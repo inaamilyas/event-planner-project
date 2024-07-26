@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:padding="20dp"
-    tools:context=".LoginActivity">
+    tools:context=".SignupActivity">
 
     <LinearLayout
         android:layout_gravity="center"
@@ -36,13 +36,39 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign In"
+            android:text="Sign Up"
             android:textSize="25dp"
             android:textAlignment="center"
             android:textColor="#37364A"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:paddingVertical="10dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/input_bg"
+            android:layout_marginBottom="20dp"
+            android:paddingHorizontal="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/email_icon" />
+
+            <EditText
+                android:layout_marginLeft="10dp"
+                android:hint="Full Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="transparent"
+                android:layout_weight="3"
+                android:inputType="textEmailAddress" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,6 +123,31 @@
                 android:inputType="textPassword" />
         </LinearLayout>
 
+        <LinearLayout
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/input_bg"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:paddingVertical="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/lock" />
+
+            <EditText
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="transparent"
+                android:layout_weight="3"
+                android:hint="Confirm Password"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button2"
             android:layout_width="match_parent"
@@ -107,20 +158,12 @@
             android:textSize="20dp"
             android:letterSpacing="0.1"
             android:textAllCaps="false"
-            android:text="Sign In" />
-
-        <TextView
-            android:textSize="20sp"
-            android:textAlignment="textEnd"
-            android:layout_marginVertical="20dp"
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Forget Password?" />
+            android:text="Sign Up" />
 
 
 
         <LinearLayout
+            android:layout_marginVertical="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -133,7 +176,7 @@
                 android:textSize="20sp"
 
                 android:layout_weight="1"
-                android:text="Don't have an account?" />
+                android:text="Already have an account?" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -141,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Signup"
+                android:text="Sign in"
                 android:layout_marginLeft="3dp"
                 android:textStyle="bold"/>
         </LinearLayout>
