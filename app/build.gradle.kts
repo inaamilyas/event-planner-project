@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+
 android {
     namespace = "com.example.eventplanner"
     compileSdk = 34
@@ -45,5 +46,8 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation(libs.material.v190)
+    implementation(libs.material.v190);
+    implementation("com.github.bumptech.glide:glide:4.16.0");
+
+
 }
