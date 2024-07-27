@@ -63,10 +63,10 @@
             <EditText
                 android:layout_marginLeft="10dp"
                 android:hint="Email"
-                android:id="@+id/editTextTextEmailAddress2"
+                android:id="@+id/etLoginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="transparent"
+                android:background="#00000000"
                 android:layout_weight="3"
                 android:inputType="textEmailAddress" />
         </LinearLayout>
@@ -88,17 +88,17 @@
 
             <EditText
                 android:layout_marginLeft="10dp"
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/etLoginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="transparent"
+                android:background="#00000000"
                 android:layout_weight="3"
                 android:hint="Password"
                 android:inputType="textPassword" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button2"
+            android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:backgroundTint="@null"
@@ -113,7 +113,7 @@
             android:textSize="20sp"
             android:textAlignment="textEnd"
             android:layout_marginVertical="20dp"
-            android:id="@+id/textView"
+            android:id="@+id/tvGoToForgetPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Forget Password?" />
@@ -136,7 +136,7 @@
                 android:text="Don't have an account?" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvGoToSignup"
                 android:textSize="22sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
