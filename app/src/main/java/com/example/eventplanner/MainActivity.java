@@ -33,5 +33,8 @@ public class MainActivity extends AppCompatActivity {
         EventsAdapter eventsAdapter = new EventsAdapter(eventsArr);
         binding.eventsRecyclerHome.setAdapter(eventsAdapter);
 
+        binding.venuesRecyclerHome.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.venuesRecyclerHome.setAdapter(eventsAdapter);
+
     }
 }

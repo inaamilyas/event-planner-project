@@ -1,15 +1,18 @@
 package com.example.eventplanner.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.eventplanner.EventDetailsActivity;
 import com.example.eventplanner.R;
 import com.example.eventplanner.models.Event;
 
@@ -59,6 +62,21 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
 
             // Define click listener for the ViewHolder's View
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Handle click event here
+                    int position = getAdapterPosition();
+//                    if (position != RecyclerView.NO_POSITION) {
+//                        Event event = events[position];
+                        Intent intent = new Intent(view.getContext(), EventDetailsActivity.class);
+                        intent.putExtra("eventId", position);
+                        view.getContext().startActivity(intent);
+                        Toast.makeText(view.getContext(), "click on item "+position, Toast.LENGTH_SHORT).show();
+                        // Do something with the clicked event
+//                    }
+                }
+            });
         }
 
         public void setView(Event event) {
