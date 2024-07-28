@@ -28,6 +28,7 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
+                android:id="@+id/arrow_back_event_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

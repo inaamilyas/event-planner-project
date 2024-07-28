@@ -90,6 +90,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/see_all_events"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -130,6 +131,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/see_all_venues"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="20dp"
     android:background="@drawable/bg_rounded"
     android:elevation="10dp"
-    android:layout_margin="5dp"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="20dp">
 
 
     <FrameLayout
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp">
 
         <ImageView
             android:id="@+id/imageview_event"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/tv_event_date"
@@ -28,7 +28,6 @@
             android:layout_marginTop="5dp"
             android:background="@color/white"
             android:padding="8dp"
-            android:text="18 June"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
     </FrameLayout>
@@ -40,7 +39,6 @@
         android:layout_marginVertical="5dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="International Band Mu dfj dh fdsf hjdf hjd sf hh dfh fh"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -61,8 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:text="International Band fdsjfjsjhf dfjdjfldsjfdfjl" />
+            android:maxLines="1"/>
 
     </LinearLayout>
 </LinearLayout>
