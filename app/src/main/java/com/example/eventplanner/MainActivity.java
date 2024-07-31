@@ -9,15 +9,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eventplanner.adapters.EventsAdapter;
 import com.example.eventplanner.databinding.ActivityMainBinding;
+import com.example.eventplanner.fragments.EventsFragment;
+import com.example.eventplanner.fragments.HomeFragment;
+import com.example.eventplanner.fragments.ProfileFragment;
+import com.example.eventplanner.fragments.SettingFragment;
+import com.example.eventplanner.fragments.VenuesFragment;
 import com.example.eventplanner.models.Event;
 import com.google.android.material.navigation.NavigationView;
 
@@ -30,11 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView usernameTextView;
     private ImageView buttonCloseDrawer;
 
-    private Event[] eventsArr = {
-            new Event("Event 1", "Date 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
-            // Add more events if needed
-    };
-
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +48,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View view = binding.getRoot();
         setContentView(view);
 
-        // Initialize RecyclerViews
-        binding.eventsRecyclerHome.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        EventsAdapter eventsAdapter = new EventsAdapter(eventsArr);
-        binding.eventsRecyclerHome.setAdapter(eventsAdapter);
-
-        binding.venuesRecyclerHome.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.venuesRecyclerHome.setAdapter(eventsAdapter);
-
-        // Set click listeners
-        binding.seeAllEvents.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AllEventsActivity.class)));
-        binding.seeAllVenues.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AllVenuesActivity.class)));
+        setSupportActionBar(binding.toolbar);
 
         // Initialize DrawerLayout and NavigationView
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 //        buttonCloseDrawer = findViewById(R.id.close_menu);
 
+        // Set default fragment
+        if (savedInstanceState == null) {
+            replaceFragment(new HomeFragment());
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
 
         // Initialize header view
         View headerView = navigationView.getHeaderView(0);
@@ -91,17 +91,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-
-        if(id == R.id.nav_home){
-            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
-        } else  if(id == R.id.nav_settings){
-            Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show();
-        } else  if(id == R.id.nav_logout){
+        Fragment selectedFragment = null;
+        if (id == R.id.nav_home) {
+            selectedFragment = new HomeFragment();
+        } else if (id == R.id.nav_events) {
+            selectedFragment = new EventsFragment();
+        } else if (id == R.id.nav_venues) {
+            selectedFragment = new VenuesFragment();
+        } else if (id == R.id.nav_profile) {
+            selectedFragment = new ProfileFragment();
+        } else if (id == R.id.nav_settings) {
+            selectedFragment = new SettingFragment();
+        } else if (id == R.id.nav_logout) {
+            // Handle logout here
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+        }
+
+        if (selectedFragment != null) {
+            replaceFragment(selectedFragment);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
