@@ -2,23 +2,29 @@ package com.example.eventplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toolbar;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventplanner.databinding.ActivitySignupBinding;
 
+import java.util.Objects;
+
 public class SignupActivity extends AppCompatActivity {
     private ActivitySignupBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.myToolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         binding.tvGoToSignin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +41,28 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
+    private void setSupportActionBar(Toolbar myToolbar) {
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.login_sign, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_signup_venue_manager) {
+
+            return true;
+        } else if (item.getItemId() == R.id.action_login_venue_manager) {
+
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

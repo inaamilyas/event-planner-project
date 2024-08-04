@@ -2,6 +2,9 @@ package com.example.eventplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventplanner.databinding.ActivityLoginBinding;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
 
@@ -22,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        setSupportActionBar(binding.myToolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,5 +60,25 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.login_sign, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_signup_venue_manager) {
+
+            return true;
+        } else if (item.getItemId() == R.id.action_login_venue_manager) {
+
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -15,6 +15,30 @@
         android:theme="@style/Theme.EventPlanner"
         tools:targetApi="31">
         <activity
+            android:name=".VenueManager.AllVenuesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueManager.EditVenueActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueManager.VenuesRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueManager.AddVenueActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueManager.DashboardVenueManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueManager.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueManager.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".AllVenuesActivity"
             android:exported="false" />
         <activity

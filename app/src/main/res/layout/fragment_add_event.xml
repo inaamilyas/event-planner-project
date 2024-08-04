@@ -5,10 +5,111 @@
     android:layout_height="match_parent"
     tools:context=".fragments.AddEventFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Add Event Fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:padding="5dp"
+                android:text="New Event"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etLoginEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:hint="Name"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textSize="18dp" />
+
+            <!--        <EditText-->
+            <!--            android:hint="Address"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="match_parent"-->
+            <!--            android:background="#00000000"-->
+            <!--            android:padding="10dp"-->
+            <!--            android:textSize="18dp"-->
+            <!--            android:layout_marginBottom="10dp"-->
+            <!--            android:inputType="text" />-->
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Date"
+                android:inputType="none"
+                android:padding="10dp"
+                android:textSize="18dp" />
+
+            <EditText
+                android:id="@+id/editTextTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Time"
+                android:inputType="none"
+                android:padding="10dp"
+                android:textSize="18dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:hint="Budget"
+                android:inputType="number"
+                android:padding="10dp"
+                android:textSize="18dp" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:hint="No. of Guests"
+                android:inputType="number"
+                android:padding="10dp"
+                android:textSize="18dp" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="10dp"
+                android:ems="10"
+                android:hint="Details"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:textSize="18dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/save_event_button"
+                android:background="@drawable/buttonbg"
+                android:text="Add Event"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
+
 
 </FrameLayout>

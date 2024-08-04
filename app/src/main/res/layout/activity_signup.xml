@@ -7,10 +7,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:padding="20dp"
     tools:context=".SignupActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white" />
+
     <LinearLayout
+        android:padding="20dp"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -148,6 +154,7 @@
                 android:layout_weight="3"
                 android:hint="Confirm Password"
                 android:inputType="textPassword" />
+
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -161,7 +168,6 @@
             android:letterSpacing="0.1"
             android:textAllCaps="false"
             android:text="Sign Up" />
-
 
 
         <LinearLayout

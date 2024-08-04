@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_signup_venue_manager"
+        android:title="Signup as Venue Manager" />
+    <item
+        android:id="@+id/action_login_venue_manager"
+        android:title="Login as Venue Manager" />
+</menu>
