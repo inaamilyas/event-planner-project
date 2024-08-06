@@ -14,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.eventplanner.VenueManager.VenueLoginActivity;
+import com.example.eventplanner.VenueManager.VenueSignupActivity;
 import com.example.eventplanner.databinding.ActivityLoginBinding;
 
 import java.util.Objects;
@@ -72,10 +74,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_signup_venue_manager) {
-
+            startActivity(new Intent(LoginActivity.this, VenueSignupActivity.class));
             return true;
         } else if (item.getItemId() == R.id.action_login_venue_manager) {
-
+            startActivity(new Intent(LoginActivity.this, VenueLoginActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

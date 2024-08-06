@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.eventplanner.adapters.EventsAdapter;
+import com.example.eventplanner.adapters.VenuesAdapter;
 import com.example.eventplanner.databinding.FragmentHomeBinding;
 import com.example.eventplanner.models.Event;
+import com.example.eventplanner.models.Venue;
 
 public class HomeFragment extends Fragment {
 
@@ -42,6 +44,15 @@ public class HomeFragment extends Fragment {
             // Add more events if needed
     };
 
+    private Venue[] venuesArr = {
+            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
+            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
+            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
+            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
+            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
+            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
+    };
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -50,9 +61,9 @@ public class HomeFragment extends Fragment {
         binding.eventsRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         EventsAdapter eventsAdapter = new EventsAdapter(eventsArr);
         binding.eventsRecyclerHome.setAdapter(eventsAdapter);
-
         binding.venuesRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.venuesRecyclerHome.setAdapter(eventsAdapter);
+        VenuesAdapter venuesAdapter = new VenuesAdapter(venuesArr);
+        binding.venuesRecyclerHome.setAdapter(venuesAdapter);
 
         // Set click listeners
 //        binding.seeAllEvents.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AllEventsActivity.class)));

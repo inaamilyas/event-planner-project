@@ -15,6 +15,9 @@
         android:theme="@style/Theme.EventPlanner"
         tools:targetApi="31">
         <activity
+            android:name=".VenueManager.VenueManagerVenDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".VenueManager.AllVenuesActivity"
             android:exported="false" />
         <activity
@@ -30,10 +33,10 @@
             android:name=".VenueManager.DashboardVenueManagerActivity"
             android:exported="false" />
         <activity
-            android:name=".VenueManager.SignupActivity"
+            android:name=".VenueManager.VenueSignupActivity"
             android:exported="false" />
         <activity
-            android:name=".VenueManager.LoginActivity"
+            android:name=".VenueManager.VenueLoginActivity"
             android:exported="false" />
         <activity
             android:name=".VenueDetailsActivity"
