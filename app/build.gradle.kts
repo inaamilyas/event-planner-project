@@ -50,5 +50,16 @@ dependencies {
     implementation(libs.glide);
     implementation(libs.circleimageview)
 
+    implementation (libs.play.services.maps)
+    implementation (libs.play.services.location)
+
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
+
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+
 
 }

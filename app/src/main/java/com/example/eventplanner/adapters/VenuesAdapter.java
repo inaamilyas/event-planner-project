@@ -1,5 +1,6 @@
 package com.example.eventplanner.adapters;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.eventplanner.BookVenueActivity;
 import com.example.eventplanner.R;
+import com.example.eventplanner.VenueDetailsActivity;
 import com.example.eventplanner.models.Venue;
 
 public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder> {
@@ -63,13 +66,9 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Handle click event here
                     int position = getAdapterPosition();
-//                    if (position != RecyclerView.NO_POSITION) {
-//                        Event event = events[position];
-//                    Intent intent = new Intent(view.getContext(), EventDetailsActivity.class);
-//                    intent.putExtra("eventId", position);
-//                    view.getContext().startActivity(intent);
+                    Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
+                    view.getContext().startActivity(intent);
                     Toast.makeText(view.getContext(), "click on item " + position, Toast.LENGTH_SHORT).show();
                     // Do something with the clicked event
 //                    }
@@ -81,7 +80,9 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Toast.makeText(view.getContext(), "Clicked on view " + position,  Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
+                    view.getContext().startActivity(intent);
+                    Toast.makeText(view.getContext(), "Clicked on view " + position, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -89,7 +90,9 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Toast.makeText(view.getContext(), "Clicked on book " + position,  Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(view.getContext(), BookVenueActivity.class);
+                    view.getContext().startActivity(intent);
+                    Toast.makeText(view.getContext(), "Clicked on book " + position, Toast.LENGTH_SHORT).show();
                 }
             });
         }

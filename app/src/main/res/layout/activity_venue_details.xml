@@ -56,6 +56,7 @@
 
 
             <TextView
+                android:id="@+id/gotoBookVenueBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="10dp"
@@ -187,6 +188,11 @@
                         android:textSize="15dp" />
                 </LinearLayout>
             </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/map_container"
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
