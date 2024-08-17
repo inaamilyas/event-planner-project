@@ -6,13 +6,17 @@ import com.example.eventplanner.datamodels.requests.LoginRequest;
 import com.example.eventplanner.datamodels.requests.SignupRequest;
 import com.example.eventplanner.datamodels.responses.LoginResponse;
 import com.example.eventplanner.datamodels.responses.SignupResponse;
-import com.example.eventplanner.datamodels.responses.VenuesResponse;
+import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
+
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -23,12 +27,11 @@ public interface ApiService {
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/user/signup")
-    Call<ApiResponse<SignupResponse>> signup(@Body SignupRequest signupRequest);
-
+    Call<ApiResponse<User>> signup(@Body Map<String, Object> requestBody);
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/user/login")
-    Call<ApiResponse<LoginResponse>> login(@Body LoginRequest loginRequest);
+    Call<ApiResponse<User>> login(@Body Map<String, Object> requestBody);
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/venue-manager/signup")

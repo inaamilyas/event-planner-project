@@ -1,20 +1,14 @@
 package com.example.eventplanner;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventplanner.VenueManager.VenueLoginActivity;
 import com.example.eventplanner.VenueManager.VenueSignupActivity;
@@ -22,12 +16,11 @@ import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityLoginBinding;
-import com.example.eventplanner.datamodels.requests.LoginRequest;
-import com.example.eventplanner.datamodels.requests.SignupRequest;
-import com.example.eventplanner.datamodels.responses.LoginResponse;
-import com.example.eventplanner.datamodels.responses.SignupResponse;
+import com.example.eventplanner.models.User;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -58,27 +51,21 @@ public class LoginActivity extends AppCompatActivity {
                 String password = binding.etLoginPassword.getText().toString();
 
                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                LoginRequest request = new LoginRequest(email, password);
-                Call<ApiResponse<LoginResponse>> call = apiService.login(request);
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("email", email);
+                requestBody.put("password", password);
+                Call<ApiResponse<User>> call = apiService.login(requestBody);
 
-                call.enqueue(new Callback<ApiResponse<LoginResponse>>() {
+                call.enqueue(new Callback<ApiResponse<User>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<LoginResponse>> call, Response<ApiResponse<LoginResponse>> response) {
+                    public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
                         if (response.isSuccessful()) {
-                            ApiResponse<LoginResponse> apiResponse = response.body();
+                            ApiResponse<User> apiResponse = response.body();
                             if (apiResponse != null && apiResponse.getCode() == 200) {
 
-                                Log.d("inaamilyas", ""+ apiResponse.getData());
-
                                 // Handle success
-                                LoginResponse loginData = apiResponse.getData();
-
-                                // Save user data to SharedPreferences
-                                SharedPreferences sharedPreferences = getSharedPreferences("EventPlannerPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("userId", loginData.getUserId());
-                                editor.putString("token", loginData.getToken());
-                                editor.apply();
+                                User user = apiResponse.getData();
+                                user.saveToPreferences(LoginActivity.this);
 
                                 Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
                                 // Navigate to MainActivity
@@ -104,15 +91,15 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         binding.btnLogin.setEnabled(true);
-                        binding.btnLogin.setText("Sign Up");
+                        binding.btnLogin.setText("Sign In");
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<LoginResponse>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
                         // Handle failure (e.g., no internet connection)
                         binding.tvShowError.setText("Failed to connect. Please check your internet connection.");
                         binding.btnLogin.setEnabled(true);
-                        binding.btnLogin.setText("Sign Up");
+                        binding.btnLogin.setText("Sign In");
                     }
                 });
 

@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityMainBinding;
 import com.example.eventplanner.fragments.EventsFragment;
 import com.example.eventplanner.fragments.HomeFragment;
@@ -101,10 +102,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Handle logout here
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
             // Remove specific user data from SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("EventPlannerPrefs", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(AppConfig.SHARED_PREF_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove("userId");
-            editor.remove("token");
+            editor.remove("user");
             editor.apply();
 
             // redirect the user to the login screen

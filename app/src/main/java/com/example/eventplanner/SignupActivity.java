@@ -1,7 +1,6 @@
 package com.example.eventplanner;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,10 +15,11 @@ import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivitySignupBinding;
-import com.example.eventplanner.datamodels.requests.SignupRequest;
-import com.example.eventplanner.datamodels.responses.SignupResponse;
+import com.example.eventplanner.models.User;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -61,26 +61,22 @@ public class SignupActivity extends AppCompatActivity {
                 String password = binding.etSignupPassword.getText().toString();
                 String confirmPassword = binding.etSignupConfPass.getText().toString();
 
-                SignupRequest request = new SignupRequest(name, email, password, confirmPassword);
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("name", name);
+                requestBody.put("email", email);
+                requestBody.put("password", password);
+                requestBody.put("confirmPassword", confirmPassword);
+                Call<ApiResponse<User>> call = apiService.signup(requestBody);
 
-                Call<ApiResponse<SignupResponse>> call = apiService.signup(request);
-
-                call.enqueue(new Callback<ApiResponse<SignupResponse>>() {
+                call.enqueue(new Callback<ApiResponse<User>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<SignupResponse>> call, Response<ApiResponse<SignupResponse>> response) {
+                    public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
                         if (response.isSuccessful()) {
-                            ApiResponse<SignupResponse> apiResponse = response.body();
+                            ApiResponse<User> apiResponse = response.body();
                             if (apiResponse != null && apiResponse.getCode() == 200) {
                                 // Handle success
-                                SignupResponse signupData = apiResponse.getData();
-
-                                // Save user data to SharedPreferences
-                                SharedPreferences sharedPreferences = getSharedPreferences("EventPlannerPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("userId", signupData.getUserId());
-                                editor.putString("token", signupData.getToken());
-                                editor.apply();
-
+                                User user = apiResponse.getData();
+                                user.saveToPreferences(SignupActivity.this);
                                 Toast.makeText(SignupActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
                                 // Navigate to MainActivity
                                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
@@ -113,7 +109,7 @@ public class SignupActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<SignupResponse>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
                         // Handle failure (e.g., no internet connection)
                         binding.tvSignupApiError.setText("Failed to connect. Please check your internet connection.");
                         binding.btnSignup.setEnabled(true);
