@@ -14,16 +14,13 @@ import com.example.eventplanner.adapters.VenuesAdapter;
 import com.example.eventplanner.databinding.FragmentVenuesBinding;
 import com.example.eventplanner.models.Venue;
 
+import java.util.ArrayList;
+
 public class VenuesFragment extends Fragment {
 
     private FragmentVenuesBinding binding;
 
-    private Venue[] venueArr = {
-            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
-            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
-            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
-            new Venue("Event 1", "Address 1", "https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M="),
-    };
+    private ArrayList<Venue> venuesList = new ArrayList<>();
 
     public VenuesFragment() {
         // Required empty public constructor
@@ -43,7 +40,7 @@ public class VenuesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.recyclerviewAllVenues.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        VenuesAdapter venuesAdapter = new VenuesAdapter(venueArr);
+        VenuesAdapter venuesAdapter = new VenuesAdapter(venuesList);
         binding.recyclerviewAllVenues.setAdapter(venuesAdapter);
 
     }

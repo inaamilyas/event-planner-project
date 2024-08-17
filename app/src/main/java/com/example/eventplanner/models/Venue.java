@@ -1,18 +1,41 @@
 package com.example.eventplanner.models;
 
-public class Venue {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class Venue implements Serializable {
+    private int id;
     private String name;
+    private double latitude;
+    private double longitude;
+    private String phone;
     private String address;
-    private String image;
-    private String id;
-    private String latitude;
-    private String longitude;
+    private String about;
+    private String picture;
+    @SerializedName("created_at")
+    private String createdAt;
 
-    public Venue(String name, String address, String image) {
+    @SerializedName("updated_at")
+    private String updatedAt;
+
+    public Venue(int id, String name, double latitude, double longitude, String phone, String address, String about, String image) {
+        this.id = id;
         this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.phone = phone;
         this.address = address;
-        this.image = image;
+        this.about = about;
+        this.picture = image;
+    }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -23,6 +46,30 @@ public class Venue {
         this.name = name;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -31,35 +78,19 @@ public class Venue {
         this.address = address;
     }
 
-    public String getImage() {
-        return image;
+    public String getAbout() {
+        return about;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setAbout(String about) {
+        this.about = about;
     }
 
-    public String getId() {
-        return id;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

@@ -2,33 +2,28 @@ package com.example.eventplanner;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.eventplanner.adapters.EventsAdapter;
 import com.example.eventplanner.databinding.ActivityMainBinding;
 import com.example.eventplanner.fragments.EventsFragment;
 import com.example.eventplanner.fragments.HomeFragment;
 import com.example.eventplanner.fragments.ProfileFragment;
 import com.example.eventplanner.fragments.SettingFragment;
 import com.example.eventplanner.fragments.VenuesFragment;
-import com.example.eventplanner.models.Event;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -105,6 +100,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_logout) {
             // Handle logout here
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+            // Remove specific user data from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("EventPlannerPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("userId");
+            editor.remove("token");
+            editor.apply();
+
+            // redirect the user to the login screen
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Close the current activity
         }
 
         if (selectedFragment != null) {

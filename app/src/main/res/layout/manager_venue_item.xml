@@ -5,15 +5,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp"
-    >
+    android:padding="5dp">
 
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/venue_list_item_image"
@@ -69,13 +68,13 @@
                     android:textSize="12dp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/venue_list_item_book_button"
+                    android:id="@+id/venue_list_item_edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/buttonbg"
-                    android:text="Book Now"
+                    android:text="Edit"
                     android:textColor="@color/white"
                     android:textSize="12dp" />
             </LinearLayout>

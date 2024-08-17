@@ -1,4 +1,4 @@
-package com.example.eventplanner.adapters;
+package com.example.eventplanner.VenueManager.adapter;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -6,43 +6,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventplanner.BookVenueActivity;
 import com.example.eventplanner.R;
-import com.example.eventplanner.VenueDetailsActivity;
+import com.example.eventplanner.VenueManager.EditVenueActivity;
+import com.example.eventplanner.VenueManager.VenueManagerVenDetailsActivity;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.models.Venue;
 
 import java.util.ArrayList;
 
-public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder> {
-    private ArrayList<Venue> venuesList = new ArrayList<>();
+public class MangerVenueSAdapter extends RecyclerView.Adapter<MangerVenueSAdapter.ViewHolder> {
+    private ArrayList<Venue> venuesList;
 
-    public VenuesAdapter(ArrayList<Venue> venuesList) {
+    public MangerVenueSAdapter(ArrayList<Venue> venuesList) {
         this.venuesList = venuesList;
-    }
-
-
-    // Method to update the venues data
-    public void setVenues(ArrayList<Venue> venues) {
-        this.venuesList = venues;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.venue_item, viewGroup, false);
+    public MangerVenueSAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.manager_venue_item, viewGroup, false);
 
-        return new ViewHolder(view);
+        return new MangerVenueSAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MangerVenueSAdapter.ViewHolder holder, int position) {
         Venue venue = venuesList.get(position);
         holder.setView(venue);
     }
@@ -72,32 +65,36 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
+                    Venue selectedVenue = venuesList.get(position);
+
+                    Intent intent = new Intent(view.getContext(), VenueManagerVenDetailsActivity.class);
+                    intent.putExtra("selectedVenue", selectedVenue);
                     view.getContext().startActivity(intent);
-                    Toast.makeText(view.getContext(), "click on item " + position, Toast.LENGTH_SHORT).show();
-                    // Do something with the clicked event
-//                    }
                 }
             });
 
-//            view venue details
+//            edit venue details
+            view.findViewById(R.id.venue_list_item_edit_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Venue selectedVenue = venuesList.get(position);
+
+                    Intent intent = new Intent(view.getContext(), EditVenueActivity.class);
+                    intent.putExtra("selectedVenue", selectedVenue);
+                    view.getContext().startActivity(intent);
+                }
+            });
+
             view.findViewById(R.id.venue_list_item_view_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
-                    view.getContext().startActivity(intent);
-                    Toast.makeText(view.getContext(), "Clicked on view " + position, Toast.LENGTH_SHORT).show();
-                }
-            });
+                    Venue selectedVenue = venuesList.get(position);
 
-            view.findViewById(R.id.venue_list_item_book_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    Intent intent = new Intent(view.getContext(), BookVenueActivity.class);
+                    Intent intent = new Intent(view.getContext(), VenueManagerVenDetailsActivity.class);
+                    intent.putExtra("selectedVenue", selectedVenue);
                     view.getContext().startActivity(intent);
-                    Toast.makeText(view.getContext(), "Clicked on book " + position, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -105,9 +102,8 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
         public void setView(Venue venue) {
             this.venueName.setText(venue.getName());
             this.venueAddress.setText(venue.getAddress());
-            Glide.with(this.venueImage.getContext()).load(AppConfig.SERVER_URL +venue.getPicture()).placeholder(R.drawable.enent_image).into(this.venueImage);
+            Glide.with(this.venueImage.getContext()).load(AppConfig.SERVER_URL + venue.getPicture()).placeholder(R.drawable.enent_image).into(this.venueImage);
 //            this.eventImage.setImageResource(R.drawable.enent_image);
         }
     }
-
 }

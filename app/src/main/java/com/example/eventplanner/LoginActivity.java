@@ -1,7 +1,9 @@
 package com.example.eventplanner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,9 +18,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.eventplanner.VenueManager.VenueLoginActivity;
 import com.example.eventplanner.VenueManager.VenueSignupActivity;
+import com.example.eventplanner.api.ApiClient;
+import com.example.eventplanner.api.ApiResponse;
+import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityLoginBinding;
+import com.example.eventplanner.datamodels.requests.LoginRequest;
+import com.example.eventplanner.datamodels.requests.SignupRequest;
+import com.example.eventplanner.datamodels.responses.LoginResponse;
+import com.example.eventplanner.datamodels.responses.SignupResponse;
+import com.google.gson.Gson;
 
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
@@ -36,13 +50,72 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Sign in...", Toast.LENGTH_SHORT).show();
+
+                binding.btnLogin.setEnabled(false);
+                binding.btnLogin.setText("Loading...");
+
                 String email = binding.etLoginEmail.getText().toString();
                 String password = binding.etLoginPassword.getText().toString();
 
-//                hit api for login. on success login to home screen
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                LoginRequest request = new LoginRequest(email, password);
+                Call<ApiResponse<LoginResponse>> call = apiService.login(request);
+
+                call.enqueue(new Callback<ApiResponse<LoginResponse>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<LoginResponse>> call, Response<ApiResponse<LoginResponse>> response) {
+                        if (response.isSuccessful()) {
+                            ApiResponse<LoginResponse> apiResponse = response.body();
+                            if (apiResponse != null && apiResponse.getCode() == 200) {
+
+                                Log.d("inaamilyas", ""+ apiResponse.getData());
+
+                                // Handle success
+                                LoginResponse loginData = apiResponse.getData();
+
+                                // Save user data to SharedPreferences
+                                SharedPreferences sharedPreferences = getSharedPreferences("EventPlannerPrefs", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("userId", loginData.getUserId());
+                                editor.putString("token", loginData.getToken());
+                                editor.apply();
+
+                                Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                                // Navigate to MainActivity
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            } else {
+                                // Handle error based on API response
+                                assert apiResponse != null;
+                                binding.tvShowError.setText(apiResponse.getMessage());
+                            }
+                        } else {
+                            try {
+                                // Parse the error body to get the API response
+                                Gson gson = new Gson();
+                                ApiResponse<?> apiErrorResponse = gson.fromJson(response.errorBody().string(), ApiResponse.class);
+                                if (apiErrorResponse != null) {
+                                    binding.tvShowError.setText(apiErrorResponse.getMessage());
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                binding.tvShowError.setText("An unexpected error occurred.");
+                            }
+                        }
+
+                        binding.btnLogin.setEnabled(true);
+                        binding.btnLogin.setText("Sign Up");
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<LoginResponse>> call, Throwable t) {
+                        // Handle failure (e.g., no internet connection)
+                        binding.tvShowError.setText("Failed to connect. Please check your internet connection.");
+                        binding.btnLogin.setEnabled(true);
+                        binding.btnLogin.setText("Sign Up");
+                    }
+                });
+
             }
         });
 

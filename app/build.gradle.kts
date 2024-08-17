@@ -58,8 +58,9 @@ dependencies {
     implementation (libs.okhttp)
     implementation (libs.logging.interceptor)
 
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation (libs.lifecycle.livedata.ktx)
+    implementation (libs.lifecycle.viewmodel.ktx)
+    implementation (libs.swiperefreshlayout)
 
 
 }
