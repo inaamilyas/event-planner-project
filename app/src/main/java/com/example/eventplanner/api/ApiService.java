@@ -2,10 +2,6 @@ package com.example.eventplanner.api;
 
 // ApiService.java
 
-import com.example.eventplanner.datamodels.requests.LoginRequest;
-import com.example.eventplanner.datamodels.requests.SignupRequest;
-import com.example.eventplanner.datamodels.responses.LoginResponse;
-import com.example.eventplanner.datamodels.responses.SignupResponse;
 import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.VenueManager;
@@ -16,8 +12,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -42,20 +36,11 @@ public interface ApiService {
     @POST("api/v1/venue-manager/login")
     Call<ApiResponse<VenueManager>> venueManagerLogin(@Body Map<String, Object> requestBody);
 
-
     @Multipart
     @POST("api/v1/venues")
-    Call<ApiResponse<String>> addVenue(
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("phone") RequestBody phone,
-            @Part("about") RequestBody about,
-            @Part("latitude") RequestBody latitude,
-            @Part("longitude") RequestBody longitude
-    );
+    Call<ApiResponse<String>> addVenue(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude);
 
     @GET("api/v1/venues")
     Call<ApiResponseArray<Venue>> getVenues();
-
 
 }

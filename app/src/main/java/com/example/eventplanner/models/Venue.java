@@ -5,14 +5,30 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Venue implements Serializable {
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("latitude")
     private double latitude;
+
+    @SerializedName("longitude")
     private double longitude;
+
+    @SerializedName("phone")
     private String phone;
+
+    @SerializedName("address")
     private String address;
+
+    @SerializedName("about")
     private String about;
+
+    @SerializedName("picture")
     private String picture;
+
     @SerializedName("created_at")
     private String createdAt;
 

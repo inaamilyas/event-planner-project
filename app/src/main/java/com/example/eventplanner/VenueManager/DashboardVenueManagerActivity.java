@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.eventplanner.VenueManager.adapter.MangerVenueSAdapter;
+import com.example.eventplanner.VenueManager.adapter.MangerVenueAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponseArray;
 import com.example.eventplanner.api.ApiService;
@@ -28,7 +28,7 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
 
     private ActivityDashboardVenueManagerBinding binding;
     private ArrayList<Venue> venuesList = new ArrayList<>();
-    private MangerVenueSAdapter venuesAdapter;
+    private MangerVenueAdapter venuesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
 
         // Initialize RecyclerView and Adapter
         binding.venuesRecyclerHome.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        venuesAdapter = new MangerVenueSAdapter(venuesList);
+        venuesAdapter = new MangerVenueAdapter(venuesList);
         binding.venuesRecyclerHome.setAdapter(venuesAdapter);
 
         // Fetch data from API

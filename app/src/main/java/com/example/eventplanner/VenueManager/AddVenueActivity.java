@@ -63,11 +63,8 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
 //        setSupportActionBar(binding.myToolbar);
 
         // Check for storage permissions
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_STORAGE_PERMISSION);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
         }
 
 
@@ -76,9 +73,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.select_map_container, mapFragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.select_map_container, mapFragment).commit();
         mapFragment.getMapAsync(this);
 
         binding.btnSelectImage.setOnClickListener(new View.OnClickListener() {
@@ -97,8 +92,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
                 binding.saveVenueButton.setEnabled(false);
 
                 // Ensure permissions are granted before proceeding
-                if (ContextCompat.checkSelfPermission(AddVenueActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(AddVenueActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     // Your code to handle the button click
                     try {
                         saveVenue();
@@ -127,20 +121,18 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         // Get the user's current location and move the camera
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, location -> {
-                    if (location != null) {
-                        LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+            if (location != null) {
+                LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
 
-                        // Place a marker at the user's current location
-                        selectedLatLng = userLocation;
-                        selectedMarker = mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Current Location"));
-                    } else {
-                        Toast.makeText(AddVenueActivity.this, "Unable to get your location", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(AddVenueActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show());
+                // Place a marker at the user's current location
+                selectedLatLng = userLocation;
+                selectedMarker = mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Current Location"));
+            } else {
+                Toast.makeText(AddVenueActivity.this, "Unable to get your location", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> Toast.makeText(AddVenueActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show());
 
         // Set a map click listener to get the location the user selects
         mMap.setOnMapClickListener(latLng -> {

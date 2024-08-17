@@ -19,23 +19,23 @@ import com.example.eventplanner.models.Venue;
 
 import java.util.ArrayList;
 
-public class MangerVenueSAdapter extends RecyclerView.Adapter<MangerVenueSAdapter.ViewHolder> {
+public class MangerVenueAdapter extends RecyclerView.Adapter<MangerVenueAdapter.ViewHolder> {
     private ArrayList<Venue> venuesList;
 
-    public MangerVenueSAdapter(ArrayList<Venue> venuesList) {
+    public MangerVenueAdapter(ArrayList<Venue> venuesList) {
         this.venuesList = venuesList;
     }
 
     @NonNull
     @Override
-    public MangerVenueSAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public MangerVenueAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.manager_venue_item, viewGroup, false);
 
-        return new MangerVenueSAdapter.ViewHolder(view);
+        return new MangerVenueAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MangerVenueSAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MangerVenueAdapter.ViewHolder holder, int position) {
         Venue venue = venuesList.get(position);
         holder.setView(venue);
     }
