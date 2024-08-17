@@ -8,6 +8,7 @@ import com.example.eventplanner.datamodels.responses.LoginResponse;
 import com.example.eventplanner.datamodels.responses.SignupResponse;
 import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
+import com.example.eventplanner.models.VenueManager;
 
 import java.util.Map;
 
@@ -35,11 +36,11 @@ public interface ApiService {
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/venue-manager/signup")
-    Call<ApiResponse<SignupResponse>> venueManagerSignup(@Body SignupRequest signupRequest);
+    Call<ApiResponse<VenueManager>> venueManagerSignup(@Body Map<String, Object> requestBody);
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/venue-manager/login")
-    Call<ApiResponse<LoginResponse>> venueManagerLogin(@Body LoginRequest loginRequest);
+    Call<ApiResponse<VenueManager>> venueManagerLogin(@Body Map<String, Object> requestBody);
 
 
     @Multipart

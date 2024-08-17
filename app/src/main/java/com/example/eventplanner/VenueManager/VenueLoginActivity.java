@@ -1,9 +1,7 @@
 package com.example.eventplanner.VenueManager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,9 +11,11 @@ import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityVenueLoginBinding;
-import com.example.eventplanner.datamodels.requests.LoginRequest;
-import com.example.eventplanner.datamodels.responses.LoginResponse;
+import com.example.eventplanner.models.VenueManager;
 import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,33 +43,23 @@ public class VenueLoginActivity extends AppCompatActivity {
                 binding.btnVenueLogin.setText("Loading...");
 
                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                LoginRequest request = new LoginRequest(email, password);
-                Log.d("inaamilyas", "after request");
-                Call<ApiResponse<LoginResponse>> call = apiService.venueManagerLogin(request);
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("email", email);
+                requestBody.put("password", password);
+                Call<ApiResponse<VenueManager>> call = apiService.venueManagerLogin(requestBody);
 
-                call.enqueue(new Callback<ApiResponse<LoginResponse>>() {
+                call.enqueue(new Callback<ApiResponse<VenueManager>>() {
 
                     @Override
-                    public void onResponse(Call<ApiResponse<LoginResponse>> call, Response<ApiResponse<LoginResponse>> response) {
-                        Log.d("inaamilyas", "inside request");
+                    public void onResponse(Call<ApiResponse<VenueManager>> call, Response<ApiResponse<VenueManager>> response) {
                         if (response.isSuccessful()) {
-                            ApiResponse<LoginResponse> apiResponse = response.body();
+                            ApiResponse<VenueManager> apiResponse = response.body();
                             if (apiResponse != null && apiResponse.getCode() == 200) {
 
-                                Log.d("inaamilyas", "" + apiResponse.getData());
-
                                 // Handle success
-                                LoginResponse loginData = apiResponse.getData();
-
-                                // Save user data to SharedPreferences
-                                SharedPreferences sharedPreferences = getSharedPreferences("EventPlannerPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("venuerManagerUserId", loginData.getUserId());
-                                editor.putString("venueManagerToken", loginData.getToken());
-                                editor.apply();
-
+                                VenueManager venueManager = apiResponse.getData();
+                                venueManager.saveToPreferences(VenueLoginActivity.this);
                                 Toast.makeText(VenueLoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
-                                // Navigate to MainActivity
                                 startActivity(new Intent(VenueLoginActivity.this, DashboardVenueManagerActivity.class));
                                 finish();
                             } else {
@@ -96,7 +86,7 @@ public class VenueLoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<LoginResponse>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<VenueManager>> call, Throwable t) {
                         // Handle failure (e.g., no internet connection)
                         binding.tvShowError.setText("Failed to connect. Please check your internet connection.");
                         binding.btnVenueLogin.setEnabled(true);

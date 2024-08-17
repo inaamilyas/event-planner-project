@@ -1,21 +1,21 @@
 package com.example.eventplanner.VenueManager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.eventplanner.MainActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityVenueManagerSignupBinding;
-import com.example.eventplanner.datamodels.requests.SignupRequest;
-import com.example.eventplanner.datamodels.responses.SignupResponse;
+import com.example.eventplanner.models.VenueManager;
 import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,25 +49,24 @@ public class VenueSignupActivity extends AppCompatActivity {
                 String confirmPassword = binding.etSignupConfPass.getText().toString();
                 String phoneNumber = binding.etSignupPhoneNumber.getText().toString();
 
-                SignupRequest request = new SignupRequest(name, email, phoneNumber, password, confirmPassword);
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("name", name);
+                requestBody.put("confirmPassword", confirmPassword);
+                requestBody.put("phone", phoneNumber);
+                requestBody.put("email", email);
+                requestBody.put("password", password);
 
-                Call<ApiResponse<SignupResponse>> call = apiService.venueManagerSignup(request);
+                Call<ApiResponse<VenueManager>> call = apiService.venueManagerSignup(requestBody);
 
-                call.enqueue(new Callback<ApiResponse<SignupResponse>>() {
+                call.enqueue(new Callback<ApiResponse<VenueManager>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<SignupResponse>> call, Response<ApiResponse<SignupResponse>> response) {
+                    public void onResponse(Call<ApiResponse<VenueManager>> call, Response<ApiResponse<VenueManager>> response) {
                         if (response.isSuccessful()) {
-                            ApiResponse<SignupResponse> apiResponse = response.body();
+                            ApiResponse<VenueManager> apiResponse = response.body();
                             if (apiResponse != null) {
                                 // Handle success
-                                SignupResponse signupData = apiResponse.getData();
-
-                                // Save user data to SharedPreferences
-                                SharedPreferences sharedPreferences = getSharedPreferences("EventPlannerPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("venueManagerUserId", signupData.getUserId());
-                                editor.putString("venueManagerToken", signupData.getToken());
-                                editor.apply();
+                                VenueManager venueManager = apiResponse.getData();
+                                venueManager.saveToPreferences(VenueSignupActivity.this);
 
                                 Toast.makeText(VenueSignupActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
                                 // Navigate to MainActivity
@@ -98,7 +97,7 @@ public class VenueSignupActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<SignupResponse>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<VenueManager>> call, Throwable t) {
                         // Handle failure (e.g., no internet connection)
                         binding.tvSignupApiError.setText("Failed to connect. Please check your internet connection.");
                         binding.btnSignup.setEnabled(false);
