@@ -6,7 +6,10 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
+import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityVenueDetailsBinding;
+import com.example.eventplanner.models.Venue;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -18,9 +21,7 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
 
     private ActivityVenueDetailsBinding binding;
     private GoogleMap mMap;
-
-    private static final double LATITUDE = 48.8584;  // Example latitude for Eiffel Tower
-    private static final double LONGITUDE = 2.2945;
+    private Venue selectedVenue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +30,21 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         setContentView(binding.getRoot());
 //        setSupportActionBar(binding.myToolbar);
 
+        selectedVenue = (Venue) getIntent().getSerializableExtra("selectedVenue");
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.map_container, mapFragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.map_container, mapFragment).commit();
         mapFragment.getMapAsync(this);
 
+        binding.venueName.setText(selectedVenue.getName());
+        binding.venueAbout.setText(selectedVenue.getAbout());
+        binding.venueAddress.setText(selectedVenue.getAddress());
+        binding.venueContact.setText(selectedVenue.getPhone());
+        binding.venueOwnName.setText(selectedVenue.getOwner().getName());
+        binding.venueOwnerPhone.setText(selectedVenue.getOwner().getPhone());
+        String imageUrl = AppConfig.SERVER_URL + selectedVenue.getPicture();
+        Glide.with(this).load(imageUrl).placeholder(R.drawable.event_image_1).into(binding.venueImage);
 
         binding.gotoBookVenueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,11 +60,11 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         mMap = googleMap;
 
         // Add a marker and move the camera
-        LatLng location = new LatLng(LATITUDE, LONGITUDE);
+        LatLng location = new LatLng(selectedVenue.getLatitude(), selectedVenue.getLongitude());
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        
-        mMap.addMarker(new MarkerOptions().position(location).title("Marker in Sydney"));
+
+        mMap.addMarker(new MarkerOptions().position(location).title(selectedVenue.getName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
 
     }

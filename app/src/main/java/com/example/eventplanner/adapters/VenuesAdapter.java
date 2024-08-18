@@ -1,5 +1,6 @@
 package com.example.eventplanner.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,28 +56,25 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView venueName;
         TextView venueAddress;
-        //        TextView event;
+        TextView venueDistance;
         ImageView venueImage;
 
         public ViewHolder(View view) {
             super(view);
             this.venueName = (TextView) view.findViewById(R.id.venue_list_item_title);
-
             this.venueAddress = (TextView) view.findViewById(R.id.venue_list_item_address);
-
+            this.venueDistance = (TextView) view.findViewById(R.id.venue_list_item_distance);
             this.venueImage = (ImageView) view.findViewById(R.id.venue_list_item_image);
-
 
             // Define click listener for the ViewHolder's View
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     int position = getAdapterPosition();
                     Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
+                    Venue selectedVenue = venuesList.get(position);
+                    intent.putExtra("selectedVenue", selectedVenue);
                     view.getContext().startActivity(intent);
-                    Toast.makeText(view.getContext(), "click on item " + position, Toast.LENGTH_SHORT).show();
-                    // Do something with the clicked event
-//                    }
                 }
             });
 
@@ -86,8 +84,9 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
+                    Venue selectedVenue = venuesList.get(position);
+                    intent.putExtra("selectedVenue", selectedVenue);
                     view.getContext().startActivity(intent);
-                    Toast.makeText(view.getContext(), "Clicked on view " + position, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -102,11 +101,12 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
             });
         }
 
+        @SuppressLint("SetTextI18n")
         public void setView(Venue venue) {
             this.venueName.setText(venue.getName());
             this.venueAddress.setText(venue.getAddress());
-            Glide.with(this.venueImage.getContext()).load(AppConfig.SERVER_URL +venue.getPicture()).placeholder(R.drawable.enent_image).into(this.venueImage);
-//            this.eventImage.setImageResource(R.drawable.enent_image);
+            this.venueDistance.setText(venue.getDistance());
+            Glide.with(this.venueImage.getContext()).load(AppConfig.SERVER_URL + venue.getPicture()).placeholder(R.drawable.enent_image).into(this.venueImage);
         }
     }
 

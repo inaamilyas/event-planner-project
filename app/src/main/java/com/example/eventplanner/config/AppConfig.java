@@ -1,7 +1,8 @@
 package com.example.eventplanner.config;
 
 public class AppConfig {
-    public static final String SERVER_URL = "https://510e-182-183-118-182.ngrok-free.app";
+    public static final String SERVER_URL = "https://75bb-182-183-22-52.ngrok-free.app";
     public static final String SHARED_PREF_NAME = "EventPlannerPrefs";
+    public static final String WEATHER_API_KEY = "9f28422c6a2644958a162539241108";
 }
 

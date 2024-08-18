@@ -7,7 +7,9 @@ import com.example.eventplanner.config.AppConfig;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-public class VenueManager {
+import java.io.Serializable;
+
+public class VenueManager implements Serializable {
     @SerializedName("id")
     private int id;
 

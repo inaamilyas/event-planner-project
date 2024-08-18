@@ -43,4 +43,8 @@ public interface ApiService {
     @GET("api/v1/venues")
     Call<ApiResponseArray<Venue>> getVenues();
 
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/venues/suggest/nearest")
+    Call<ApiResponseArray<Venue>> getNearestVenues(@Body Map<String, Object> requestBody);
+
 }

@@ -29,11 +29,17 @@ public class Venue implements Serializable {
     @SerializedName("picture")
     private String picture;
 
+    @SerializedName("distance")
+    private String distance;
+
     @SerializedName("created_at")
     private String createdAt;
 
     @SerializedName("updated_at")
     private String updatedAt;
+
+    @SerializedName("owner")
+    private VenueManager owner;
 
     public Venue(int id, String name, double latitude, double longitude, String phone, String address, String about, String image) {
         this.id = id;
@@ -44,6 +50,18 @@ public class Venue implements Serializable {
         this.address = address;
         this.about = about;
         this.picture = image;
+    }
+
+    public Venue(int id, String name, double latitude, double longitude, String phone, String address, String about, String picture, String distance) {
+        this.id = id;
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.phone = phone;
+        this.address = address;
+        this.about = about;
+        this.picture = picture;
+        this.distance = distance;
     }
 
     public int getId() {
@@ -108,5 +126,37 @@ public class Venue implements Serializable {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public VenueManager getOwner() {
+        return owner;
+    }
+
+    public void setOwner(VenueManager owner) {
+        this.owner = owner;
     }
 }

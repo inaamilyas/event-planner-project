@@ -2,18 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/venue_list_item_layout"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp"
-    >
+    android:padding="5dp">
 
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/venue_list_item_image"
@@ -43,19 +42,49 @@
                 android:textSize="20dp" />
 
             <TextView
+                android:layout_marginTop="10dp"
                 android:id="@+id/venue_list_item_address"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:text="this is the address of the event where it is to be happened   wrwrwrw wer wr weer weer weer wer wer"
                 android:textAlignment="textStart"
-                android:textSize="18dp" />
+                android:textSize="16dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="Air Distance :"
+                    android:textAlignment="textStart"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/venue_list_item_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:textAlignment="textStart"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/venue_list_item_view_button"

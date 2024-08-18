@@ -13,6 +13,7 @@
         tools:ignore="UselessParent">
 
         <ImageView
+            android:id="@+id/venue_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -54,7 +55,6 @@
             android:paddingVertical="10dp">
 
 
-
             <TextView
                 android:id="@+id/gotoBookVenueBtn"
                 android:layout_width="wrap_content"
@@ -74,17 +74,17 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:paddingHorizontal="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
 
             <TextView
+                android:id="@+id/venue_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
                 android:maxLines="3"
-                android:text="Bat and Bite Cafe"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
@@ -110,14 +110,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Decembar 23 2034"
+                        android:text="Contact"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/venue_contact"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tuesday 23 June 09:00 AM"
                         android:textSize="15dp" />
                 </LinearLayout>
             </LinearLayout>
@@ -141,17 +141,17 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/venue_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Gala Convention Center"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="36 Guild Street London, UK"
-                        android:textSize="15dp" />
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="36 Guild Street London, UK"-->
+<!--                        android:textSize="15dp" />-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -176,6 +176,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/venue_own_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Inam Ilyas"
@@ -184,37 +185,42 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Organizer"
+                        android:text="Owner"
+                        android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/venue_owner_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:textSize="15dp" />
                 </LinearLayout>
             </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/map_container"
-            android:layout_width="match_parent"
-            android:layout_height="400dp" />
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
-                    android:text="About Event"
+                    android:text="About"
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/venue_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)"
+                    android:lineHeight="22dp"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:lineHeight="22dp"/>
+                    android:textSize="16dp" />
             </LinearLayout>
 
         </LinearLayout>
