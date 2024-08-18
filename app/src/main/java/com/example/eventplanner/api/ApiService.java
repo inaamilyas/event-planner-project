@@ -40,6 +40,18 @@ public interface ApiService {
     @POST("api/v1/venues")
     Call<ApiResponse<String>> addVenue(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude);
 
+    @Multipart
+    @POST("api/v1/events")
+    Call<ApiResponse<String>> addEvent(
+            @Part MultipartBody.Part picture,
+            @Part("name") RequestBody name,
+            @Part("date") RequestBody date,
+            @Part("time") RequestBody time,
+            @Part("budget") RequestBody budget,
+            @Part("no_of_guests") RequestBody noOfGuests,
+            @Part("about") RequestBody about
+    );
+
     @GET("api/v1/venues")
     Call<ApiResponseArray<Venue>> getVenues();
 

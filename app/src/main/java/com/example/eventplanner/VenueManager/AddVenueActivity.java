@@ -53,7 +53,6 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
     private static final int PICK_IMAGE_REQUEST = 12;
     private static final int REQUEST_STORAGE_PERMISSION = 100;
     private Uri imageUri;
-    private double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

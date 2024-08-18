@@ -27,27 +27,18 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/etLoginEmail"
+                android:id="@+id/event_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:hint="Name"
                 android:inputType="text"
-                android:padding="10dp"
+                android:paddingHorizontal="10dp"
                 android:textSize="18dp" />
 
-            <!--        <EditText-->
-            <!--            android:hint="Address"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="match_parent"-->
-            <!--            android:background="#00000000"-->
-            <!--            android:padding="10dp"-->
-            <!--            android:textSize="18dp"-->
-            <!--            android:layout_marginBottom="10dp"-->
-            <!--            android:inputType="text" />-->
 
             <EditText
-                android:id="@+id/editTextDate"
+                android:id="@+id/event_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
@@ -55,11 +46,11 @@
                 android:focusable="false"
                 android:hint="Date"
                 android:inputType="none"
-                android:padding="10dp"
+                android:paddingHorizontal="10dp"
                 android:textSize="18dp" />
 
             <EditText
-                android:id="@+id/editTextTime"
+                android:id="@+id/event_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
@@ -67,38 +58,60 @@
                 android:focusable="false"
                 android:hint="Time"
                 android:inputType="none"
-                android:padding="10dp"
+                android:paddingHorizontal="10dp"
                 android:textSize="18dp" />
 
             <EditText
+                android:id="@+id/event_budget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:hint="Budget"
                 android:inputType="number"
-                android:padding="10dp"
+                android:paddingHorizontal="10dp"
                 android:textSize="18dp" />
 
 
             <EditText
+                android:id="@+id/event_guests_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:hint="No. of Guests"
                 android:inputType="number"
-                android:padding="10dp"
+                android:paddingHorizontal="10dp"
                 android:textSize="18dp" />
 
 
             <EditText
+                android:id="@+id/et_venue_about"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="200dp"
                 android:layout_marginVertical="10dp"
                 android:ems="10"
                 android:hint="Details"
+                android:gravity="start"
                 android:inputType="textMultiLine"
-                android:padding="10dp"
+                android:paddingHorizontal="10dp"
                 android:textSize="18dp" />
+
+            <!-- ImageView to display the selected image -->
+            <ImageView
+                android:id="@+id/iv_selected_image"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginVertical="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/event_image_1" />
+
+            <!-- Button to trigger image selection -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_select_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Image"
+                android:textSize="16sp"
+                android:layout_marginVertical="10dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="match_parent"
