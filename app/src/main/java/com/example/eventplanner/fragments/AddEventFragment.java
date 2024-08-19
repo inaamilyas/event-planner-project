@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.eventplanner.R;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
@@ -71,6 +75,8 @@ public class AddEventFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     saveEvent();
+                    binding.saveEventButton.setText("Add Event");
+                    binding.saveEventButton.isEnabled();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -79,18 +85,6 @@ public class AddEventFragment extends Fragment {
 
         binding.eventDate.setOnClickListener(v -> showDatePickerDialog());
         binding.eventTime.setOnClickListener(v -> showTimePickerDialog());
-
-//        binding.saveEventButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                VenuesFragment venuesFragment = new VenuesFragment();
-//                FragmentManager fragmentManager = getParentFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container, venuesFragment);
-//                fragmentTransaction.addToBackStack(null); // Optional: Add to back stack to enable back navigation
-//                fragmentTransaction.commit();
-//            }
-//        });
 
         binding.btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +170,9 @@ public class AddEventFragment extends Fragment {
     }
 
     private void saveEvent() throws IOException {
+        binding.saveEventButton.setText("Loading...");
+        binding.saveEventButton.setEnabled(false);
+
         // Convert URI to File and proceed with the API call
         File imageFile = getFileFromUri(imageUri);
 
@@ -203,26 +200,43 @@ public class AddEventFragment extends Fragment {
         RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<String>> call = apiService.addEvent(body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
-        call.enqueue(new Callback<ApiResponse<String>>() {
+        Call<ApiResponse<Integer>> call = apiService.addEvent(body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
+        call.enqueue(new Callback<ApiResponse<Integer>>() {
             @Override
-            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+            public void onResponse(Call<ApiResponse<Integer>> call, Response<ApiResponse<Integer>> response) {
                 // Handle success
                 if (response.isSuccessful()) {
-                    // Do something with the response
-                    Toast.makeText(getContext(), "Venue created successfully", Toast.LENGTH_SHORT).show();
+
+                    int eventId = response.body().getData();
+
+                    Toast.makeText(getContext(), "Event created successfully", Toast.LENGTH_SHORT).show();
+                    VenuesFragment venuesFragment = new VenuesFragment();
+
+                    // Create a bundle to pass the data
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("eventId", eventId);
+                    venuesFragment.setArguments(bundle);
+
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, venuesFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 } else {
                     // Handle error
                     Toast.makeText(getContext(), "Failed to create venue", Toast.LENGTH_SHORT).show();
-
+                    binding.saveEventButton.setText("Add Event");
+                    binding.saveEventButton.isEnabled();
                 }
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Integer>> call, Throwable t) {
                 // Handle failure
+                Log.d("inaamilyas", "onFailure: " + t);
                 Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
-
+                binding.saveEventButton.setText("Add Event");
+                binding.saveEventButton.isEnabled();
             }
         });
 

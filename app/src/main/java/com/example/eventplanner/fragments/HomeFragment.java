@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +47,10 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
-    private long LATITUDE, LONGITUDE;
     private VenuesAdapter venuesAdapter;
     private FragmentHomeBinding binding;
     private FusedLocationProviderClient fusedLocationClient;
+    static ArrayList<Venue> venuesList = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,7 +65,6 @@ public class HomeFragment extends Fragment {
 
     private Event[] eventsArr = {};
 
-    private ArrayList<Venue> venuesList = new ArrayList<>();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

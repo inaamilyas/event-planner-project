@@ -42,7 +42,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/events")
-    Call<ApiResponse<String>> addEvent(
+    Call<ApiResponse<Integer>> addEvent(
             @Part MultipartBody.Part picture,
             @Part("name") RequestBody name,
             @Part("date") RequestBody date,

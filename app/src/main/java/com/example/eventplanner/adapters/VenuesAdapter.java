@@ -23,15 +23,15 @@ import java.util.ArrayList;
 
 public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder> {
     private ArrayList<Venue> venuesList = new ArrayList<>();
+    private int eventId;
 
     public VenuesAdapter(ArrayList<Venue> venuesList) {
         this.venuesList = venuesList;
     }
 
-
-    // Method to update the venues data
-    public void setVenues(ArrayList<Venue> venues) {
-        this.venuesList = venues;
+    public VenuesAdapter(ArrayList<Venue> venuesList, int eventId) {
+        this.venuesList = venuesList;
+        this.eventId = eventId;
     }
 
     @NonNull
@@ -86,6 +86,7 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                     Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
                     Venue selectedVenue = venuesList.get(position);
                     intent.putExtra("selectedVenue", selectedVenue);
+                    intent.putExtra("eventId", eventId);
                     view.getContext().startActivity(intent);
                 }
             });
@@ -95,6 +96,8 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     Intent intent = new Intent(view.getContext(), BookVenueActivity.class);
+                    intent.putExtra("selectedVenue", venuesList.get(position));
+                    intent.putExtra("eventId", eventId);
                     view.getContext().startActivity(intent);
                     Toast.makeText(view.getContext(), "Clicked on book " + position, Toast.LENGTH_SHORT).show();
                 }
