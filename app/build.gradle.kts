@@ -47,6 +47,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation(libs.material.v190);
+    implementation (libs.material.v1120)
     implementation(libs.glide);
     implementation(libs.circleimageview)
 

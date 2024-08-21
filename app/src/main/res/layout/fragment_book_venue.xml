@@ -1,29 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".BookVenueActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter Details and confirm booking"
-        android:textSize="20sp"
-        android:paddingVertical="10dp"
-        android:textAlignment="center"
-        />
-
-    <EditText
-        android:id="@+id/editTextText2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        />
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/etDate"
@@ -49,14 +29,23 @@
         android:focusable="false"
         android:clickable="true" />
 
-
-    <EditText
-        android:id="@+id/editTextText6"
+    <Spinner
+        android:id="@+id/spinnerEvents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="phone"
-        android:text="Name" />
+        android:spinnerMode="dropdown" />
 
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Phone Number"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/btnBook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Book Venue" />
 
 </LinearLayout>

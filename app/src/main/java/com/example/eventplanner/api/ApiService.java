@@ -17,6 +17,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -59,4 +60,10 @@ public interface ApiService {
     @POST("api/v1/venues/suggest/nearest")
     Call<ApiResponseArray<Venue>> getNearestVenues(@Body Map<String, Object> requestBody);
 
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/venues/booking/{venueId}")
+    Call<ApiResponse<String>> bookVenue(
+            @Path("venueId") String venueId,
+            @Body Map<String, Object> requestBody
+    );
 }

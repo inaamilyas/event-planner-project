@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +19,7 @@ import com.example.eventplanner.BookVenueActivity;
 import com.example.eventplanner.R;
 import com.example.eventplanner.VenueDetailsActivity;
 import com.example.eventplanner.config.AppConfig;
+import com.example.eventplanner.fragments.BookVenueFragment;
 import com.example.eventplanner.models.Venue;
 
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
         this.venuesList = venuesList;
         this.eventId = eventId;
     }
+
 
     @NonNull
     @Override
@@ -71,10 +75,20 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
+//                    Intent intent = new Intent(view.getContext(), VenueDetailsActivity.class);
                     Venue selectedVenue = venuesList.get(position);
-                    intent.putExtra("selectedVenue", selectedVenue);
-                    view.getContext().startActivity(intent);
+//                    intent.putExtra("selectedVenue", selectedVenue);
+//                    view.getContext().startActivity(intent);
+
+                    // Show bottom sheet
+//                    BookVenueFragment bookVenueFragment = new BookVenueFragment();
+//                    bookVenueFragment.show(fragmentManager, "BookVenueBottomSheet");
+
+                    // Show bottom sheet
+                    BookVenueFragment bookVenueFragment = BookVenueFragment.newInstance(selectedVenue, String.valueOf(eventId));
+                    FragmentManager fragmentManager = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
+                    bookVenueFragment.show(fragmentManager, "BookVenueBottomSheet");
+
                 }
             });
 
