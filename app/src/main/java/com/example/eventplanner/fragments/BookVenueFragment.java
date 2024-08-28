@@ -1,5 +1,7 @@
 package com.example.eventplanner.fragments;
 
+import static com.example.eventplanner.fragments.HomeFragment.eventList;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -16,10 +18,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.eventplanner.R;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.FragmentBookVenueBinding;
+import com.example.eventplanner.models.Event;
 import com.example.eventplanner.models.Venue;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -39,9 +43,11 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
 
     private static final String ARG_VENUE = "selectedVenue";
     private static final String ARG_EVENT_ID = "eventId";
+    private int selectedEventId;
 
     private Venue selectedVenue;
     private String eventId;
+
 
     public static BookVenueFragment newInstance(Venue venue, String eventId) {
         BookVenueFragment fragment = new BookVenueFragment();
@@ -58,6 +64,10 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
         binding = FragmentBookVenueBinding.inflate(inflater, container, false);
         LinearLayout view = binding.getRoot();
 
+        if (getArguments() != null) {
+            selectedVenue = (Venue) getArguments().getSerializable(ARG_VENUE);
+            eventId = getArguments().getString(ARG_EVENT_ID);
+        }
 
         // Set listeners using ViewBinding
         binding.etDate.setOnClickListener(v -> showDatePicker());
@@ -66,11 +76,48 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
 
         // Setup Spinner with event names
         List<String> events = new ArrayList<>();
-        events.add("Event 1");
-        events.add("Event 2");
-        events.add("Event 3");
+        int selectedEventPosition = 0;
 
-        setupSpinner(events);
+        // Loop through the event list to get names
+        for (int i = 0; i < eventList.size(); i++) {
+            Event event = eventList.get(i);
+            events.add(event.getName()); // Add event name to list
+
+            // If the event ID matches, update the selected event position
+            if (String.valueOf(event.getId()).equals(eventId)) {
+                Log.d("inaamilyas", "onCreateView: " + event.getId() + " " + i);
+
+                selectedEventPosition = i;
+            }
+        }
+
+        // Create an ArrayAdapter using the custom spinner item layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), R.layout.event_dropdown_item, events);
+        binding.spinnerEvents.setAdapter(adapter);
+
+        // Set the spinner selection to the selected event position
+        if (selectedEventPosition >= 0 && selectedEventPosition < events.size()) {
+            binding.spinnerEvents.setSelection(selectedEventPosition);
+        } else {
+            // Handle the case where the position is invalid
+            Log.d("inaamilyas", "Invalid selectedEventPosition: " + selectedEventPosition);
+        }
+
+        // Handle selection of spinner item
+        binding.spinnerEvents.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedEventName = (String) parent.getItemAtPosition(position);
+                selectedEventId = eventList.get(position).getId();
+                Toast.makeText(getContext(), "Selected Event: " + selectedEventId, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing if nothing is selected
+            }
+        });
+
 
         binding.btnBook.setOnClickListener(v -> {
             // Collect the data and send it to the backend
@@ -80,7 +127,7 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
 
             if (!date.isEmpty() && !startTime.isEmpty() && !endTime.isEmpty()) {
                 // TODO: Send data to backend via API
-                sendBookingDataToBackend(date, startTime, endTime);
+                sendBookingDataToBackend();
             } else {
                 Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             }
@@ -116,12 +163,15 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
         timePickerDialog.show();
     }
 
-    private void sendBookingDataToBackend(String date, String startTime, String endTime) {
+    private void sendBookingDataToBackend() {
+        Log.d("inaamilyas", "sendBookingDataToBackend: " + selectedEventId);
 // Create the request body as a Map
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("bookingDate", binding.etDate.getText().toString());
-        requestBody.put("startTime", binding.etStartTime.getText().toString());
-        requestBody.put("endTime", binding.etEndTime.getText().toString());
+        requestBody.put("date", binding.etDate.getText().toString());
+        requestBody.put("start_time", binding.etStartTime.getText().toString());
+        requestBody.put("end_time", binding.etEndTime.getText().toString());
+        requestBody.put("phone", binding.etPhoneNumber.getText().toString());
+        requestBody.put("event_id", selectedEventId);
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<ApiResponse<String>> call = apiService.bookVenue(String.valueOf(selectedVenue.getId()), requestBody);
@@ -131,13 +181,14 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
                 if (response.isSuccessful()) {
                     // Handle success
                     assert response.body() != null;
-                    String result = response.body().getData();
-                    Log.d("inaamilyas", result);
                     Toast.makeText(getContext(), "Venue booked successfully", Toast.LENGTH_SHORT).show();
+
+                    // Close the fragment
+                    dismiss();
                 } else {
                     // Handle error
                     Log.e("inaamilyas", "Failed to book venue" + response.code());
-                    Toast.makeText(getContext(), "Failed to book venue", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

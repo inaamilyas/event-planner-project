@@ -9,38 +9,52 @@
         android:id="@+id/etDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Date"
+        android:layout_marginVertical="10dp"
+        android:clickable="true"
         android:focusable="false"
-        android:clickable="true" />
+        android:hint="Select Date"
+        android:paddingHorizontal="10dp" />
 
     <EditText
         android:id="@+id/etStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Start Time"
+        android:layout_marginVertical="10dp"
+        android:clickable="true"
         android:focusable="false"
-        android:clickable="true" />
+        android:hint="Select Start Time"
+        android:paddingHorizontal="10dp" />
 
     <EditText
         android:id="@+id/etEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select End Time"
+        android:layout_marginVertical="10dp"
+        android:clickable="true"
         android:focusable="false"
-        android:clickable="true" />
+        android:hint="Select End Time"
+        android:paddingHorizontal="10dp" />
 
     <Spinner
         android:id="@+id/spinnerEvents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
         android:spinnerMode="dropdown" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="#494949" />
 
     <EditText
         android:id="@+id/etPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
         android:hint="Enter Phone Number"
-        android:inputType="phone" />
+        android:inputType="phone"
+        android:paddingHorizontal="10dp" />
 
     <Button
         android:id="@+id/btnBook"

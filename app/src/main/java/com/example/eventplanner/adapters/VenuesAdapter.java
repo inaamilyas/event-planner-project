@@ -25,8 +25,8 @@ import com.example.eventplanner.models.Venue;
 import java.util.ArrayList;
 
 public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder> {
-    private ArrayList<Venue> venuesList = new ArrayList<>();
-    private int eventId;
+    private final ArrayList<Venue> venuesList;
+    private int eventId = -1;
 
     public VenuesAdapter(ArrayList<Venue> venuesList) {
         this.venuesList = venuesList;
@@ -123,7 +123,8 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
             this.venueName.setText(venue.getName());
             this.venueAddress.setText(venue.getAddress());
             this.venueDistance.setText(venue.getDistance());
-            Glide.with(this.venueImage.getContext()).load(AppConfig.SERVER_URL + venue.getPicture()).placeholder(R.drawable.enent_image).into(this.venueImage);
+            String imageUrl = (AppConfig.SERVER_URL + venue.getPicture()).trim();
+            Glide.with(this.venueImage.getContext()).load(imageUrl).placeholder(R.drawable.enent_image).into(this.venueImage);
         }
     }
 

@@ -33,6 +33,11 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Intent i;
 
                 if (user != null && !user.isEmpty()) {
+//                    Fetch information
+
+
+
+
 //                    Go to Home
                     i = new Intent(SplashScreenActivity.this, MainActivity.class);
                 } else if (isFirstTime) {

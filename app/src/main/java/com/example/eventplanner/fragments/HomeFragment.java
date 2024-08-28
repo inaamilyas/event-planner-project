@@ -1,10 +1,14 @@
 package com.example.eventplanner.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,22 +27,28 @@ import com.example.eventplanner.R;
 import com.example.eventplanner.adapters.EventsAdapter;
 import com.example.eventplanner.adapters.VenuesAdapter;
 import com.example.eventplanner.api.ApiClient;
+import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiResponseArray;
 import com.example.eventplanner.api.ApiService;
+import com.example.eventplanner.api.Data;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.FragmentHomeBinding;
 import com.example.eventplanner.models.Event;
+import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.WeatherResponse;
 import com.example.eventplanner.network.WeatherApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,9 +58,12 @@ public class HomeFragment extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private VenuesAdapter venuesAdapter;
+    private EventsAdapter eventsAdapter;
     private FragmentHomeBinding binding;
     private FusedLocationProviderClient fusedLocationClient;
     static ArrayList<Venue> venuesList = new ArrayList<>();
+    static ArrayList<Event> eventList = new ArrayList<>();
+    static User user = null;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -63,12 +76,12 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private Event[] eventsArr = {};
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Show loading spinner
+//        binding.progressBar.setVisibility(View.VISIBLE);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         // Check for location permissions
@@ -78,15 +91,15 @@ public class HomeFragment extends Fragment {
             getCurrentLocation();
         }
 
-
         binding.venuesRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         venuesAdapter = new VenuesAdapter(venuesList);
         binding.venuesRecyclerHome.setAdapter(venuesAdapter);
 
         // Initialize RecyclerViews
         binding.eventsRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        EventsAdapter eventsAdapter = new EventsAdapter(eventsArr);
+        eventsAdapter = new EventsAdapter(eventList);
         binding.eventsRecyclerHome.setAdapter(eventsAdapter);
+
 
     }
 
@@ -104,7 +117,7 @@ public class HomeFragment extends Fragment {
                     fetchWeatherData(lat, lon);
                     ApiService apiService = ApiClient.getClient().create(ApiService.class);
                     // Fetch data from API
-                    fetchVenues(apiService, lat, lon);
+                    fetchDetails(apiService, lat, lon);
                 }
             }
         });
@@ -199,6 +212,59 @@ public class HomeFragment extends Fragment {
                 getCurrentLocation();
             }
         }
+    }
+
+    private void fetchDetails(ApiService apiService, String lat, String lon) {
+
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(AppConfig.SHARED_PREF_NAME, MODE_PRIVATE);
+        String userJson = sharedPreferences.getString("user", null);
+        Gson gson = new Gson();
+        user = gson.fromJson(userJson, User.class);
+        int userId = user.getId();
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("latitude", lat);
+        requestBody.put("longitude", lon);
+        requestBody.put("user_id", userId);
+        Call<ApiResponse<Data>> call = apiService.getCurrentUserInformation(userId,requestBody);
+        call.enqueue(new Callback<ApiResponse<Data>>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<ApiResponse<Data>> call, Response<ApiResponse<Data>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if(response.code() == 200){
+                        user = response.body().getData().getUser();
+                        user.saveToPreferences(requireContext());
+
+                        // Get the list of Venue from the ApiResponseArray
+                        List<Venue> venueList = response.body().getData().getVenues();
+                        if (venueList != null && !venueList.isEmpty()) {
+                            // Update the list and notify adapter
+                            venuesList.clear();
+                            venuesList.addAll(venueList);
+                            venuesAdapter.notifyDataSetChanged();
+                        }
+                        List<Event> allEvents = response.body().getData().getEvents();
+                        if (allEvents != null && !allEvents.isEmpty()) {
+                            // Update the list and notify adapter
+                            eventList.clear();
+                            eventList.addAll(allEvents);
+                            eventsAdapter.notifyDataSetChanged();
+                        }
+                    } else{
+                        Toast.makeText(getContext(), "Failed to retrieve data", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Toast.makeText(getContext(), "Check Internet connection", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Data>> call, Throwable t) {
+                Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

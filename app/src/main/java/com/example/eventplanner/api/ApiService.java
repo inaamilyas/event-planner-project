@@ -2,6 +2,7 @@ package com.example.eventplanner.api;
 
 // ApiService.java
 
+import com.example.eventplanner.models.Event;
 import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.VenueManager;
@@ -13,6 +14,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -43,7 +45,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/events")
-    Call<ApiResponse<Integer>> addEvent(
+    Call<ApiResponse<Event>> addEvent(
             @Part MultipartBody.Part picture,
             @Part("name") RequestBody name,
             @Part("date") RequestBody date,
@@ -61,9 +63,16 @@ public interface ApiService {
     Call<ApiResponseArray<Venue>> getNearestVenues(@Body Map<String, Object> requestBody);
 
     @Headers({"Content-Type: application/json"})
-    @POST("api/v1/venues/booking/{venueId}")
+    @POST("api/v1/user/info")
+    Call<ApiResponse<Data>> getCurrentUserInformation(
+            @Header("user_id") int userId,
+            @Body Map<String, Object> requestBody
+    );
+
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/venues/booking/{venue_id}")
     Call<ApiResponse<String>> bookVenue(
-            @Path("venueId") String venueId,
+            @Path("venue_id") String venueId,
             @Body Map<String, Object> requestBody
     );
 }

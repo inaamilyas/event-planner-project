@@ -1,5 +1,7 @@
 package com.example.eventplanner.fragments;
 
+import static com.example.eventplanner.fragments.HomeFragment.eventList;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -28,6 +30,7 @@ import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.FragmentAddEventBinding;
+import com.example.eventplanner.models.Event;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -200,21 +203,22 @@ public class AddEventFragment extends Fragment {
         RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<Integer>> call = apiService.addEvent(body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
-        call.enqueue(new Callback<ApiResponse<Integer>>() {
+        Call<ApiResponse<Event>> call = apiService.addEvent(body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
+        call.enqueue(new Callback<ApiResponse<Event>>() {
             @Override
-            public void onResponse(Call<ApiResponse<Integer>> call, Response<ApiResponse<Integer>> response) {
+            public void onResponse(Call<ApiResponse<Event>> call, Response<ApiResponse<Event>> response) {
                 // Handle success
                 if (response.isSuccessful()) {
 
-                    int eventId = response.body().getData();
+                    Event event = response.body().getData();
+                    eventList.add(event);
 
                     Toast.makeText(getContext(), "Event created successfully", Toast.LENGTH_SHORT).show();
                     VenuesFragment venuesFragment = new VenuesFragment();
 
                     // Create a bundle to pass the data
                     Bundle bundle = new Bundle();
-                    bundle.putInt("eventId", eventId);
+                    bundle.putInt("eventId", event.getId());
                     venuesFragment.setArguments(bundle);
 
                     FragmentManager fragmentManager = getParentFragmentManager();
@@ -231,7 +235,7 @@ public class AddEventFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<Integer>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Event>> call, Throwable t) {
                 // Handle failure
                 Log.d("inaamilyas", "onFailure: " + t);
                 Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
