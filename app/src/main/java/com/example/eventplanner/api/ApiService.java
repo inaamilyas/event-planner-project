@@ -13,11 +13,15 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
@@ -53,6 +57,37 @@ public interface ApiService {
             @Part("budget") RequestBody budget,
             @Part("no_of_guests") RequestBody noOfGuests,
             @Part("about") RequestBody about
+    );
+
+    @Multipart
+    @PUT("api/v1/events/{event_id}")
+    Call<ApiResponse<String>> updateEvent(
+            @Path("event_id") String event_id,
+            @Part MultipartBody.Part picture,
+            @Part("name") RequestBody name,
+            @Part("date") RequestBody date,
+            @Part("time") RequestBody time,
+            @Part("budget") RequestBody budget,
+            @Part("no_of_guests") RequestBody noOfGuests,
+            @Part("about") RequestBody about
+    );
+
+    @FormUrlEncoded
+    @PUT("api/v1/events/{event_id}")
+    Call<ApiResponse<String>> updateEventWithoutImage(
+            @Path("event_id") String event_id,
+            @Field("name") String name,
+            @Field("date") String date,
+            @Field("time") String time,
+            @Field("budget") String budget,
+            @Field("no_of_guests") String noOfGuests,
+            @Field("about") String about
+    );
+
+    @Headers({"Content-Type: application/json"})
+    @DELETE("api/v1/events/{event_id}")
+    Call<ApiResponse> deleteEvent(
+            @Path("event_id") String event_id
     );
 
     @GET("api/v1/venues")

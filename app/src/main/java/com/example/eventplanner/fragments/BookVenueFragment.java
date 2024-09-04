@@ -4,6 +4,7 @@ import static com.example.eventplanner.fragments.HomeFragment.eventList;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.eventplanner.R;
 import com.example.eventplanner.api.ApiClient;
@@ -85,8 +88,6 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
 
             // If the event ID matches, update the selected event position
             if (String.valueOf(event.getId()).equals(eventId)) {
-                Log.d("inaamilyas", "onCreateView: " + event.getId() + " " + i);
-
                 selectedEventPosition = i;
             }
         }
@@ -98,9 +99,6 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
         // Set the spinner selection to the selected event position
         if (selectedEventPosition >= 0 && selectedEventPosition < events.size()) {
             binding.spinnerEvents.setSelection(selectedEventPosition);
-        } else {
-            // Handle the case where the position is invalid
-            Log.d("inaamilyas", "Invalid selectedEventPosition: " + selectedEventPosition);
         }
 
         // Handle selection of spinner item
@@ -164,7 +162,6 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
     }
 
     private void sendBookingDataToBackend() {
-        Log.d("inaamilyas", "sendBookingDataToBackend: " + selectedEventId);
 // Create the request body as a Map
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("date", binding.etDate.getText().toString());

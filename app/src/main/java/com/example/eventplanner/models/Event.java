@@ -35,14 +35,15 @@ public class Event {
     @SerializedName("updated_at")
     private String updatedAt;
 
-    private String address;
+    @SerializedName("venue_booking")
+    private Venue venue;
 
-    public Event(String name, String date, String address, String image) {
-        this.name = name;
-        this.date = date;
-        this.address = address;
-        this.image = image;
-    }
+//    public Event(String name, String date, String address, String image) {
+//        this.name = name;
+//        this.date = date;
+//        this.address = address;
+//        this.image = image;
+//    }
 
     public String getName() {
         return name;
@@ -60,12 +61,12 @@ public class Event {
         this.date = date;
     }
 
-    public String getAddress() {
-        return address;
+    public Venue getVenue() {
+        return venue;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setVenue(Venue venue) {
+        this.venue = venue;
     }
 
     public String getImage() {

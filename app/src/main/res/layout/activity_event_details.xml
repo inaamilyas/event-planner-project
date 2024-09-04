@@ -9,10 +9,11 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         tools:ignore="UselessParent">
 
         <ImageView
+            android:id="@+id/event_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -59,18 +60,19 @@
                 android:layout_marginEnd="10dp"
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="3dp"
-                android:text="+20 people invited"
+                android:text="Invite Guests"
                 android:textColor="#5669FF"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/share_event"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/buttonbg"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="3dp"
-                android:text="Invite"
+                android:text="Share"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -89,11 +91,12 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/event_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
                 android:maxLines="3"
-                android:text="International Band Music Concert"
+                android:text=""
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
@@ -113,21 +116,24 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/event_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Decembar 23 2034"
+                        android:text=""
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tuesday 23 June 09:00 AM"
-                        android:textSize="15dp" />
+<!--                    <TextView-->
+<!--                        -->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Tuesday 23 June 09:00 AM"-->
+<!--                        android:textSize="15dp" />-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -147,20 +153,22 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/event_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Gala Convention Center"
+                        android:text=""
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="36 Guild Street London, UK"
-                        android:textSize="15dp" />
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="36 Guild Street London, UK"-->
+<!--                        android:textSize="15dp" />-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -172,6 +180,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/profile_picture"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
@@ -185,12 +194,14 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/organizer_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Inam Ilyas"
+                        android:text=""
                         android:textSize="20dp" />
 
                     <TextView
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Organizer"
@@ -213,13 +224,42 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/event_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)centerCrop: Scales the image uniformly (maintains the image's aspect ratio) so that both dimensions (width and height) of the image will be equal to or larger than the corresponding dimension of the view (cropped if necessary to fill the view)"
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:lineHeight="22dp"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/event_edit_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_rounded"
+                    android:backgroundTint="#E436C502"
+                    android:text="Edit"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/event_delete_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rounded"
+                    android:backgroundTint="#E4C50202"
+                    android:text="Delete"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
 
         </LinearLayout>
 

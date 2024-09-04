@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +43,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,12 +55,12 @@ public class HomeFragment extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private VenuesAdapter venuesAdapter;
-    private EventsAdapter eventsAdapter;
+    public static EventsAdapter homeEventsAdapter;
     private FragmentHomeBinding binding;
     private FusedLocationProviderClient fusedLocationClient;
-    static ArrayList<Venue> venuesList = new ArrayList<>();
-    static ArrayList<Event> eventList = new ArrayList<>();
-    static User user = null;
+    public static ArrayList<Venue> venuesList = new ArrayList<>();
+    public static ArrayList<Event> eventList = new ArrayList<>();
+    public static User user = null;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -80,9 +77,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Show loading spinner
-//        binding.progressBar.setVisibility(View.VISIBLE);
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         // Check for location permissions
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -97,9 +91,8 @@ public class HomeFragment extends Fragment {
 
         // Initialize RecyclerViews
         binding.eventsRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        eventsAdapter = new EventsAdapter(eventList);
-        binding.eventsRecyclerHome.setAdapter(eventsAdapter);
-
+        homeEventsAdapter = new EventsAdapter(eventList);
+        binding.eventsRecyclerHome.setAdapter(homeEventsAdapter);
 
     }
 
@@ -226,13 +219,13 @@ public class HomeFragment extends Fragment {
         requestBody.put("latitude", lat);
         requestBody.put("longitude", lon);
         requestBody.put("user_id", userId);
-        Call<ApiResponse<Data>> call = apiService.getCurrentUserInformation(userId,requestBody);
+        Call<ApiResponse<Data>> call = apiService.getCurrentUserInformation(userId, requestBody);
         call.enqueue(new Callback<ApiResponse<Data>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<ApiResponse<Data>> call, Response<ApiResponse<Data>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    if(response.code() == 200){
+                    if (response.code() == 200) {
                         user = response.body().getData().getUser();
                         user.saveToPreferences(requireContext());
 
@@ -249,9 +242,13 @@ public class HomeFragment extends Fragment {
                             // Update the list and notify adapter
                             eventList.clear();
                             eventList.addAll(allEvents);
-                            eventsAdapter.notifyDataSetChanged();
+                            homeEventsAdapter.notifyDataSetChanged();
+
+                        } else {
+                            // Show the "No Events" TextView when there are no events
+                            binding.noEvents.setVisibility(View.VISIBLE);
                         }
-                    } else{
+                    } else {
                         Toast.makeText(getContext(), "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                     }
 
