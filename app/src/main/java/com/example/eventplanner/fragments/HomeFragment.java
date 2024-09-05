@@ -163,39 +163,6 @@ public class HomeFragment extends Fragment {
         binding.dailyForecastContainer.addView(dailyForecastView);
     }
 
-    private void fetchVenues(ApiService apiService, String lat, String lon) {
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("latitude", lat);
-        requestBody.put("longitude", lon);
-        Call<ApiResponseArray<Venue>> call = apiService.getNearestVenues(requestBody);
-        call.enqueue(new Callback<ApiResponseArray<Venue>>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onResponse(Call<ApiResponseArray<Venue>> call, Response<ApiResponseArray<Venue>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-
-                    // Get the list of Venue from the ApiResponseArray
-                    List<Venue> venueList = response.body().getData();
-                    if (venueList != null && !venueList.isEmpty()) {
-                        // Update the list and notify adapter
-                        venuesList.clear(); // Clear the current list
-                        venuesList.addAll(venueList); // Add all fetched venues to the list
-                        venuesAdapter.notifyDataSetChanged(); // Notify adapter about data change
-                    } else {
-                        Toast.makeText(getContext(), "No venues found", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Failed to retrieve data", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponseArray<Venue>> call, Throwable t) {
-                Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

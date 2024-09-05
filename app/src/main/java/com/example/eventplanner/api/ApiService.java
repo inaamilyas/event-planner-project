@@ -49,46 +49,19 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/events")
-    Call<ApiResponse<Event>> addEvent(
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("date") RequestBody date,
-            @Part("time") RequestBody time,
-            @Part("budget") RequestBody budget,
-            @Part("no_of_guests") RequestBody noOfGuests,
-            @Part("about") RequestBody about
-    );
+    Call<ApiResponse<Event>> addEvent(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("budget") RequestBody budget, @Part("no_of_guests") RequestBody noOfGuests, @Part("about") RequestBody about);
 
     @Multipart
     @PUT("api/v1/events/{event_id}")
-    Call<ApiResponse<String>> updateEvent(
-            @Path("event_id") String event_id,
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("date") RequestBody date,
-            @Part("time") RequestBody time,
-            @Part("budget") RequestBody budget,
-            @Part("no_of_guests") RequestBody noOfGuests,
-            @Part("about") RequestBody about
-    );
+    Call<ApiResponse<String>> updateEvent(@Path("event_id") String event_id, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("budget") RequestBody budget, @Part("no_of_guests") RequestBody noOfGuests, @Part("about") RequestBody about);
 
     @FormUrlEncoded
     @PUT("api/v1/events/{event_id}")
-    Call<ApiResponse<String>> updateEventWithoutImage(
-            @Path("event_id") String event_id,
-            @Field("name") String name,
-            @Field("date") String date,
-            @Field("time") String time,
-            @Field("budget") String budget,
-            @Field("no_of_guests") String noOfGuests,
-            @Field("about") String about
-    );
+    Call<ApiResponse<String>> updateEventWithoutImage(@Path("event_id") String event_id, @Field("name") String name, @Field("date") String date, @Field("time") String time, @Field("budget") String budget, @Field("no_of_guests") String noOfGuests, @Field("about") String about);
 
     @Headers({"Content-Type: application/json"})
     @DELETE("api/v1/events/{event_id}")
-    Call<ApiResponse> deleteEvent(
-            @Path("event_id") String event_id
-    );
+    Call<ApiResponse> deleteEvent(@Path("event_id") String event_id);
 
     @GET("api/v1/venues")
     Call<ApiResponseArray<Venue>> getVenues();
@@ -99,15 +72,26 @@ public interface ApiService {
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/user/info")
-    Call<ApiResponse<Data>> getCurrentUserInformation(
-            @Header("user_id") int userId,
-            @Body Map<String, Object> requestBody
-    );
+    Call<ApiResponse<Data>> getCurrentUserInformation(@Header("user_id") int userId, @Body Map<String, Object> requestBody);
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/venues/booking/{venue_id}")
-    Call<ApiResponse<String>> bookVenue(
-            @Path("venue_id") String venueId,
-            @Body Map<String, Object> requestBody
+    Call<ApiResponse<String>> bookVenue(@Path("venue_id") String venueId, @Body Map<String, Object> requestBody);
+
+    @Multipart
+    @PUT("api/v1/venues/{venue_id}")
+    Call<ApiResponse<Venue>> updateVenue(
+            @Path("venue_id") String venueId,                   // Path parameter for the venue ID
+            @Part MultipartBody.Part picture,                   // Part for the picture (image)
+            @Part("name") RequestBody name,                     // Part for the venue name
+            @Part("phone") RequestBody phone,                   // Part for the phone number
+            @Part("about") RequestBody about,                   // Part for the description
+            @Part("latitude") RequestBody latitude,             // Part for latitude
+            @Part("longitude") RequestBody longitude            // Part for longitude
     );
+
+    @Headers({"Content-Type: application/json"})
+    @DELETE("api/v1/venues/{venue_id}")
+    Call<ApiResponse> deleteVenue(@Path("venue_id") String venue_id);
+
 }

@@ -1,5 +1,7 @@
 package com.example.eventplanner;
 
+import static com.example.eventplanner.fragments.HomeFragment.user;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,14 +20,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityMainBinding;
+import com.example.eventplanner.fragments.AddEventFragment;
 import com.example.eventplanner.fragments.EventsFragment;
 import com.example.eventplanner.fragments.HomeFragment;
 import com.example.eventplanner.fragments.ProfileFragment;
 import com.example.eventplanner.fragments.SettingFragment;
 import com.example.eventplanner.fragments.VenuesFragment;
+import com.example.eventplanner.models.User;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActivityMainBinding binding;
@@ -64,9 +70,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buttonCloseDrawer = headerView.findViewById(R.id.close_menu);
 
 
+
+        User user = User.getFromPreferences(this);
+//        Toast.makeText(this, user.getProfilePic(), Toast.LENGTH_SHORT).show();
         // Set user information
         profileImageView.setImageResource(R.drawable.event_image_1);
-        usernameTextView.setText("Inam Ilyas");
+        usernameTextView.setText(user.getName());
 
         // Set button click listener to open/close drawer
         binding.buttonOpenDrawer.setOnClickListener(v -> {
@@ -82,6 +91,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Set Navigation Item Selected Listener
         navigationView.setNavigationItemSelectedListener(this);
+
+        binding.buttonAddEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddEventFragment fragment = new AddEventFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
     }
 
     @Override
@@ -96,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             selectedFragment = new VenuesFragment();
         } else if (id == R.id.nav_profile) {
             selectedFragment = new ProfileFragment();
-        } else if (id == R.id.nav_settings) {
-            selectedFragment = new SettingFragment();
         } else if (id == R.id.nav_logout) {
             // Handle logout here
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
@@ -136,4 +155,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
 }

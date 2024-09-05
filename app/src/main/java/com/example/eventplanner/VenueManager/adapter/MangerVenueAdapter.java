@@ -94,6 +94,7 @@ public class MangerVenueAdapter extends RecyclerView.Adapter<MangerVenueAdapter.
 
                     Intent intent = new Intent(view.getContext(), VenueManagerVenDetailsActivity.class);
                     intent.putExtra("selectedVenue", selectedVenue);
+                    intent.putExtra("position", position);
                     view.getContext().startActivity(intent);
                 }
             });
