@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity;
 import com.example.eventplanner.VenueManager.adapter.MangerVenueAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponseArray;
@@ -51,6 +52,7 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(DashboardVenueManagerActivity.this, AddVenueActivity.class));
+//                startActivity(new Intent(DashboardVenueManagerActivity.this, AddMenuActivity.class));
             }
         });
 

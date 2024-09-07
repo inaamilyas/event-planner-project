@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.eventplanner.BookVenueActivity;
+import com.example.eventplanner.MenuSelectionActivity;
 import com.example.eventplanner.R;
 import com.example.eventplanner.VenueDetailsActivity;
 import com.example.eventplanner.config.AppConfig;
@@ -109,7 +109,7 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Intent intent = new Intent(view.getContext(), BookVenueActivity.class);
+                    Intent intent = new Intent(view.getContext(), MenuSelectionActivity.class);
                     intent.putExtra("selectedVenue", venuesList.get(position));
                     intent.putExtra("eventId", eventId);
                     view.getContext().startActivity(intent);

@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.eventplanner.MenuSelectionActivity;
 import com.example.eventplanner.R;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
@@ -182,9 +183,12 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
 
                     // Close the fragment
                     dismiss();
+
+                    Intent menuActivityIntent = new Intent(getContext(), MenuSelectionActivity.class);
+                    menuActivityIntent.putExtra("selectedVenue", selectedVenue);
+                    startActivity(menuActivityIntent);
                 } else {
                     // Handle error
-                    Log.e("inaamilyas", "Failed to book venue" + response.code());
                     Toast.makeText(getContext(), response.message(), Toast.LENGTH_SHORT).show();
                 }
             }

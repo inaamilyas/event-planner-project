@@ -1,8 +1,5 @@
 package com.example.eventplanner.VenueManager;
 
-import static com.example.eventplanner.fragments.HomeFragment.eventList;
-import static com.example.eventplanner.fragments.HomeFragment.homeEventsAdapter;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,14 +10,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.eventplanner.EventDetailsActivity;
 import com.example.eventplanner.R;
+import com.example.eventplanner.VenueManager.MenuItem.MenuItemsActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityVenueManagerVenDetailsBinding;
-import com.example.eventplanner.models.Event;
 import com.example.eventplanner.models.Venue;
 
 import retrofit2.Call;
@@ -50,7 +46,16 @@ public class VenueManagerVenDetailsActivity extends AppCompatActivity {
 //            Setting image
             String imageUrl = AppConfig.SERVER_URL + selectedVenue.getPicture();
             Glide.with(this).load(imageUrl).placeholder(R.drawable.event_image_1).into(binding.venueDetailsImage);
+
         }
+
+        binding.viewMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VenueManagerVenDetailsActivity.this, MenuItemsActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         binding.venueEditButton.setOnClickListener(new View.OnClickListener() {

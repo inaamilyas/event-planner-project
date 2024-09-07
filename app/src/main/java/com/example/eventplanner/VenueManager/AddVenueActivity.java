@@ -160,12 +160,8 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
 
         if (requestCode == REQUEST_STORAGE_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, proceed with accessing the file
-                try {
-                    saveVenue();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+
+                openImagePicker();
             } else {
                 Toast.makeText(this, "Storage permission denied", Toast.LENGTH_SHORT).show();
             }

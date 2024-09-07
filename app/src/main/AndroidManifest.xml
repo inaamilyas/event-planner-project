@@ -19,6 +19,12 @@
         android:theme="@style/Theme.EventPlanner"
         tools:targetApi="31">
         <activity
+            android:name=".VenueManager.MenuItem.MenuItemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VenueManager.MenuItem.AddMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditEventActivity"
             android:exported="false" />
 
@@ -40,7 +46,7 @@
         </provider>
 
         <activity
-            android:name=".BookVenueActivity"
+            android:name=".MenuSelectionActivity"
             android:exported="false" />
         <activity
             android:name=".VenueManager.VenueManagerVenDetailsActivity"
