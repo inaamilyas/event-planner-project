@@ -94,4 +94,36 @@ public interface ApiService {
     @DELETE("api/v1/venues/{venue_id}")
     Call<ApiResponse> deleteVenue(@Path("venue_id") String venue_id);
 
+
+    @Headers({"Content-Type: application/json"})
+    @GET("api/v1/venues/{venue_id}")
+    Call<ApiResponse> getMenuItems(@Path("venue_id") String venue_id);
+
+    @Headers({"Content-Type: application/json"})
+    @DELETE("api/v1/venues/{venue_id}")
+    Call<ApiResponse> deleteMenuItem(@Path("venue_id") String venue_id);
+
+    @Multipart
+    @POST("api/v1/venues/{venue_id}")
+    Call<ApiResponse<Venue>> addMenuItems(
+            @Path("venue_id") String venueId,
+            @Part MultipartBody.Part picture,
+            @Part("name") RequestBody name,
+            @Part("price") RequestBody price
+    );
+
+    @Multipart
+    @POST("api/v1/venues/{venue_id}")
+    Call<ApiResponse<Venue>> updateMenuItems(
+            @Path("venue_id") String venueId,
+            @Part MultipartBody.Part picture,
+            @Part("name") RequestBody name,
+            @Part("price") RequestBody price
+    );
+
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/venues/booking/{venue_id}")
+    Call<ApiResponse<String>> bookMenuItems(@Body Map<String, Object> requestBody);
+
+
 }

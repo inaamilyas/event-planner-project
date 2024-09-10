@@ -5,20 +5,25 @@ import com.google.gson.annotations.SerializedName;
 public class MenuItem {
     @SerializedName("id")
     private int id;
-
+    @SerializedName("name")
     private String name;
-    private String description;
+    @SerializedName("price")
     private double price;
+    @SerializedName("picture")
     private String imageUrl;
+    @SerializedName("is_available")
     private boolean isAvailable;
+    @SerializedName("venue_id")
+    private int venue_id;
+
     private int quantity;
 
-    public MenuItem(int id, String name, String description, double price, String imageUrl) {
+    public MenuItem(int id, String name, int venue_id, double price, String imageUrl) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.venue_id = venue_id;
         this.isAvailable = isAvailable;
         this.quantity = quantity;
     }
@@ -37,14 +42,6 @@ public class MenuItem {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public double getPrice() {
@@ -78,4 +75,13 @@ public class MenuItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public int getVenue_id() {
+        return venue_id;
+    }
+
+    public void setVenue_id(int venue_id) {
+        this.venue_id = venue_id;
+    }
 }
+
