@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
+import com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity;
 import com.example.eventplanner.VenueManager.MenuItem.MenuItemsActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
@@ -52,7 +53,8 @@ public class VenueManagerVenDetailsActivity extends AppCompatActivity {
         binding.viewMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(VenueManagerVenDetailsActivity.this, MenuItemsActivity.class);
+                Intent intent = new Intent(VenueManagerVenDetailsActivity.this, AddMenuActivity.class);
+                intent.putExtra("selectedVenue", selectedVenue);
                 startActivity(intent);
             }
         });

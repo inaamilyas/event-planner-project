@@ -18,6 +18,7 @@ import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityAddVenueBinding;
+import com.example.eventplanner.models.VenueManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -201,9 +202,11 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         RequestBody latitudePart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(latitude));
         RequestBody longitudePart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(longitude));
 
+        int managerId = VenueManager.getFromPreferences(this).getId();
+        RequestBody managerIdPart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(managerId));
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<String>> call = apiService.addVenue(body, venueNamePart, venuePhonePart, venueAboutPart, latitudePart, longitudePart);
+        Call<ApiResponse<String>> call = apiService.addVenue(body, venueNamePart, venuePhonePart, venueAboutPart, latitudePart, longitudePart,managerIdPart);
         call.enqueue(new Callback<ApiResponse<String>>() {
             @Override
             public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {

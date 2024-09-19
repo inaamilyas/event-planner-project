@@ -1,6 +1,8 @@
 package com.example.eventplanner.VenueManager.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +11,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
+import com.example.eventplanner.VenueManager.DashboardVenueManagerActivity;
+import com.example.eventplanner.VenueManager.VenueManagerVenDetailsActivity;
+import com.example.eventplanner.api.ApiClient;
+import com.example.eventplanner.api.ApiResponse;
+import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.models.MenuItem;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHolder> {
     ArrayList<MenuItem> menuItems;
@@ -64,16 +76,61 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "edit", Toast.LENGTH_SHORT).show();
+                    int position = getAdapterPosition();
+                    MenuItem menuItem = menuItems.get(position);
+                    Toast.makeText(v.getContext(), "edit" + menuItem.getName(), Toast.LENGTH_SHORT).show();
                 }
             });
 
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "delete", Toast.LENGTH_SHORT).show();
+                    int position = getAdapterPosition();
+                    MenuItem menuItem = menuItems.get(position);
+
+
+                    // Show a confirmation dialog to the user
+                    new AlertDialog.Builder(view.getContext())
+                            .setTitle("Delete Venue")
+                            .setMessage("Are you sure you want to delete this item?")
+                            .setPositiveButton("Confirm", (dialog, which) -> {
+                                // User confirmed deletion, proceed with API call
+                                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+
+                                apiService.deleteMenuItem(String.valueOf(menuItem.getId())).enqueue(new Callback<ApiResponse>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
+                                        Log.d("inaamilyas", "onResponse: " + response.code());
+                                        if (response.isSuccessful() && response.body() != null) {
+                                            Toast.makeText(view.getContext(), "menu item deleted successfully", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+
+                                            menuItems.remove(position);
+                                            notifyItemRemoved(position);
+
+                                        } else {
+                                            Toast.makeText(view.getContext(), "Failed to delete venue", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
+                                        Toast.makeText(view.getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            })
+                            .setNegativeButton("Cancel", (dialog, which) -> {
+                                // User canceled the deletion
+                                dialog.dismiss();
+                            })
+                            .show();
+
                 }
             });
+
+        }
+
+        private void deleteVenue(int venueId) {
 
         }
 

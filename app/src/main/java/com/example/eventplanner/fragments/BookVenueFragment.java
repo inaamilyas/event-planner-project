@@ -18,8 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.eventplanner.MenuSelectionActivity;
 import com.example.eventplanner.R;
@@ -108,7 +106,7 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedEventName = (String) parent.getItemAtPosition(position);
                 selectedEventId = eventList.get(position).getId();
-                Toast.makeText(getContext(), "Selected Event: " + selectedEventId, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Selected Event: " + selectedEventId, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -180,12 +178,14 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
                     // Handle success
                     assert response.body() != null;
                     Toast.makeText(getContext(), "Venue booked successfully", Toast.LENGTH_SHORT).show();
+                    int bookingId = Integer.valueOf(response.body().getData());
 
                     // Close the fragment
                     dismiss();
 
                     Intent menuActivityIntent = new Intent(getContext(), MenuSelectionActivity.class);
                     menuActivityIntent.putExtra("selectedVenue", selectedVenue);
+                    menuActivityIntent.putExtra("bookingId", bookingId);
                     startActivity(menuActivityIntent);
                 } else {
                     // Handle error

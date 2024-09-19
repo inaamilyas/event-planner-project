@@ -49,6 +49,7 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         binding.gotoBookVenueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(VenueDetailsActivity.this, MenuSelectionActivity.class);
                 startActivity(intent);
             }

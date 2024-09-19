@@ -106,19 +106,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        binding.tvGoToForgetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
-                finish();
-            }
-        });
+//        binding.tvGoToForgetPassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+//                finish();
+//            }
+//        });
 
         binding.tvGoToSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-                finish();
+//                finish();
             }
         });
 

@@ -3,6 +3,7 @@ package com.example.eventplanner.api;
 // ApiService.java
 
 import com.example.eventplanner.models.Event;
+import com.example.eventplanner.models.MenuItem;
 import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.VenueManager;
@@ -45,7 +46,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/venues")
-    Call<ApiResponse<String>> addVenue(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude);
+    Call<ApiResponse<String>> addVenue(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude, @Part("manager_id") RequestBody managerIdPart);
 
     @Multipart
     @POST("api/v1/events")
@@ -64,7 +65,9 @@ public interface ApiService {
     Call<ApiResponse> deleteEvent(@Path("event_id") String event_id);
 
     @GET("api/v1/venues")
-    Call<ApiResponseArray<Venue>> getVenues();
+    Call<ApiResponseArray<Venue>> getVenues(
+            @Header("manager_id") int id
+    );
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/venues/suggest/nearest")
@@ -100,12 +103,12 @@ public interface ApiService {
     Call<ApiResponse> getMenuItems(@Path("venue_id") String venue_id);
 
     @Headers({"Content-Type: application/json"})
-    @DELETE("api/v1/venues/{venue_id}")
-    Call<ApiResponse> deleteMenuItem(@Path("venue_id") String venue_id);
+    @DELETE("api/v1/food-menu/{id}")
+    Call<ApiResponse> deleteMenuItem(@Path("id") String menuId);
 
     @Multipart
-    @POST("api/v1/venues/{venue_id}")
-    Call<ApiResponse<Venue>> addMenuItems(
+    @POST("api/v1/food-menu/{venue_id}")
+    Call<ApiResponse<MenuItem>> addMenuItems(
             @Path("venue_id") String venueId,
             @Part MultipartBody.Part picture,
             @Part("name") RequestBody name,
@@ -113,16 +116,16 @@ public interface ApiService {
     );
 
     @Multipart
-    @POST("api/v1/venues/{venue_id}")
+    @PUT("api/v1/food-menu/{id}")
     Call<ApiResponse<Venue>> updateMenuItems(
-            @Path("venue_id") String venueId,
+            @Path("id") String itemId,
             @Part MultipartBody.Part picture,
             @Part("name") RequestBody name,
             @Part("price") RequestBody price
     );
 
     @Headers({"Content-Type: application/json"})
-    @POST("api/v1/venues/booking/{venue_id}")
+    @POST("api/v1/food-menu/order/save")
     Call<ApiResponse<String>> bookMenuItems(@Body Map<String, Object> requestBody);
 
 

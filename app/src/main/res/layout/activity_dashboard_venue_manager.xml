@@ -52,6 +52,18 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp" />
 
+            <TextView
+                android:id="@+id/no_events"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="40dp"
+                android:layout_gravity="center_vertical"
+                android:textAlignment="center"
+                android:text="No venues to Show. Please add some venues"
+                android:textSize="25dp"
+                tools:ignore="RtlCompat" />
+
         </LinearLayout>
 
     </LinearLayout>

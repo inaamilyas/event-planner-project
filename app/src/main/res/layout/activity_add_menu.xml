@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context=".VenueManager.MenuItem.AddMenuActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"> <!-- Changed height to match_parent -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20dp"
                 android:maxLines="3"
-                android:text="Add Menu"
+                android:text="Food Menu"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
@@ -41,14 +45,13 @@
                 <EditText
                     android:id="@+id/et_menu_price"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
                     android:ems="10"
                     android:hint="Price in PKR"
                     android:inputType="phone"
                     android:padding="10dp"
                     android:textSize="18dp" />
-
 
                 <!-- ImageView to display the selected image -->
                 <ImageView
@@ -80,6 +83,32 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20dp"
+                    android:maxLines="3"
+                    android:text="All Food Items"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/menu_items_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:padding="5dp"
+                    android:scrollbars="none" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
+    </ScrollView>
 </LinearLayout>

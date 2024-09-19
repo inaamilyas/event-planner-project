@@ -4,10 +4,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -94,6 +98,31 @@ public class HomeFragment extends Fragment {
         homeEventsAdapter = new EventsAdapter(eventList);
         binding.eventsRecyclerHome.setAdapter(homeEventsAdapter);
 
+        binding.seeAllEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventsFragment fragment = new EventsFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                assert fragmentManager != null;
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+        binding.seeAllVenues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VenuesFragment fragment = new VenuesFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                assert fragmentManager != null;
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
     }
 
     private void getCurrentLocation() {
@@ -135,6 +164,7 @@ public class HomeFragment extends Fragment {
 
     private void updateUIWithWeatherData(WeatherResponse weatherResponse) {
         // Current weather
+        binding.forcastText.setText("Daily Forecast");
         binding.temperature.setText(String.format("%s°C", weatherResponse.getCurrent().getTempC()));
         binding.weatherDescription.setText(weatherResponse.getCurrent().getCondition().getText());
         binding.weatherDetails.setText(String.format("Humidity: %s%%\nWind: %s km/h", weatherResponse.getCurrent().getHumidity(), weatherResponse.getCurrent().getWindKph()));

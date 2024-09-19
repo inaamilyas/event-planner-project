@@ -84,7 +84,7 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
 //                    BookVenueFragment bookVenueFragment = new BookVenueFragment();
 //                    bookVenueFragment.show(fragmentManager, "BookVenueBottomSheet");
 
-                    // Show bottom sheet
+//                     Show bottom sheet
                     BookVenueFragment bookVenueFragment = BookVenueFragment.newInstance(selectedVenue, String.valueOf(eventId));
                     FragmentManager fragmentManager = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
                     bookVenueFragment.show(fragmentManager, "BookVenueBottomSheet");
@@ -108,12 +108,20 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
             view.findViewById(R.id.venue_list_item_book_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    int position = getAdapterPosition();
+//                    Intent intent = new Intent(view.getContext(), MenuSelectionActivity.class);
+//                    intent.putExtra("selectedVenue", venuesList.get(position));
+//                    intent.putExtra("eventId", eventId);
+//                    view.getContext().startActivity(intent);
+
                     int position = getAdapterPosition();
-                    Intent intent = new Intent(view.getContext(), MenuSelectionActivity.class);
-                    intent.putExtra("selectedVenue", venuesList.get(position));
-                    intent.putExtra("eventId", eventId);
-                    view.getContext().startActivity(intent);
                     Toast.makeText(view.getContext(), "Clicked on book " + position, Toast.LENGTH_SHORT).show();
+                    Venue selectedVenue = venuesList.get(position);
+
+//                     Show bottom sheet
+                    BookVenueFragment bookVenueFragment = BookVenueFragment.newInstance(selectedVenue, String.valueOf(eventId));
+                    FragmentManager fragmentManager = ((AppCompatActivity) view.getContext()).getSupportFragmentManager();
+                    bookVenueFragment.show(fragmentManager, "BookVenueBottomSheet");
                 }
             });
         }

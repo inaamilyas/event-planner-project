@@ -2,7 +2,9 @@ package com.example.eventplanner.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MenuItem {
+import java.io.Serializable;
+
+public class MenuItem  implements Serializable {
     @SerializedName("id")
     private int id;
     @SerializedName("name")

@@ -23,12 +23,12 @@ public class MenuItemsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-        menuItemsList.add(new MenuItem(1, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
-        menuItemsList.add(new MenuItem(2, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
-        menuItemsList.add(new MenuItem(3, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
-        menuItemsList.add(new MenuItem(4, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
-        menuItemsList.add(new MenuItem(5, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
-        menuItemsList.add(new MenuItem(6, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
+//        menuItemsList.add(new MenuItem(1, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
+//        menuItemsList.add(new MenuItem(2, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
+//        menuItemsList.add(new MenuItem(3, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
+//        menuItemsList.add(new MenuItem(4, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
+//        menuItemsList.add(new MenuItem(5, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
+//        menuItemsList.add(new MenuItem(6, "Pizza", "No description", 12, "oijfdso;ijfoasj"));
         // Initialize RecyclerView and Adapter
         binding.menuItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         MenuItemAdapter menuItemAdapter = new MenuItemAdapter(menuItemsList);

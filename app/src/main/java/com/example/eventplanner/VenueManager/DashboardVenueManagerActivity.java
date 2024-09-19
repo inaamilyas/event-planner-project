@@ -17,9 +17,12 @@ import com.example.eventplanner.api.ApiResponseArray;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityDashboardVenueManagerBinding;
 import com.example.eventplanner.models.Venue;
+import com.example.eventplanner.models.VenueManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +71,9 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
 
 
     private void fetchVenues(ApiService apiService) {
-        Call<ApiResponseArray<Venue>> call = apiService.getVenues();
+        int managerId = VenueManager.getFromPreferences(DashboardVenueManagerActivity.this).getId();
+
+        Call<ApiResponseArray<Venue>> call = apiService.getVenues(managerId);
         call.enqueue(new Callback<ApiResponseArray<Venue>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -85,6 +90,7 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
                         venuesList.addAll(venueList); // Add all fetched venues to the list
                         venuesAdapter.notifyDataSetChanged(); // Notify adapter about data change
                     } else {
+                        binding.noEvents.setVisibility(View.VISIBLE);
                         Toast.makeText(DashboardVenueManagerActivity.this, "No venues found", Toast.LENGTH_SHORT).show();
                     }
                 } else {

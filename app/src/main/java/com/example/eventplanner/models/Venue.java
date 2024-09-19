@@ -3,6 +3,7 @@ package com.example.eventplanner.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Venue implements Serializable {
     @SerializedName("id")
@@ -40,6 +41,9 @@ public class Venue implements Serializable {
 
     @SerializedName("owner")
     private VenueManager owner;
+
+    @SerializedName("venue_food_menu")
+    private List<MenuItem> foodMenuItems;
 
     public Venue(int id, String name, double latitude, double longitude, String phone, String address, String about, String image) {
         this.id = id;
@@ -158,5 +162,13 @@ public class Venue implements Serializable {
 
     public void setOwner(VenueManager owner) {
         this.owner = owner;
+    }
+
+    public List<MenuItem> getFoodMenuItems() {
+        return foodMenuItems;
+    }
+
+    public void setFoodMenuItems(List<MenuItem> foodMenuItems) {
+        this.foodMenuItems = foodMenuItems;
     }
 }
