@@ -12,12 +12,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
 import com.example.eventplanner.VenueManager.DashboardVenueManagerActivity;
+import com.example.eventplanner.VenueManager.EditMenuItemDialogFragment;
+import com.example.eventplanner.VenueManager.OnMenuItemUpdatedListener;
 import com.example.eventplanner.VenueManager.VenueManagerVenDetailsActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
@@ -78,9 +81,24 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     MenuItem menuItem = menuItems.get(position);
-                    Toast.makeText(v.getContext(), "edit" + menuItem.getName(), Toast.LENGTH_SHORT).show();
+                    EditMenuItemDialogFragment dialog = EditMenuItemDialogFragment.newInstance(menuItem);
+
+                    // Set the listener to handle the update
+                    dialog.setMenuItemUpdateListener(new OnMenuItemUpdatedListener() {
+                        @Override
+                        public void onMenuItemUpdated(MenuItem updatedMenuItem, int position) {
+                            // Update the list and notify the adapter
+                            menuItems.set(position, updatedMenuItem);
+                            notifyItemChanged(position);  // Notify the adapter of the change
+                        }
+                    }, position);
+
+                    // Show the dialog
+                    dialog.show(((AppCompatActivity) v.getContext()).getSupportFragmentManager(), "EditMenuItemDialog");
                 }
             });
+
+
 
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,10 +145,6 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
 
                 }
             });
-
-        }
-
-        private void deleteVenue(int venueId) {
 
         }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -16,6 +17,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventplanner.VenueManager.EditMenuItemDialogFragment;
+import com.example.eventplanner.VenueManager.OnMenuItemUpdatedListener;
 import com.example.eventplanner.VenueManager.adapter.MenuItemAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
@@ -38,10 +41,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddMenuActivity extends AppCompatActivity {
+public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpdatedListener {
 
     private ActivityAddMenuBinding binding;
     private ArrayList<MenuItem> menuItemsList = new ArrayList<>();
+    MenuItemAdapter menuItemAdapter;
 
     private static final int PICK_IMAGE_REQUEST = 12;
     private static final int REQUEST_STORAGE_PERMISSION = 100;
@@ -59,7 +63,7 @@ public class AddMenuActivity extends AppCompatActivity {
         assert selectedVenue != null;
         menuItemsList = (ArrayList<MenuItem>) selectedVenue.getFoodMenuItems();
         binding.menuItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        MenuItemAdapter menuItemAdapter = new MenuItemAdapter(menuItemsList);
+        menuItemAdapter = new MenuItemAdapter(menuItemsList);
         binding.menuItemsRecyclerView.setAdapter(menuItemAdapter);
 
         // Call the method to set the RecyclerView height
@@ -199,4 +203,25 @@ public class AddMenuActivity extends AppCompatActivity {
 
         return tempFile;
     }
+
+
+    @Override
+    public void onMenuItemUpdated(MenuItem updatedMenuItem, int position) {
+        Log.d("inaamilyas", "onMenuItemUpdated: loop ");
+        // Update the item in the list
+        for (int i = 0; i < menuItemsList.size(); i++) {
+            if (menuItemsList.get(i).getId() == updatedMenuItem.getId()) {
+                Log.d("inaamilyas", "onMenuItemUpdated: loop " + updatedMenuItem.getName());
+                menuItemsList.set(i, updatedMenuItem);
+                menuItemAdapter.notifyItemChanged(i); // Notify the adapter of the change
+                break;
+            }
+        }
+    }
+
+//    private void showEditMenuItemDialog(MenuItem menuItem) {
+//        EditMenuItemDialogFragment dialog = EditMenuItemDialogFragment.newInstance(menuItem);
+//        dialog.setOnMenuItemUpdatedListener(this);  // Set the listener
+//        dialog.show(dialog.getChildFragmentManager(), "EditMenuItemDialog");
+//    }
 }

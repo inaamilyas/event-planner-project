@@ -60,13 +60,14 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         binding = ActivityAddVenueBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        setSupportActionBar(binding.myToolbar);
 
         // Check for storage permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
         }
 
+        // Set a custom title for the toolbar
+        setTitle("");
 
         // Initialize fusedLocationClient to get user's location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);

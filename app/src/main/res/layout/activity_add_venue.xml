@@ -7,7 +7,27 @@
     android:orientation="vertical"
     tools:context=".VenueManager.AddVenueActivity">
 
+    <!-- Toolbar at the top -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#4769D0"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Venue"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
+    </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
+        android:paddingVertical="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,15 +37,15 @@
             android:orientation="vertical"
             android:paddingHorizontal="20dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="20dp"
-                android:maxLines="3"
-                android:text="Add Venue"
-                android:textAlignment="textStart"
-                android:textColor="@color/black"
-                android:textSize="25sp" />
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginVertical="20dp"-->
+<!--                android:maxLines="3"-->
+<!--                android:text="Add Venue"-->
+<!--                android:textAlignment="textStart"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="25sp" />-->
 
             <FrameLayout
                 android:id="@+id/select_map_container"

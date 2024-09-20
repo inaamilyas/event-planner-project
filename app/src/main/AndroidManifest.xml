@@ -19,6 +19,9 @@
         android:theme="@style/Theme.EventPlanner"
         tools:targetApi="31">
         <activity
+            android:name=".VenueManager.ManagerBaseActivity"
+            android:exported="false" />
+        <activity
             android:name=".VenueManager.MenuItem.MenuItemsActivity"
             android:exported="false" />
         <activity

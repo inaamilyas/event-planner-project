@@ -117,7 +117,7 @@ public interface ApiService {
 
     @Multipart
     @PUT("api/v1/food-menu/{id}")
-    Call<ApiResponse<Venue>> updateMenuItems(
+    Call<ApiResponse<MenuItem>> updateMenuItems(
             @Path("id") String itemId,
             @Part MultipartBody.Part picture,
             @Part("name") RequestBody name,
