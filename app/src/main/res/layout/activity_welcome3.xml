@@ -44,15 +44,15 @@
             android:text="In publishing and graphic design, Lorem is a placeholder text commonly "
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginVertical="30dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:paddingHorizontal="16dp">
 
             <TextView
                 android:id="@+id/tvSkip3"
@@ -61,7 +61,7 @@
                 android:layout_weight="1"
                 android:text="Skip"
                 android:textColor="#BAFFFFFF"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <ImageView

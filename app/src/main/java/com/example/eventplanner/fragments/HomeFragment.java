@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
@@ -123,6 +124,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Set up the refresh listener
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCurrentLocation();
+            }
+        });
+
     }
 
     private void getCurrentLocation() {
@@ -140,6 +149,8 @@ public class HomeFragment extends Fragment {
                     ApiService apiService = ApiClient.getClient().create(ApiService.class);
                     // Fetch data from API
                     fetchDetails(apiService, lat, lon);
+                    // After the refresh is complete, hide the loading indicator
+                    binding.swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });

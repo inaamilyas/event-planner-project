@@ -58,6 +58,9 @@ public class EditEventActivity extends AppCompatActivity {
         binding = ActivityEditEventBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setTitle("Edit Event");
+        setSupportActionBar(binding.toolBar);
+
         // Check for storage permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);

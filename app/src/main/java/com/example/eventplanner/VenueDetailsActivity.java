@@ -1,14 +1,17 @@
 package com.example.eventplanner;
 
-import android.content.Intent;
+import static com.example.eventplanner.fragments.HomeFragment.eventList;
+
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityVenueDetailsBinding;
+import com.example.eventplanner.fragments.BookVenueFragment;
 import com.example.eventplanner.models.Venue;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,9 +52,9 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         binding.gotoBookVenueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(VenueDetailsActivity.this, MenuSelectionActivity.class);
-                startActivity(intent);
+                BookVenueFragment bookVenueFragment = BookVenueFragment.newInstance(selectedVenue, String.valueOf(eventList.get(0).getId()));
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                bookVenueFragment.show(fragmentManager, "BookVenueBottomSheet");
             }
         });
     }

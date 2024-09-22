@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F5F2"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".fragments.ProfileFragment">
 
@@ -12,7 +12,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#F0EEEE"
+        android:background="@color/white"
         android:gravity="center"
         android:padding="20dp">
 
@@ -30,7 +30,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/full_rounded_bg"
-            android:backgroundTint="@color/black"
+            android:backgroundTint="@color/primary_color"
             android:padding="10dp">
 
             <ImageView
@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="#6200EE"
+            android:backgroundTint="@color/primary_color"
             android:paddingHorizontal="35dp"
             android:paddingVertical="15dp"
             android:text="Save Changes"
