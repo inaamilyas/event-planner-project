@@ -50,11 +50,19 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/events")
-    Call<ApiResponse<Event>> addEvent(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("budget") RequestBody budget, @Part("no_of_guests") RequestBody noOfGuests, @Part("about") RequestBody about);
+    Call<ApiResponse<Event>> addEvent(@Header("user_id") int userId,@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("budget") RequestBody budget, @Part("no_of_guests") RequestBody noOfGuests, @Part("about") RequestBody about);
 
     @Multipart
     @PUT("api/v1/events/{event_id}")
-    Call<ApiResponse<String>> updateEvent(@Path("event_id") String event_id, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("budget") RequestBody budget, @Part("no_of_guests") RequestBody noOfGuests, @Part("about") RequestBody about);
+    Call<ApiResponse<String>> updateEvent(
+            @Path("event_id") String event_id,
+            @Part MultipartBody.Part picture,
+            @Part("name") RequestBody name,
+            @Part("date") RequestBody date,
+            @Part("time") RequestBody time,
+            @Part("budget") RequestBody budget,
+            @Part("no_of_guests") RequestBody noOfGuests,
+            @Part("about") RequestBody about);
 
     @FormUrlEncoded
     @PUT("api/v1/events/{event_id}")
@@ -92,6 +100,11 @@ public interface ApiService {
             @Part("latitude") RequestBody latitude,             // Part for latitude
             @Part("longitude") RequestBody longitude            // Part for longitude
     );
+
+    @Headers({"Content-Type: application/json"})
+    @GET("api/v1/venues/{venue_id}")
+    Call<ApiResponse<Venue>> getVenueById(@Path("venue_id") int venue_id);
+
 
     @Headers({"Content-Type: application/json"})
     @DELETE("api/v1/venues/{venue_id}")

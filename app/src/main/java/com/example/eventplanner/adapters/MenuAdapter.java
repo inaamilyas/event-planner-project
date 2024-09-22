@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     ArrayList<MenuItem> menuItems;
-    private OnAddToCartClickListener listener;
+    private static OnAddToCartClickListener listener;
     public static HashMap<Integer, Integer> quantityMap = new HashMap<>();
 //    MenuItem selectedMenuItem;
 
@@ -58,7 +58,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         return menuItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView itemName;
         AppCompatButton addToCartBtn;
         AppCompatButton removeToCartBtn;

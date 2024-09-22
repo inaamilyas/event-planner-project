@@ -2,16 +2,27 @@ package com.example.eventplanner;
 
 import static com.example.eventplanner.fragments.HomeFragment.eventList;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.eventplanner.adapters.ManuVenueDetailsAdapter;
+import com.example.eventplanner.api.ApiClient;
+import com.example.eventplanner.api.ApiResponse;
+import com.example.eventplanner.api.ApiService;
+import com.example.eventplanner.api.Data;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityVenueDetailsBinding;
 import com.example.eventplanner.fragments.BookVenueFragment;
+import com.example.eventplanner.models.Event;
+import com.example.eventplanner.models.MenuItem;
 import com.example.eventplanner.models.Venue;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +30,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VenueDetailsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -55,6 +73,56 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
                 BookVenueFragment bookVenueFragment = BookVenueFragment.newInstance(selectedVenue, String.valueOf(eventList.get(0).getId()));
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 bookVenueFragment.show(fragmentManager, "BookVenueBottomSheet");
+            }
+        });
+
+        binding.arrowBackEventDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        ManuVenueDetailsAdapter adapter = new ManuVenueDetailsAdapter((ArrayList<MenuItem>) selectedVenue.getFoodMenuItems());
+        binding.menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.menuRecyclerView.setAdapter(adapter);
+
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                Call<ApiResponse<Venue>> call = apiService.getVenueById(selectedVenue.getId());
+                call.enqueue(new Callback<ApiResponse<Venue>>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onResponse(Call<ApiResponse<Venue>> call, Response<ApiResponse<Venue>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            if (response.code() == 200) {
+
+                                // Get the list of Venue from the ApiResponseArray
+                                Venue venue = response.body().getData();
+                                if (venue != null) {
+                                    selectedVenue = venue;
+                                }
+
+                            } else {
+                                Toast.makeText(VenueDetailsActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(VenueDetailsActivity.this, "Check Internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<Venue>> call, Throwable t) {
+                        Toast.makeText(VenueDetailsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // Stop the refreshing animation
+                binding.swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

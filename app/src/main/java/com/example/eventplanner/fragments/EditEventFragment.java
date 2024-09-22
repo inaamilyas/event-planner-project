@@ -10,27 +10,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
-import com.example.eventplanner.api.ApiClient;
-import com.example.eventplanner.api.ApiResponse;
-import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.FragmentAddEventBinding;
 import com.example.eventplanner.models.Event;
@@ -45,9 +37,6 @@ import java.util.Calendar;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class EditEventFragment extends Fragment {
     private FragmentAddEventBinding binding;
@@ -57,7 +46,6 @@ public class EditEventFragment extends Fragment {
     private Uri imageUri;
     private String position; // To store the position value
     private Event event; // Assuming you need the event object later on
-
 
 
     public EditEventFragment() {
@@ -227,47 +215,47 @@ public class EditEventFragment extends Fragment {
         RequestBody eventGuestNumberPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventGuestsNumber);
         RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<Event>> call = apiService.addEvent(body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
-        call.enqueue(new Callback<ApiResponse<Event>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<Event>> call, Response<ApiResponse<Event>> response) {
-                // Handle success
-                if (response.isSuccessful()) {
-
-                    Event event = response.body().getData();
-                    eventList.add(event);
-
-                    Toast.makeText(getContext(), "Event created successfully", Toast.LENGTH_SHORT).show();
-                    VenuesFragment venuesFragment = new VenuesFragment();
-
-                    // Create a bundle to pass the data
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("eventId", event.getId());
-                    venuesFragment.setArguments(bundle);
-
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, venuesFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                } else {
-                    // Handle error
-                    Toast.makeText(getContext(), "Failed to create venue", Toast.LENGTH_SHORT).show();
-                    binding.saveEventButton.setText("Add Event");
-                    binding.saveEventButton.isEnabled();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<Event>> call, Throwable t) {
-                // Handle failure
-                Log.d("inaamilyas", "onFailure: " + t);
-                Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
-                binding.saveEventButton.setText("Add Event");
-                binding.saveEventButton.isEnabled();
-            }
-        });
+//        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+//        Call<ApiResponse<Event>> call = apiService.updateEvent(,body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
+//        call.enqueue(new Callback<ApiResponse<Event>>() {
+//            @Override
+//            public void onResponse(Call<ApiResponse<Event>> call, Response<ApiResponse<Event>> response) {
+//                // Handle success
+//                if (response.isSuccessful()) {
+//
+//                    Event event = response.body().getData();
+//                    eventList.add(event);
+//
+//                    Toast.makeText(getContext(), "Event created successfully", Toast.LENGTH_SHORT).show();
+//                    VenuesFragment venuesFragment = new VenuesFragment();
+//
+//                    // Create a bundle to pass the data
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("eventId", event.getId());
+//                    venuesFragment.setArguments(bundle);
+//
+//                    FragmentManager fragmentManager = getParentFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.replace(R.id.fragment_container, venuesFragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+//                } else {
+//                    // Handle error
+//                    Toast.makeText(getContext(), "Failed to create venue", Toast.LENGTH_SHORT).show();
+//                    binding.saveEventButton.setText("Add Event");
+//                    binding.saveEventButton.isEnabled();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ApiResponse<Event>> call, Throwable t) {
+//                // Handle failure
+//                Log.d("inaamilyas", "onFailure: " + t);
+//                Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
+//                binding.saveEventButton.setText("Add Event");
+//                binding.saveEventButton.isEnabled();
+//            }
+//        });
 
     }
 

@@ -29,6 +29,7 @@ import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityEditEventBinding;
 import com.example.eventplanner.models.Event;
+import com.example.eventplanner.models.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -220,7 +221,6 @@ public class EditEventActivity extends AppCompatActivity {
             RequestBody eventBudgetPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventBudget);
             RequestBody eventGuestNumberPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventGuestsNumber);
             RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
-
 
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
             Call<ApiResponse<String>> call = apiService.updateEvent(String.valueOf(event.getId()), body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);

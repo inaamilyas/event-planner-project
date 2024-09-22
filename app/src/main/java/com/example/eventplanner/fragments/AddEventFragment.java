@@ -1,6 +1,7 @@
 package com.example.eventplanner.fragments;
 
 import static com.example.eventplanner.fragments.HomeFragment.eventList;
+import static com.example.eventplanner.fragments.HomeFragment.user;
 
 import android.Manifest;
 import android.app.Activity;
@@ -203,7 +204,7 @@ public class AddEventFragment extends Fragment {
         RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<Event>> call = apiService.addEvent(body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
+        Call<ApiResponse<Event>> call = apiService.addEvent(user.getId(),body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
         call.enqueue(new Callback<ApiResponse<Event>>() {
             @Override
             public void onResponse(Call<ApiResponse<Event>> call, Response<ApiResponse<Event>> response) {

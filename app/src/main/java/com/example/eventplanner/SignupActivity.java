@@ -2,6 +2,7 @@ package com.example.eventplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -111,6 +112,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
                         // Handle failure (e.g., no internet connection)
+                        Log.d("inaamilyas", "onFailure: "+ t);
                         binding.tvSignupApiError.setText("Failed to connect. Please check your internet connection.");
                         binding.btnSignup.setEnabled(true);
                         binding.btnSignup.setText("Sign Up");
