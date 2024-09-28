@@ -1,5 +1,8 @@
 package com.example.eventplanner.VenueManager.adapter;
 
+import static com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity.menuItemsRecyclerView;
+import static com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity.setRecyclerViewHeight;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
@@ -118,13 +121,13 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
                                 apiService.deleteMenuItem(String.valueOf(menuItem.getId())).enqueue(new Callback<ApiResponse>() {
                                     @Override
                                     public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
-                                        Log.d("inaamilyas", "onResponse: " + response.code());
                                         if (response.isSuccessful() && response.body() != null) {
                                             Toast.makeText(view.getContext(), "menu item deleted successfully", Toast.LENGTH_SHORT).show();
                                             dialog.dismiss();
 
                                             menuItems.remove(position);
                                             notifyItemRemoved(position);
+                                            setRecyclerViewHeight(menuItemsRecyclerView);
 
                                         } else {
                                             Toast.makeText(view.getContext(), "Failed to delete venue", Toast.LENGTH_SHORT).show();

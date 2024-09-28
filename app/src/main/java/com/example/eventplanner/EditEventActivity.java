@@ -80,8 +80,6 @@ public class EditEventActivity extends AppCompatActivity {
         binding.eventName.setText(event.getName());
         binding.eventDate.setText(event.getDate());
         binding.eventTime.setText(event.getTime());
-        binding.eventBudget.setText(String.valueOf(event.getBudget()));
-        binding.eventGuestsNumber.setText(String.valueOf(event.getNoOfGuests()));
         binding.etVenueAbout.setText(event.getAbout());
         String imageUrl = event.getImage() != null ? (AppConfig.SERVER_URL + event.getImage()).trim() : null;
         Glide.with(this).load(imageUrl).placeholder(R.drawable.enent_image).error(R.drawable.enent_image).into(binding.ivSelectedImage);
@@ -206,8 +204,6 @@ public class EditEventActivity extends AppCompatActivity {
         String eventName = binding.eventName.getText().toString().trim();
         String eventDate = binding.eventDate.getText().toString().trim();
         String eventTime = binding.eventTime.getText().toString().trim();
-        String eventBudget = binding.eventBudget.getText().toString().trim();
-        String eventGuestsNumber = binding.eventGuestsNumber.getText().toString().trim();
         String eventAbout = binding.etVenueAbout.getText().toString().trim();
 
         if (imageUri != null) {
@@ -218,12 +214,10 @@ public class EditEventActivity extends AppCompatActivity {
             RequestBody eventNamePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventName);
             RequestBody eventDatePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventDate);
             RequestBody eventTimePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventTime);
-            RequestBody eventBudgetPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventBudget);
-            RequestBody eventGuestNumberPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventGuestsNumber);
             RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
-            Call<ApiResponse<String>> call = apiService.updateEvent(String.valueOf(event.getId()), body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
+            Call<ApiResponse<String>> call = apiService.updateEvent(String.valueOf(event.getId()), body, eventNamePart, eventDatePart, eventTimePart, eventAboutPart);
             call.enqueue(new Callback<ApiResponse<String>>() {
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
@@ -236,8 +230,6 @@ public class EditEventActivity extends AppCompatActivity {
                         event.setName(eventName);
                         event.setDate(eventDate);
                         event.setTime(eventTime);
-                        event.setBudget(Integer.parseInt(eventBudget));
-                        event.setNoOfGuests(Integer.parseInt(eventGuestsNumber));
                         event.setAbout(eventAbout);
                         eventList.set(position, event);
                         homeEventsAdapter.notifyDataSetChanged();
@@ -267,7 +259,7 @@ public class EditEventActivity extends AppCompatActivity {
         } else {
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
             Call<ApiResponse<String>> call;
-            call = apiService.updateEventWithoutImage(String.valueOf(event.getId()), eventName, eventDate, eventTime, eventBudget, eventGuestsNumber, eventAbout);
+            call = apiService.updateEventWithoutImage(String.valueOf(event.getId()), eventName, eventDate, eventTime, eventAbout);
 
             call.enqueue(new Callback<ApiResponse<String>>() {
                 @SuppressLint("NotifyDataSetChanged")
@@ -282,8 +274,6 @@ public class EditEventActivity extends AppCompatActivity {
                         event.setName(eventName);
                         event.setDate(eventDate);
                         event.setTime(eventTime);
-                        event.setBudget(Integer.parseInt(eventBudget));
-                        event.setNoOfGuests(Integer.parseInt(eventGuestsNumber));
                         event.setAbout(eventAbout);
                         eventList.set(position, event);
                         homeEventsAdapter.notifyDataSetChanged();

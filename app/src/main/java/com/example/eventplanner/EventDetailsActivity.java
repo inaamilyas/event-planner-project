@@ -21,20 +21,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.eventplanner.adapters.ManuVenueDetailsAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityEventDetailsBinding;
 import com.example.eventplanner.models.Event;
+import com.example.eventplanner.models.MenuItem;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -115,6 +119,17 @@ public class EventDetailsActivity extends AppCompatActivity {
                 deleteEvent(Integer.parseInt(position));
             }
         });
+
+
+        if( event.getVenue() != null && !event.getVenue().getFoodMenuItems().isEmpty()){
+            ManuVenueDetailsAdapter adapter = new ManuVenueDetailsAdapter((ArrayList<MenuItem>) event.getVenue().getFoodMenuItems());
+            binding.menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            binding.menuRecyclerView.setAdapter(adapter);
+        } else{
+            binding.menuRecyclerView.setVisibility(View.GONE);
+            binding.noMenuItem.setVisibility(View.GONE);
+        }
+
     }
 
     private void shareEventDetails() {

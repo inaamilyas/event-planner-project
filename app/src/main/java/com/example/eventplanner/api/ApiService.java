@@ -50,7 +50,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/events")
-    Call<ApiResponse<Event>> addEvent(@Header("user_id") int userId,@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("budget") RequestBody budget, @Part("no_of_guests") RequestBody noOfGuests, @Part("about") RequestBody about);
+    Call<ApiResponse<Event>> addEvent(@Header("user_id") int userId,@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("about") RequestBody about);
 
     @Multipart
     @PUT("api/v1/events/{event_id}")
@@ -60,13 +60,11 @@ public interface ApiService {
             @Part("name") RequestBody name,
             @Part("date") RequestBody date,
             @Part("time") RequestBody time,
-            @Part("budget") RequestBody budget,
-            @Part("no_of_guests") RequestBody noOfGuests,
             @Part("about") RequestBody about);
 
     @FormUrlEncoded
     @PUT("api/v1/events/{event_id}")
-    Call<ApiResponse<String>> updateEventWithoutImage(@Path("event_id") String event_id, @Field("name") String name, @Field("date") String date, @Field("time") String time, @Field("budget") String budget, @Field("no_of_guests") String noOfGuests, @Field("about") String about);
+    Call<ApiResponse<String>> updateEventWithoutImage(@Path("event_id") String event_id, @Field("name") String name, @Field("date") String date, @Field("time") String time, @Field("about") String about);
 
     @Headers({"Content-Type: application/json"})
     @DELETE("api/v1/events/{event_id}")
@@ -121,7 +119,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/food-menu/{venue_id}")
-    Call<ApiResponse<MenuItem>> addMenuItems(
+    Call<ApiResponse<MenuItem[]>> addMenuItems(
             @Path("venue_id") String venueId,
             @Part MultipartBody.Part picture,
             @Part("name") RequestBody name,

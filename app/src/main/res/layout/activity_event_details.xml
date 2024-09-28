@@ -83,14 +83,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <LinearLayout
-            android:paddingHorizontal="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
 
             <TextView
                 android:id="@+id/event_name"
@@ -118,8 +118,8 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:orientation="vertical">
 
                     <TextView
@@ -130,12 +130,12 @@
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-<!--                    <TextView-->
-<!--                        -->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Tuesday 23 June 09:00 AM"-->
-<!--                        android:textSize="15dp" />-->
+                    <!--                    <TextView-->
+                    <!--                        -->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:text="Tuesday 23 June 09:00 AM"-->
+                    <!--                        android:textSize="15dp" />-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -166,11 +166,11 @@
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="36 Guild Street London, UK"-->
-<!--                        android:textSize="15dp" />-->
+                    <!--                    <TextView-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:text="36 Guild Street London, UK"-->
+                    <!--                        android:textSize="15dp" />-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -214,8 +214,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -229,9 +229,42 @@
                     android:id="@+id/event_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:lineHeight="22dp"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:lineHeight="22dp"/>
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:text="Item Ordered"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/menu_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="40dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/no_menu_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:paddingVertical="40dp"
+                    android:text="No Menu Ordered yet"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout

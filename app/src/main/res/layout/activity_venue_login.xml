@@ -127,16 +127,8 @@
             android:textAllCaps="false"
             android:text="Sign In" />
 
-        <TextView
-            android:textSize="20sp"
-            android:textAlignment="textEnd"
-            android:layout_marginVertical="20dp"
-            android:id="@+id/tvGoToForgetPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Forget Password?" />
-
         <LinearLayout
+            android:layout_marginVertical="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

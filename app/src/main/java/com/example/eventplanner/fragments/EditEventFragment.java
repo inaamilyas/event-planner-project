@@ -77,8 +77,6 @@ public class EditEventFragment extends Fragment {
         binding.eventName.setText(event.getName());
         binding.eventDate.setText(event.getDate());
         binding.eventTime.setText(event.getTime());
-        binding.eventBudget.setText(event.getBudget());
-        binding.eventGuestsNumber.setText(event.getNoOfGuests());
         binding.etVenueAbout.setText(event.getAbout());
         binding.ivSelectedImage.setImageURI(Uri.parse(event.getImage()));
         String imageUrl = event.getImage() != null ? (AppConfig.SERVER_URL + event.getImage()).trim() : null;
@@ -196,8 +194,6 @@ public class EditEventFragment extends Fragment {
         String eventName = binding.eventName.getText().toString().trim();
         String eventDate = binding.eventDate.getText().toString().trim();
         String eventTime = binding.eventTime.getText().toString().trim();
-        String eventBudget = binding.eventBudget.getText().toString().trim();
-        String eventGuestsNumber = binding.eventGuestsNumber.getText().toString().trim();
         String eventAbout = binding.etVenueAbout.getText().toString().trim();
 
 
@@ -211,8 +207,6 @@ public class EditEventFragment extends Fragment {
         RequestBody eventNamePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventName);
         RequestBody eventDatePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventDate);
         RequestBody eventTimePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventTime);
-        RequestBody eventBudgetPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventBudget);
-        RequestBody eventGuestNumberPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventGuestsNumber);
         RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
 //        ApiService apiService = ApiClient.getClient().create(ApiService.class);

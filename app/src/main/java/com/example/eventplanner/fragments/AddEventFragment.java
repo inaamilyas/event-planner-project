@@ -174,8 +174,9 @@ public class AddEventFragment extends Fragment {
     }
 
     private void saveEvent() throws IOException {
+        Toast.makeText(getContext(), "Saving event", Toast.LENGTH_SHORT).show();
         binding.saveEventButton.setText("Loading...");
-        binding.saveEventButton.setEnabled(false);
+//        binding.saveEventButton.d(false);
 
         // Convert URI to File and proceed with the API call
         File imageFile = getFileFromUri(imageUri);
@@ -184,8 +185,6 @@ public class AddEventFragment extends Fragment {
         String eventName = binding.eventName.getText().toString().trim();
         String eventDate = binding.eventDate.getText().toString().trim();
         String eventTime = binding.eventTime.getText().toString().trim();
-        String eventBudget = binding.eventBudget.getText().toString().trim();
-        String eventGuestsNumber = binding.eventGuestsNumber.getText().toString().trim();
         String eventAbout = binding.etVenueAbout.getText().toString().trim();
 
 
@@ -199,12 +198,10 @@ public class AddEventFragment extends Fragment {
         RequestBody eventNamePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventName);
         RequestBody eventDatePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventDate);
         RequestBody eventTimePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventTime);
-        RequestBody eventBudgetPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventBudget);
-        RequestBody eventGuestNumberPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventGuestsNumber);
-        RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
+       RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<Event>> call = apiService.addEvent(user.getId(),body, eventNamePart, eventDatePart, eventTimePart, eventBudgetPart, eventGuestNumberPart, eventAboutPart);
+        Call<ApiResponse<Event>> call = apiService.addEvent(user.getId(),body, eventNamePart, eventDatePart, eventTimePart,eventAboutPart);
         call.enqueue(new Callback<ApiResponse<Event>>() {
             @Override
             public void onResponse(Call<ApiResponse<Event>> call, Response<ApiResponse<Event>> response) {

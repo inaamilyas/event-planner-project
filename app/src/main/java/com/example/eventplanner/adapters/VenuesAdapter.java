@@ -24,7 +24,7 @@ import com.example.eventplanner.models.Venue;
 import java.util.ArrayList;
 
 public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder> {
-    private final ArrayList<Venue> venuesList;
+    private ArrayList<Venue> venuesList;
     private int eventId = -1;
 
     public VenuesAdapter(ArrayList<Venue> venuesList) {
@@ -49,6 +49,13 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Venue venue = venuesList.get(position);
         holder.setView(venue);
+    }
+
+    // Update the venue list when a search is performed
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateVenueList(ArrayList<Venue> filteredVenues) {
+        venuesList = filteredVenues;
+        notifyDataSetChanged(); // Notify the adapter that the data has changed
     }
 
     @Override

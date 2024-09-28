@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventplanner.VenueManager.EditMenuItemDialogFragment;
 import com.example.eventplanner.VenueManager.OnMenuItemUpdatedListener;
 import com.example.eventplanner.VenueManager.adapter.MenuItemAdapter;
 import com.example.eventplanner.api.ApiClient;
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -45,7 +45,8 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
 
     private ActivityAddMenuBinding binding;
     private ArrayList<MenuItem> menuItemsList = new ArrayList<>();
-    MenuItemAdapter menuItemAdapter;
+    public static MenuItemAdapter menuItemAdapter;
+    public static RecyclerView menuItemsRecyclerView;
 
     private static final int PICK_IMAGE_REQUEST = 12;
     private static final int REQUEST_STORAGE_PERMISSION = 100;
@@ -61,10 +62,11 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
 
         Venue selectedVenue = (Venue) getIntent().getSerializableExtra("selectedVenue");
         assert selectedVenue != null;
+        menuItemsRecyclerView = binding.menuItemsRecyclerView;
         menuItemsList = (ArrayList<MenuItem>) selectedVenue.getFoodMenuItems();
-        binding.menuItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        menuItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         menuItemAdapter = new MenuItemAdapter(menuItemsList);
-        binding.menuItemsRecyclerView.setAdapter(menuItemAdapter);
+        menuItemsRecyclerView.setAdapter(menuItemAdapter);
 
         // Call the method to set the RecyclerView height
         setRecyclerViewHeight(binding.menuItemsRecyclerView);
@@ -84,8 +86,8 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
         binding.saveItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AddMenuActivity.this, "save menu item", Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(AddMenuActivity.this, "save menu item", Toast.LENGTH_SHORT).show();
+                binding.saveItemButton.setText("Adding...");
 
                 // Convert URI to File and proceed with the API call
                 File imageFile = null;
@@ -108,37 +110,35 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
                 String venueId = String.valueOf(selectedVenue.getId());
                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
-                Call<ApiResponse<MenuItem>> call = apiService.addMenuItems(venueId, body, menuItemNamePart, menuItemPricePart);
+                Call<ApiResponse<MenuItem[]>> call = apiService.addMenuItems(venueId, body, menuItemNamePart, menuItemPricePart);
 
-                call.enqueue(new Callback<ApiResponse<MenuItem>>() {
+                call.enqueue(new Callback<ApiResponse<MenuItem[]>>() {
                     @SuppressLint("NotifyDataSetChanged")
                     @Override
-                    public void onResponse(Call<ApiResponse<MenuItem>> call, Response<ApiResponse<MenuItem>> response) {
+                    public void onResponse(Call<ApiResponse<MenuItem[]>> call, Response<ApiResponse<MenuItem[]>> response) {
                         // Handle success
                         if (response.isSuccessful()) {
                             // Do something with the response
+                            binding.saveItemButton.setText("Add");
                             Toast.makeText(AddMenuActivity.this, "Menu added successfully", Toast.LENGTH_SHORT).show();
                             assert response.body() != null;
-                            MenuItem menuItem = response.body().getData();
-                            menuItemsList.add(menuItem);
 
-                            // Notify the adapter that data has changed
-                            menuItemAdapter.notifyItemInserted(menuItemsList.size() - 1);
+                            MenuItem[] menuItemArray = response.body().getData();
+                            ArrayList<MenuItem> newMenuItems = new ArrayList<>(Arrays.asList(menuItemArray));
 
-                            // Optionally, scroll to the newly added item
-                            binding.menuItemsRecyclerView.scrollToPosition(menuItemsList.size() - 1);
-//                            menuItemAdapter.notifyDataSetChanged();
-//
+                            menuItemsList.clear();
+                            menuItemsList.addAll(newMenuItems);
+                            menuItemAdapter.notifyDataSetChanged();
+                            setRecyclerViewHeight(binding.menuItemsRecyclerView);
                         } else {
                             // Handle error
+                            binding.saveItemButton.setText("Add");
                             Toast.makeText(AddMenuActivity.this, "Failed to add venue", Toast.LENGTH_SHORT).show();
-//                            binding.saveVenueButton.setText("Add Venue");
-//                            binding.saveVenueButton.isEnabled();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<MenuItem>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<MenuItem[]>> call, Throwable t) {
                         // Handle failur
                         Toast.makeText(AddMenuActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
 //                        binding.saveVenueButton.setText("Add Venue");
@@ -151,7 +151,7 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
 
     }
 
-    private void setRecyclerViewHeight(RecyclerView recyclerView) {
+    public static void setRecyclerViewHeight(RecyclerView recyclerView) {
         RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
         if (adapter != null) {
             int totalHeight = 0;
@@ -162,7 +162,7 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
                 view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                 int itemHeight = view.getMeasuredHeight();
                 // Calculate total height by multiplying item height with item count
-                totalHeight = (itemHeight * itemCount) + 200;
+                totalHeight = (itemHeight * itemCount) + itemHeight * 0;
             }
             // Set the calculated height to RecyclerView
             ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
