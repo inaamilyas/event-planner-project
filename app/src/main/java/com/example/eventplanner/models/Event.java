@@ -1,7 +1,9 @@
 package com.example.eventplanner.models;
 import com.google.gson.annotations.SerializedName;
 
-public class Event {
+import java.io.Serializable;
+
+public class Event implements Serializable {
     @SerializedName("id")
     private int id;
 

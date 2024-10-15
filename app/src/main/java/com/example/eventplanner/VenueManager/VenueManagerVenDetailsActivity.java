@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
 import com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity;
-import com.example.eventplanner.VenueManager.MenuItem.MenuItemsActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
@@ -48,6 +47,13 @@ public class VenueManagerVenDetailsActivity extends AppCompatActivity {
             String imageUrl = AppConfig.SERVER_URL + selectedVenue.getPicture();
             Glide.with(this).load(imageUrl).placeholder(R.drawable.event_image_1).into(binding.venueDetailsImage);
 
+            if (selectedVenue.getStatus() == 1) {
+                binding.approveStatus.setVisibility(View.VISIBLE);
+            } else if (selectedVenue.getStatus() == 2) {
+                binding.rejectStatus.setVisibility(View.VISIBLE);
+            } else {
+                binding.pendingStatus.setVisibility(View.VISIBLE);
+            }
         }
 
         binding.viewMenu.setOnClickListener(new View.OnClickListener() {
@@ -82,38 +88,33 @@ public class VenueManagerVenDetailsActivity extends AppCompatActivity {
     private void deleteVenue(int venueId) {
 
         // Show a confirmation dialog to the user
-        new AlertDialog.Builder(this)
-                .setTitle("Delete Venue")
-                .setMessage("Are you sure you want to delete this venue?")
-                .setPositiveButton("Confirm", (dialog, which) -> {
-                    // User confirmed deletion, proceed with API call
-                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        new AlertDialog.Builder(this).setTitle("Delete Venue").setMessage("Are you sure you want to delete this venue?").setPositiveButton("Confirm", (dialog, which) -> {
+            // User confirmed deletion, proceed with API call
+            ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
-                    apiService.deleteVenue(String.valueOf(venueId)).enqueue(new Callback<ApiResponse>() {
-                        @Override
-                        public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                            Log.d("inaamilyas", "onResponse: " + response.code());
-                            if (response.isSuccessful() && response.body() != null) {
-                                Toast.makeText(VenueManagerVenDetailsActivity.this, "Venue deleted successfully", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                                startActivity(new Intent(VenueManagerVenDetailsActivity.this, DashboardVenueManagerActivity.class));
-                                finish();
-                            } else {
-                                Toast.makeText(VenueManagerVenDetailsActivity.this, "Failed to delete venue", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+            apiService.deleteVenue(String.valueOf(venueId)).enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    Log.d("inaamilyas", "onResponse: " + response.code());
+                    if (response.isSuccessful() && response.body() != null) {
+                        Toast.makeText(VenueManagerVenDetailsActivity.this, "Venue deleted successfully", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        startActivity(new Intent(VenueManagerVenDetailsActivity.this, DashboardVenueManagerActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(VenueManagerVenDetailsActivity.this, "Failed to delete venue", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-                        @Override
-                        public void onFailure(Call<ApiResponse> call, Throwable t) {
-                            Toast.makeText(VenueManagerVenDetailsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> {
-                    // User canceled the deletion
-                    dialog.dismiss();
-                })
-                .show();
+                @Override
+                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    Toast.makeText(VenueManagerVenDetailsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }).setNegativeButton("Cancel", (dialog, which) -> {
+            // User canceled the deletion
+            dialog.dismiss();
+        }).show();
     }
 
 

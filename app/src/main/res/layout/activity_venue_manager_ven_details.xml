@@ -4,8 +4,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".VenueManager.VenueManagerVenDetailsActivity">
 
     <FrameLayout
@@ -74,6 +74,53 @@
                     android:textAlignment="textStart"
                     android:textColor="@color/black"
                     android:textSize="25sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/approve_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="5dp"
+                        android:background="#07C700"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp"
+                        android:text="Approved"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/pending_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="5dp"
+                        android:background="#D1B500"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp"
+                        android:text="Pending"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/reject_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="5dp"
+                        android:background="#FF0000"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp"
+                        android:text="Rejected"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -104,46 +151,8 @@
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="36 Guild Street London, UK"-->
-<!--                        android:textSize="15dp" />-->
                 </LinearLayout>
             </LinearLayout>
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginBottom="20dp"-->
-<!--                android:orientation="horizontal">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="50dp"-->
-<!--                    android:layout_height="50dp"-->
-<!--                    android:layout_gravity="center_vertical"-->
-<!--                    android:layout_marginRight="20dp"-->
-<!--                    android:background="@drawable/bg_rounded"-->
-<!--                    android:src="@drawable/location" />-->
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Inam Ilyas"-->
-<!--                        android:textSize="20dp" />-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Organizer"-->
-<!--                        android:textSize="15dp" />-->
-<!--                </LinearLayout>-->
-<!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,33 +178,34 @@
                     android:textSize="16dp" />
             </LinearLayout>
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:orientation="vertical">-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:orientation="vertical">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="15dp"-->
-<!--                    android:text="Menu"-->
-<!--                    android:textSize="18dp"-->
-<!--                    android:textStyle="bold" />-->
+            <!--                <TextView-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginBottom="15dp"-->
+            <!--                    android:text="Menu"-->
+            <!--                    android:textSize="18dp"-->
+            <!--                    android:textStyle="bold" />-->
 
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/menu_recycler_view"-->
-<!--                    android:layout_marginBottom="40dp"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_weight="1" />-->
-<!--            </LinearLayout>-->
+            <!--                <androidx.recyclerview.widget.RecyclerView-->
+            <!--                    android:id="@+id/menu_recycler_view"-->
+            <!--                    android:layout_marginBottom="40dp"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="0dp"-->
+            <!--                    android:layout_weight="1" />-->
+            <!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

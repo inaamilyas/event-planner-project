@@ -3,6 +3,7 @@ package com.example.eventplanner.VenueManager;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -123,35 +124,55 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
 
 
     private void fetchVenues(ApiService apiService) {
+        // Get the Venue Manager ID from preferences
         int managerId = VenueManager.getFromPreferences(DashboardVenueManagerActivity.this).getId();
+        Log.d("inaamilysa", "fetchVenues: Manager ID = " + managerId);
 
+        // Call the API to fetch venues for the manager
         Call<ApiResponseArray<Venue>> call = apiService.getVenues(managerId);
         call.enqueue(new Callback<ApiResponseArray<Venue>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<ApiResponseArray<Venue>> call, Response<ApiResponseArray<Venue>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                Log.d("inaamilysa", "onResponse: API call successful. Response code = " + response.code());
 
-                    // Get the list of Venue from the ApiResponseArray
-                    List<Venue> venueList = response.body().getData();
+                if (response.isSuccessful()) {
+                    Log.d("inaamilysa", "onResponse: Response is successful");
 
-                    if (venueList != null && !venueList.isEmpty()) {
+                    if (response.body() != null) {
+                        Log.d("inaamilysa", "onResponse: Response body is not null");
 
-                        // Update the list and notify adapter
-                        venuesList.clear(); // Clear the current list
-                        venuesList.addAll(venueList); // Add all fetched venues to the list
-                        venuesAdapter.notifyDataSetChanged(); // Notify adapter about data change
+                        // Get the list of Venue from the ApiResponseArray
+                        List<Venue> venueList = response.body().getData();
+                        Log.d("inaamilysa", "onResponse: Venue list fetched: " + venueList);
+
+                        if (venueList != null && !venueList.isEmpty()) {
+                            Log.d("inaamilysa", "onResponse: Venue list size = " + venueList.size());
+
+                            // Update the list and notify adapter
+                            venuesList.clear(); // Clear the current list
+                            venuesList.addAll(venueList); // Add all fetched venues to the list
+                            Log.d("inaamilysa", "onResponse: Venues list updated in adapter, size = " + venuesList.size());
+                            venuesAdapter.notifyDataSetChanged(); // Notify adapter about data change
+
+                        } else {
+                            Log.d("inaamilysa", "onResponse: Venue list is empty or null");
+                            binding.noEvents.setVisibility(View.VISIBLE);
+                            Toast.makeText(DashboardVenueManagerActivity.this, "No venues found", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        binding.noEvents.setVisibility(View.VISIBLE);
-                        Toast.makeText(DashboardVenueManagerActivity.this, "No venues found", Toast.LENGTH_SHORT).show();
+                        Log.d("inaamilysa", "onResponse: Response body is null");
+                        Toast.makeText(DashboardVenueManagerActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    Log.d("inaamilysa", "onResponse: Response is unsuccessful. Error code = " + response.code());
                     Toast.makeText(DashboardVenueManagerActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponseArray<Venue>> call, Throwable t) {
+                Log.d("inaamilysa", "onFailure: API call failed. Error message = " + t.getMessage());
                 Toast.makeText(DashboardVenueManagerActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
             }
         });

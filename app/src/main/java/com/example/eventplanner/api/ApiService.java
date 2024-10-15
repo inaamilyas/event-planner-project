@@ -76,10 +76,6 @@ public interface ApiService {
     );
 
     @Headers({"Content-Type: application/json"})
-    @POST("api/v1/venues/suggest/nearest")
-    Call<ApiResponseArray<Venue>> getNearestVenues(@Body Map<String, Object> requestBody);
-
-    @Headers({"Content-Type: application/json"})
     @POST("api/v1/user/info")
     Call<ApiResponse<Data>> getCurrentUserInformation(@Header("user_id") int userId, @Body Map<String, Object> requestBody);
 
@@ -138,6 +134,32 @@ public interface ApiService {
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/food-menu/order/save")
     Call<ApiResponse<String>> bookMenuItems(@Body Map<String, Object> requestBody);
+
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/admin/login")
+    Call<ApiResponse> adminLogin(@Body Map<String, Object> requestBody);
+
+
+    @Multipart
+    @PUT("api/v1/user")
+    Call<ApiResponse<String>> updateUserProfile(
+            @Header("user_id") int userId,
+            @Part MultipartBody.Part picture,
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody price,
+            @Part("password") RequestBody password,
+            @Part("conf_password") RequestBody confPassword
+    );
+
+
+    @Headers({"Content-Type: application/json"})
+    @GET("api/v1/admin")
+    Call<ApiResponseArray<Venue>> getDataForAdmin();
+
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/admin/venue/change-status")
+    Call<ApiResponse> changeVenueStatus(@Body Map<String, Object> requestBody);
+
 
 
 }

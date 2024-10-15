@@ -42,6 +42,9 @@ public class Venue implements Serializable {
     @SerializedName("owner")
     private VenueManager owner;
 
+    @SerializedName("status")
+    private int status;
+
     @SerializedName("venue_food_menu")
     private List<MenuItem> foodMenuItems;
 
@@ -170,5 +173,13 @@ public class Venue implements Serializable {
 
     public void setFoodMenuItems(List<MenuItem> foodMenuItems) {
         this.foodMenuItems = foodMenuItems;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

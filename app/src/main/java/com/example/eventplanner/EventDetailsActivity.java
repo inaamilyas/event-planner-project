@@ -119,8 +119,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 deleteEvent(Integer.parseInt(position));
             }
         });
-
-
+        
         if( event.getVenue() != null && !event.getVenue().getFoodMenuItems().isEmpty()){
             ManuVenueDetailsAdapter adapter = new ManuVenueDetailsAdapter((ArrayList<MenuItem>) event.getVenue().getFoodMenuItems());
             binding.menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -129,7 +128,6 @@ public class EventDetailsActivity extends AppCompatActivity {
             binding.menuRecyclerView.setVisibility(View.GONE);
             binding.noMenuItem.setVisibility(View.GONE);
         }
-
     }
 
     private void shareEventDetails() {

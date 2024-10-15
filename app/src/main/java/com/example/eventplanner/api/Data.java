@@ -13,8 +13,22 @@ public class Data {
     @SerializedName("events")
     private List<Event> events;
 
+    @SerializedName("all_events")
+    private List<Event> allEvents;
+
     @SerializedName("venues")
     private List<Venue> venues;
+
+    @SerializedName("all_venues")
+    private List<Venue> allRandomVenues;
+
+    public List<Venue> getAllRandomVenues() {
+        return allRandomVenues;
+    }
+
+    public void setAllRandomVenues(List<Venue> allRandomVenues) {
+        this.allRandomVenues = allRandomVenues;
+    }
 
     public User getUser() {
         return user;
@@ -38,5 +52,13 @@ public class Data {
 
     public void setVenues(List<Venue> venues) {
         this.venues = venues;
+    }
+
+    public List<Event> getAllEvents() {
+        return allEvents;
+    }
+
+    public void setAllEvents(List<Event> allEvents) {
+        this.allEvents = allEvents;
     }
 }

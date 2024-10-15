@@ -12,6 +12,9 @@ import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.eventplanner.Admin.AdminLoginActivity;
+import com.example.eventplanner.VenueManager.VenueLoginActivity;
+import com.example.eventplanner.VenueManager.VenueSignupActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
@@ -112,7 +115,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
                         // Handle failure (e.g., no internet connection)
-                        Log.d("inaamilyas", "onFailure: "+ t);
+                        Log.d("inaamilyas", "onFailure: " + t);
                         binding.tvSignupApiError.setText("Failed to connect. Please check your internet connection.");
                         binding.btnSignup.setEnabled(true);
                         binding.btnSignup.setText("Sign Up");
@@ -137,10 +140,13 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_signup_venue_manager) {
-
+            startActivity(new Intent(SignupActivity.this, VenueSignupActivity.class));
             return true;
         } else if (item.getItemId() == R.id.action_login_venue_manager) {
-
+            startActivity(new Intent(SignupActivity.this, VenueLoginActivity.class));
+            return true;
+        } else if (item.getItemId() == R.id.action_login_admin) {
+            startActivity(new Intent(SignupActivity.this, AdminLoginActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

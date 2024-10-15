@@ -133,7 +133,7 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
 
         // Add a marker and move the camera
         LatLng location = new LatLng(selectedVenue.getLatitude(), selectedVenue.getLongitude());
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         mMap.addMarker(new MarkerOptions().position(location).title(selectedVenue.getName()));

@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventplanner.R;
 import com.example.eventplanner.VenueManager.OnMenuItemUpdatedListener;
 import com.example.eventplanner.VenueManager.adapter.MenuItemAdapter;
 import com.example.eventplanner.api.ApiClient;
@@ -130,6 +131,10 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
                             menuItemsList.addAll(newMenuItems);
                             menuItemAdapter.notifyDataSetChanged();
                             setRecyclerViewHeight(binding.menuItemsRecyclerView);
+
+                            binding.etMenuPrice.setText("");
+                            binding.etItemName.setText("");
+                            binding.ivSelectedImage.setImageURI(null);
                         } else {
                             // Handle error
                             binding.saveItemButton.setText("Add");

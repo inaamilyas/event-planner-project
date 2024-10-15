@@ -23,4 +23,23 @@
 
     </group>
 
+
+    <!-- Group Title -->
+    <item
+        android:id="@+id/group_admin_title"
+        android:title="Admin"
+        android:enabled="false"
+        android:checkable="false" />
+
+    <!-- Menu Group -->
+    <group
+        android:id="@+id/group_admin"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/action_login_admin"
+            android:title="Login" />
+
+    </group>
+
 </menu>

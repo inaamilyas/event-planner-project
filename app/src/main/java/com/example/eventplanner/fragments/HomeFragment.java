@@ -4,12 +4,10 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +30,6 @@ import com.example.eventplanner.adapters.EventsAdapter;
 import com.example.eventplanner.adapters.VenuesAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
-import com.example.eventplanner.api.ApiResponseArray;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.api.Data;
 import com.example.eventplanner.config.AppConfig;
@@ -60,11 +57,15 @@ public class HomeFragment extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private VenuesAdapter venuesAdapter;
+    private VenuesAdapter allVenuesAdapter;
     public static EventsAdapter homeEventsAdapter;
+//    public static EventsAdapter AllHomeEventsAdapter;
     private FragmentHomeBinding binding;
     private FusedLocationProviderClient fusedLocationClient;
     public static ArrayList<Venue> venuesList = new ArrayList<>();
+    public static ArrayList<Venue> allVenuesRandomList = new ArrayList<>();
     public static ArrayList<Event> eventList = new ArrayList<>();
+//    public static ArrayList<Event> allEventList = new ArrayList<>();
     public static User user = null;
 
     public HomeFragment() {
@@ -94,10 +95,19 @@ public class HomeFragment extends Fragment {
         venuesAdapter = new VenuesAdapter(venuesList);
         binding.venuesRecyclerHome.setAdapter(venuesAdapter);
 
+        binding.allVenuesRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        allVenuesAdapter = new VenuesAdapter(allVenuesRandomList);
+        binding.allVenuesRecyclerHome.setAdapter(allVenuesAdapter);
+
         // Initialize RecyclerViews
         binding.eventsRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         homeEventsAdapter = new EventsAdapter(eventList);
         binding.eventsRecyclerHome.setAdapter(homeEventsAdapter);
+
+        // all events
+//        binding.allEventsRecyclerHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+//        AllHomeEventsAdapter = new EventsAdapter(allEventList);
+//        binding.allEventsRecyclerHome.setAdapter(AllHomeEventsAdapter);
 
         binding.seeAllEvents.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,6 +255,16 @@ public class HomeFragment extends Fragment {
                             venuesList.addAll(venueList);
                             venuesAdapter.notifyDataSetChanged();
                         }
+
+                        // Get the list of random Venue from the ApiResponseArray
+                        List<Venue> randomVenuList = response.body().getData().getAllRandomVenues();
+                        if (venueList != null && !venueList.isEmpty()) {
+                            // Update the list and notify adapter
+                            allVenuesRandomList.clear();
+                            allVenuesRandomList.addAll(randomVenuList);
+                            allVenuesAdapter.notifyDataSetChanged();
+                        }
+
                         List<Event> allEvents = response.body().getData().getEvents();
                         if (allEvents != null && !allEvents.isEmpty()) {
                             // Update the list and notify adapter
@@ -256,6 +276,18 @@ public class HomeFragment extends Fragment {
                             // Show the "No Events" TextView when there are no events
                             binding.noEvents.setVisibility(View.VISIBLE);
                         }
+
+//                        List<Event> allUserEvents = response.body().getData().getAllEvents();
+//                        if (allEvents != null && !allEvents.isEmpty()) {
+//                            // Update the list and notify adapter
+//                            allEventList.clear();
+//                            allEventList.addAll(allUserEvents);
+//                            AllHomeEventsAdapter.notifyDataSetChanged();
+//
+//                        } else {
+//                            // Show the "No Events" TextView when there are no events
+//                            binding.noAllEvents.setVisibility(View.VISIBLE);
+//                        }
                     } else {
                         Toast.makeText(getContext(), "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                     }

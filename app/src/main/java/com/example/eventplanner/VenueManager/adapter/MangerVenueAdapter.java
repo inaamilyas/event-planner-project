@@ -50,12 +50,17 @@ public class MangerVenueAdapter extends RecyclerView.Adapter<MangerVenueAdapter.
         TextView venueAddress;
         //        TextView event;
         ImageView venueImage;
+        TextView tvApproveStatus, tvRejectStatus, tvPendingStatus;
 
         public ViewHolder(View view) {
             super(view);
             this.venueName = (TextView) view.findViewById(R.id.venue_list_item_title);
 
             this.venueAddress = (TextView) view.findViewById(R.id.venue_list_item_address);
+
+            this.tvApproveStatus = (TextView) view.findViewById(R.id.approve_status);
+            this.tvRejectStatus = (TextView) view.findViewById(R.id.reject_status);
+            this.tvPendingStatus = (TextView) view.findViewById(R.id.pending_status);
 
             this.venueImage = (ImageView) view.findViewById(R.id.venue_list_item_image);
 
@@ -103,6 +108,14 @@ public class MangerVenueAdapter extends RecyclerView.Adapter<MangerVenueAdapter.
         public void setView(Venue venue) {
             this.venueName.setText(venue.getName());
             this.venueAddress.setText(venue.getAddress());
+            int venueStatus = venue.getStatus();
+            if (venueStatus == 1) {
+                this.tvApproveStatus.setVisibility(View.VISIBLE);
+            } else if (venueStatus == 2) {
+                this.tvRejectStatus.setVisibility(View.VISIBLE);
+            } else {
+                this.tvPendingStatus.setVisibility(View.VISIBLE);
+            }
             Glide.with(this.venueImage.getContext()).load(AppConfig.SERVER_URL + venue.getPicture()).placeholder(R.drawable.enent_image).into(this.venueImage);
 //            this.eventImage.setImageResource(R.drawable.enent_image);
         }

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.eventplanner.Admin.AdminLoginActivity;
 import com.example.eventplanner.VenueManager.VenueLoginActivity;
 import com.example.eventplanner.VenueManager.VenueSignupActivity;
 import com.example.eventplanner.api.ApiClient;
@@ -138,6 +139,9 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.action_login_venue_manager) {
             startActivity(new Intent(LoginActivity.this, VenueLoginActivity.class));
+            return true;
+        } else if (item.getItemId() == R.id.action_login_admin) {
+            startActivity(new Intent(LoginActivity.this, AdminLoginActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

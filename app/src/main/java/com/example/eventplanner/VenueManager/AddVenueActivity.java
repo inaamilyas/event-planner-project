@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.eventplanner.R;
+import com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity;
+import com.example.eventplanner.VenueManager.MenuItem.MenuItemsActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
@@ -215,7 +217,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
                 if (response.isSuccessful()) {
                     // Do something with the response
                     Toast.makeText(AddVenueActivity.this, "Venue created successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddVenueActivity.this, DashboardVenueManagerActivity.class));
+                    startActivity(new Intent(AddVenueActivity.this, AddMenuActivity.class));
                     finish();
                 } else {
                     // Handle error

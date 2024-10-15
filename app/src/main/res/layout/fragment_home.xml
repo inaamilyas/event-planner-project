@@ -181,7 +181,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Venues"
+                            android:text="Venues Near You"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -203,6 +203,77 @@
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp" />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:background="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:paddingHorizontal="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Featured Venues"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/all_venues_recycler_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp" />
+                </LinearLayout>
+
+
+<!--                <LinearLayout-->
+<!--                    android:background="@color/white"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="10dp"-->
+<!--                        android:paddingHorizontal="20dp">-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:text="Your Events"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="20sp"-->
+<!--                            android:textStyle="bold" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <androidx.recyclerview.widget.RecyclerView-->
+<!--                        android:id="@+id/all_events_recycler_home"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_marginBottom="10dp" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/no_all_events"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:paddingVertical="40dp"-->
+<!--                        android:text="No Events to Show..."-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:textSize="25dp"-->
+<!--                        android:visibility="gone"-->
+<!--                        tools:ignore="RtlCompat" />-->
+<!--                </LinearLayout>-->
             </LinearLayout>
         </ScrollView>
 
