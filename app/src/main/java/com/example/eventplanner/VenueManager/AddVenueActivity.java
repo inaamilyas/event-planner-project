@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityAddVenueBinding;
+import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.VenueManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -54,7 +56,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
     private LatLng selectedLatLng;
 
     private static final int PICK_IMAGE_REQUEST = 12;
-    private static final int REQUEST_STORAGE_PERMISSION = 100;
+    private static final int REQUEST_STORAGE_PERMISSION = 120;
     private Uri imageUri;
 
     @Override
@@ -65,7 +67,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
 
         // Check for storage permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+          ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
         }
 
         // Set a custom title for the toolbar
@@ -95,16 +97,17 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
                 binding.saveVenueButton.setEnabled(false);
 
                 // Ensure permissions are granted before proceeding
-                if (ContextCompat.checkSelfPermission(AddVenueActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                if (ContextCompat.checkSelfPermission(AddVenueActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     // Your code to handle the button click
                     try {
                         saveVenue();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                } else {
-                    Toast.makeText(AddVenueActivity.this, "Storage permission is required to select an image", Toast.LENGTH_SHORT).show();
-                }
+//                } else {
+//                    Toast.makeText(AddVenueActivity.this, "Storage permission is required to select an image", Toast.LENGTH_SHORT).show();
+////                    ActivityCompat.requestPermissions(, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+//                }
             }
         });
 
@@ -158,16 +161,16 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 onMapReady(mMap);
             } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Location Permission denied", Toast.LENGTH_SHORT).show();
             }
         }
 
         if (requestCode == REQUEST_STORAGE_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 openImagePicker();
             } else {
                 Toast.makeText(this, "Storage permission denied", Toast.LENGTH_SHORT).show();
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
             }
         }
     }
@@ -209,15 +212,19 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         RequestBody managerIdPart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(managerId));
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<String>> call = apiService.addVenue(body, venueNamePart, venuePhonePart, venueAboutPart, latitudePart, longitudePart,managerIdPart);
-        call.enqueue(new Callback<ApiResponse<String>>() {
+        Call<ApiResponse<Venue>> call = apiService.addVenue(body, venueNamePart, venuePhonePart, venueAboutPart, latitudePart, longitudePart,managerIdPart);
+        call.enqueue(new Callback<ApiResponse<Venue>>() {
             @Override
-            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+            public void onResponse(Call<ApiResponse<Venue>> call, Response<ApiResponse<Venue>> response) {
                 // Handle success
                 if (response.isSuccessful()) {
                     // Do something with the response
                     Toast.makeText(AddVenueActivity.this, "Venue created successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddVenueActivity.this, AddMenuActivity.class));
+                    assert response.body() != null;
+                    Venue venue = (Venue) response.body().getData();
+                    Intent intent = new Intent(AddVenueActivity.this, AddMenuActivity.class);
+                    intent.putExtra("selectedVenue", venue);
+                    startActivity(intent);
                     finish();
                 } else {
                     // Handle error
@@ -228,7 +235,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Venue>> call, Throwable t) {
                 // Handle failur
                 Toast.makeText(AddVenueActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
                 binding.saveVenueButton.setText("Add Venue");

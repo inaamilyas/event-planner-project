@@ -3,7 +3,6 @@ package com.example.eventplanner.Admin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -81,42 +80,32 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponseArray<Venue>> call, Response<ApiResponseArray<Venue>> response) {
                 if (response.isSuccessful()) {
-                    Log.d("inaamilysa", "onResponse: Response is successful");
-
                     if (response.body() != null) {
-                        Log.d("inaamilysa", "onResponse: Response body is not null");
 
                         // Get the list of Venue from the ApiResponseArray
                         List<Venue> venueList = response.body().getData();
-                        Log.d("inaamilysa", "onResponse: Venue list fetched: " + venueList);
 
                         if (venueList != null && !venueList.isEmpty()) {
-                            Log.d("inaamilysa", "onResponse: Venue list size = " + venueList.size());
 
                             // Update the list and notify adapter
                             venuesList.clear(); // Clear the current list
                             venuesList.addAll(venueList); // Add all fetched venues to the list
-                            Log.d("inaamilysa", "onResponse: Venues list updated in adapter, size = " + venuesList.size());
                             venueAdapter.notifyDataSetChanged(); // Notify adapter about data change
 
                         } else {
-                            Log.d("inaamilysa", "onResponse: Venue list is empty or null");
                             binding.noEvents.setVisibility(View.VISIBLE);
                             Toast.makeText(AdminDashboardActivity.this, "No venues found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Log.d("inaamilysa", "onResponse: Response body is null");
                         Toast.makeText(AdminDashboardActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.d("inaamilysa", "onResponse: Response is unsuccessful. Error code = " + response.code());
                     Toast.makeText(AdminDashboardActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponseArray<Venue>> call, Throwable t) {
-                Log.d("inaamilysa", "onFailure: API call failed. Error message = " + t.getMessage());
                 Toast.makeText(AdminDashboardActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
             }
         });

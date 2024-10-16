@@ -46,7 +46,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/venues")
-    Call<ApiResponse<String>> addVenue(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude, @Part("manager_id") RequestBody managerIdPart);
+    Call<ApiResponse<Venue>> addVenue(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude, @Part("manager_id") RequestBody managerIdPart);
 
     @Multipart
     @POST("api/v1/events")
