@@ -252,6 +252,17 @@
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/venue_delete_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_rounded"
+                        android:backgroundTint="#E4C50202"
+                        android:text="Delete"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
                 </LinearLayout>
 
 

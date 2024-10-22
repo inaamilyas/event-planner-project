@@ -2,7 +2,6 @@ package com.example.eventplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,9 +53,6 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                binding.btnSignup.setEnabled(false);
-                binding.btnSignup.setText("Loading...");
-
                 // Usage in your Activity or ViewModel
                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
@@ -65,6 +61,30 @@ public class SignupActivity extends AppCompatActivity {
                 String password = binding.etSignupPassword.getText().toString();
                 String confirmPassword = binding.etSignupConfPass.getText().toString();
 
+                // Regular expressions for validation
+                String namePattern = "^[a-zA-Z\\s]+$"; // Allows only letters and spaces
+                String emailPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"; // Basic email validation pattern
+                String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"; // Minimum 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character
+
+                // Validation
+                if (name.isEmpty() || !name.matches(namePattern)) {
+                    binding.tvSignupApiError.setText("Name must contain only letters and spaces");
+                    return;
+                }
+                if (email.isEmpty() || !email.matches(emailPattern)) {
+                    binding.tvSignupApiError.setText("Enter a valid email address");
+                    return;
+                }
+                if (password.isEmpty()) {
+//                    binding.tvSignupApiError.setText("Password must be at least 8 characters long with uppercase, lowercase, number, and special character");
+                    binding.tvSignupApiError.setText("Password is required");
+                    return;
+                }
+                if (!password.equals(confirmPassword)) {
+                    binding.tvSignupApiError.setText("Passwords do not match");
+                    return;
+                }
+
                 Map<String, Object> requestBody = new HashMap<>();
                 requestBody.put("name", name);
                 requestBody.put("email", email);
@@ -72,6 +92,8 @@ public class SignupActivity extends AppCompatActivity {
                 requestBody.put("confirmPassword", confirmPassword);
                 Call<ApiResponse<User>> call = apiService.signup(requestBody);
 
+                binding.btnSignup.setEnabled(false);
+                binding.btnSignup.setText("Loading...");
                 call.enqueue(new Callback<ApiResponse<User>>() {
                     @Override
                     public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
@@ -114,8 +136,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                        // Handle failure (e.g., no internet connection)
-                        Log.d("inaamilyas", "onFailure: " + t);
+                        // Handle failure (e.g., no internet connection
                         binding.tvSignupApiError.setText("Failed to connect. Please check your internet connection.");
                         binding.btnSignup.setEnabled(true);
                         binding.btnSignup.setText("Sign Up");

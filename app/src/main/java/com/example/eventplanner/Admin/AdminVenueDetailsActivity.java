@@ -1,5 +1,6 @@
 package com.example.eventplanner.Admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
+import com.example.eventplanner.VenueManager.DashboardVenueManagerActivity;
+import com.example.eventplanner.VenueManager.VenueManagerVenDetailsActivity;
 import com.example.eventplanner.adapters.ManuVenueDetailsAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
@@ -70,6 +73,11 @@ public class AdminVenueDetailsActivity extends AppCompatActivity implements OnMa
             ManuVenueDetailsAdapter adapter = new ManuVenueDetailsAdapter((ArrayList<MenuItem>) selectedVenue.getFoodMenuItems());
             binding.menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
             binding.menuRecyclerView.setAdapter(adapter);
+
+            if(selectedVenue.getStatus() == 1){
+                binding.btnVenueApprove.setVisibility(View.GONE);
+                binding.btnVenueReject.setVisibility(View.GONE);
+            }
         }
 
 
@@ -87,6 +95,15 @@ public class AdminVenueDetailsActivity extends AppCompatActivity implements OnMa
                 changeVenueStatus(selectedVenue.getId(), 2);
             }
         });
+
+        binding.venueDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle delete button click
+                deleteVenue(selectedVenue.getId());
+            }
+        });
+
     }
 
     private void changeVenueStatus(int venueId, int status) {
@@ -117,6 +134,38 @@ public class AdminVenueDetailsActivity extends AppCompatActivity implements OnMa
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
                     // Handle failure
                     Log.e("Booking Failure", t.getMessage());
+                    Toast.makeText(AdminVenueDetailsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }).setNegativeButton("Cancel", (dialog, which) -> {
+            // User canceled the deletion
+            dialog.dismiss();
+        }).show();
+    }
+
+
+    private void deleteVenue(int venueId) {
+
+        // Show a confirmation dialog to the user
+        new AlertDialog.Builder(this).setTitle("Delete Venue").setMessage("Are you sure you want to delete this venue?").setPositiveButton("Confirm", (dialog, which) -> {
+            // User confirmed deletion, proceed with API call
+            ApiService apiService = ApiClient.getClient().create(ApiService.class);
+
+            apiService.deleteVenue(String.valueOf(venueId)).enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Toast.makeText(AdminVenueDetailsActivity.this, "Venue deleted successfully", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        startActivity(new Intent(AdminVenueDetailsActivity.this, AdminDashboardActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(AdminVenueDetailsActivity.this, "Failed to delete venue", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse> call, Throwable t) {
                     Toast.makeText(AdminVenueDetailsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
                 }
             });

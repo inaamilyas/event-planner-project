@@ -37,9 +37,6 @@ public class VenueSignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                binding.btnSignup.setEnabled(false);
-                binding.btnSignup.setText("Loading...");
-
                 // Usage in your Activity or ViewModel
                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
@@ -49,12 +46,50 @@ public class VenueSignupActivity extends AppCompatActivity {
                 String confirmPassword = binding.etSignupConfPass.getText().toString();
                 String phoneNumber = binding.etSignupPhoneNumber.getText().toString();
 
+                // Regular expression patterns
+                String namePattern = "^[a-zA-Z\\s]+$"; // Allows letters and spaces only
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                String passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$"; // At least one digit, one lower case, one upper case, one special character, and minimum 8 characters
+
+                // Validate Name
+                if (name.isEmpty() || !name.matches(namePattern)) {
+                    binding.tvSignupApiError.setText("Name should only contain letters and spaces");
+                    return;
+                }
+
+                // Validate Email
+                if (email.isEmpty() || !email.matches(emailPattern)) {
+                    binding.tvSignupApiError.setText("Please enter a valid email address");
+                    return;
+                }
+
+                // Validate Password
+                if (password.isEmpty() || !password.matches(passwordPattern)) {
+                    binding.tvSignupApiError.setText("Password must be at least 8 characters long, include a number, an uppercase letter, a lowercase letter, and a special character");
+                    return;
+                }
+
+                // Validate Confirm Password
+                if (!confirmPassword.equals(password)) {
+                    binding.tvSignupApiError.setText("Passwords do not match");
+                    return;
+                }
+
+                // Validate Phone Number
+                if (phoneNumber.isEmpty() || !phoneNumber.matches("\\d{10}")) { // Assuming a 10-digit phone number
+                    binding.tvSignupApiError.setText("Please enter a valid 10-digit phone number");
+                    return;
+                }
+
                 Map<String, Object> requestBody = new HashMap<>();
                 requestBody.put("name", name);
                 requestBody.put("confirmPassword", confirmPassword);
                 requestBody.put("phone", phoneNumber);
                 requestBody.put("email", email);
                 requestBody.put("password", password);
+
+                binding.btnSignup.setEnabled(false);
+                binding.btnSignup.setText("Loading...");
 
                 Call<ApiResponse<VenueManager>> call = apiService.venueManagerSignup(requestBody);
 
@@ -109,6 +144,13 @@ public class VenueSignupActivity extends AppCompatActivity {
             }
         });
 
+        binding.tvGoToSignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(VenueSignupActivity.this, VenueLoginActivity.class));
+                finish();
+            }
+        });
 
     }
 }

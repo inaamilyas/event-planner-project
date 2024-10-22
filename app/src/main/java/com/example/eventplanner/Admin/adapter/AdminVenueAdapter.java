@@ -148,6 +148,9 @@ public class AdminVenueAdapter extends RecyclerView.Adapter<AdminVenueAdapter.Vi
             this.venueAddress.setText(venue.getAddress());
             Glide.with(this.venueImage.getContext()).load(AppConfig.SERVER_URL + venue.getPicture()).placeholder(R.drawable.enent_image).into(this.venueImage);
             this.venueImage.setImageResource(R.drawable.enent_image);
+            if(venue.getStatus() == 1){
+                itemView.findViewById(R.id.venue_list_item_edit_button).setVisibility(View.GONE);
+            }
         }
     }
 

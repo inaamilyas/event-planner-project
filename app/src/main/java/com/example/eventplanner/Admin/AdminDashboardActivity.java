@@ -2,6 +2,7 @@ package com.example.eventplanner.Admin;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -27,7 +28,10 @@ import retrofit2.Response;
 public class AdminDashboardActivity extends AppCompatActivity {
     private ActivityAdminDashboardBinding binding;
     private ArrayList<Venue> venuesList = new ArrayList<>();
+    private ArrayList<Venue> venueRequestList = new ArrayList<>();
+    private ArrayList<Venue> allVenueList = new ArrayList<>();
     private AdminVenueAdapter venueAdapter;
+    private AdminVenueAdapter allVenuesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         setTitle("");
         setSupportActionBar(binding.toolBar);
 
-
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
         // Fetch data from API
@@ -47,9 +50,20 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         // Initialize RecyclerView and Adapter
         binding.venuesRecyclerHome.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        venueAdapter = new AdminVenueAdapter(venuesList);
+        venueAdapter = new AdminVenueAdapter(venueRequestList);
         binding.venuesRecyclerHome.setAdapter(venueAdapter);
 
+        // Setup RecyclerView for "All Venues"
+        binding.otherVenuesRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        allVenuesAdapter = new AdminVenueAdapter(allVenueList); // Assuming you have this list
+        binding.otherVenuesRecycler.setAdapter(allVenuesAdapter);
+
+        // Handle menu clicks
+        binding.venueRequestTab.setOnClickListener(v -> showVenueRequest());
+        binding.allVenuesTab.setOnClickListener(v -> showAllVenues());
+
+        // Default to showing "Venue Request"
+        showVenueRequest();
 
         binding.adminLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +85,21 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     }
 
+    private void showVenueRequest() {
+        binding.venuesRecyclerHome.setVisibility(View.VISIBLE);
+        binding.otherVenuesRecycler.setVisibility(View.GONE);
+        binding.venueRequestTab.setBackgroundColor(Color.parseColor("#eaeaea"));
+        binding.allVenuesTab.setBackgroundColor(Color.parseColor("#ffffff"));
+    }
+
+    private void showAllVenues() {
+        binding.venuesRecyclerHome.setVisibility(View.GONE);
+        binding.otherVenuesRecycler.setVisibility(View.VISIBLE);
+        binding.venueRequestTab.setBackgroundColor(Color.parseColor("#ffffff"));
+        binding.allVenuesTab.setBackgroundColor(Color.parseColor("#eaeaea"));
+    }
+
+
     private void fetchVenues(ApiService apiService) {
 
         // Call the API to fetch venues for the manager
@@ -87,13 +116,39 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
                         if (venueList != null && !venueList.isEmpty()) {
 
-                            // Update the list and notify adapter
-                            venuesList.clear(); // Clear the current list
-                            venuesList.addAll(venueList); // Add all fetched venues to the list
-                            venueAdapter.notifyDataSetChanged(); // Notify adapter about data change
+                            // Update the venuesList and notify the adapter
+                            venuesList.clear(); // Clear the current venuesList
+                            venuesList.addAll(venueList); // Add all fetched venues to the venuesList
 
+                            // Clear the request and all lists to avoid duplicates
+                            venueRequestList.clear();
+                            allVenueList.clear();
+
+                            // Loop through the venueList (or you can use venuesList)
+                            for (int i = 0; i < venueList.size(); i++) {
+                                // Check the status of the venue and categorize
+                                if (venueList.get(i).getStatus() != 1) {
+                                    venueRequestList.add(venueList.get(i));
+                                } else {
+                                    allVenueList.add(venueList.get(i));
+                                }
+                            }
+
+                            if (allVenueList.isEmpty()) {
+                                binding.noVenueRequest.setVisibility(View.VISIBLE);
+                                binding.noVenueRequest.setText("No venues found");
+                            }
+
+                            if (venueRequestList.isEmpty()) {
+                                binding.noVenueRequest.setVisibility(View.VISIBLE);
+                                binding.noVenueRequest.setText("No venues Requests found");
+                            }
+
+                            // Notify the adapter about the data change
+                            venueAdapter.notifyDataSetChanged();
+                            allVenuesAdapter.notifyDataSetChanged();
                         } else {
-                            binding.noEvents.setVisibility(View.VISIBLE);
+//                            binding.noVenueRequest.setVisibility(View.VISIBLE);
                             Toast.makeText(AdminDashboardActivity.this, "No venues found", Toast.LENGTH_SHORT).show();
                         }
                     } else {

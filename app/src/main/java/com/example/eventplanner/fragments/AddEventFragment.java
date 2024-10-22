@@ -38,7 +38,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -131,6 +133,32 @@ public class AddEventFragment extends Fragment {
         binding = null; // Avoid memory leaks
     }
 
+//    private void showDatePickerDialog() {
+//        final Calendar calendar = Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year1, month1, dayOfMonth) -> {
+//            month1 = month1 + 1;
+//            String date = dayOfMonth + "/" + month1 + "/" + year1;
+//            binding.eventDate.setText(date);
+//        }, year, month, day);
+//        datePickerDialog.show();
+//    }
+//
+//    private void showTimePickerDialog() {
+//        final Calendar calendar = Calendar.getInstance();
+//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int minute = calendar.get(Calendar.MINUTE);
+//
+//        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (view, hourOfDay, minute1) -> {
+//            String time = hourOfDay + ":" + minute1;
+//            binding.eventTime.setText(time);
+//        }, hour, minute, true);
+//        timePickerDialog.show();
+//    }
+
     private void showDatePickerDialog() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -138,24 +166,40 @@ public class AddEventFragment extends Fragment {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, year1, month1, dayOfMonth) -> {
-            month1 = month1 + 1;
+            month1 = month1 + 1; // Month is 0-based, so we need to add 1
             String date = dayOfMonth + "/" + month1 + "/" + year1;
             binding.eventDate.setText(date);
         }, year, month, day);
+
+        // Set the minimum date to the current date
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
 
+
     private void showTimePickerDialog() {
         final Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = calendar.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (view, hourOfDay, minute1) -> {
-            String time = hourOfDay + ":" + minute1;
-            binding.eventTime.setText(time);
-        }, hour, minute, true);
+            String formattedMinute = minute1 < 10 ? "0" + minute1 : String.valueOf(minute1);
+            String formattedTime = hourOfDay + ":" + formattedMinute;
+            binding.eventTime.setText(formattedTime);
+        }, currentHour, currentMinute, true);
+
+        // Only set the time restrictions if the event date is today
+        String selectedDate = binding.eventDate.getText().toString().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String todayDate = sdf.format(calendar.getTime());
+
+        if (selectedDate.equals(todayDate)) {
+            timePickerDialog.updateTime(currentHour, currentMinute);
+        }
+
         timePickerDialog.show();
     }
+
 
     private File getFileFromUri(Uri uri) throws IOException {
         InputStream inputStream = requireContext().getContentResolver().openInputStream(uri);
@@ -174,12 +218,19 @@ public class AddEventFragment extends Fragment {
     }
 
     private void saveEvent() throws IOException {
-        Toast.makeText(getContext(), "Saving event", Toast.LENGTH_SHORT).show();
-        binding.saveEventButton.setText("Loading...");
-//        binding.saveEventButton.d(false);
+        // Validate that image, eventName, eventDate, eventTime, and eventAbout fields are not empty
+        if (imageUri == null) {
+            Toast.makeText(getContext(), "Please select an image", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Convert URI to File and proceed with the API call
+        // Convert URI to File
         File imageFile = getFileFromUri(imageUri);
+
+        if (imageFile == null || !imageFile.exists()) {
+            Toast.makeText(getContext(), "Invalid image file", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Get input from EditText fields
         String eventName = binding.eventName.getText().toString().trim();
@@ -187,6 +238,23 @@ public class AddEventFragment extends Fragment {
         String eventTime = binding.eventTime.getText().toString().trim();
         String eventAbout = binding.etVenueAbout.getText().toString().trim();
 
+        // Validate other fields
+        if (eventName.isEmpty()) {
+            Toast.makeText(getContext(), "Event name is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (eventDate.isEmpty()) {
+            Toast.makeText(getContext(), "Event date is required", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (eventTime.isEmpty()) {
+            Toast.makeText(getContext(), "Event time is required", Toast.LENGTH_SHORT).show();
+           return;
+        } else if (eventAbout.isEmpty() || eventAbout.length() < 20) {
+            Toast.makeText(getContext(), "About must be at least 20 characters long", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(getContext(), "Saving event", Toast.LENGTH_SHORT).show();
+        binding.saveEventButton.setText("Loading...");
 
         // Create RequestBody for the image file
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
@@ -198,10 +266,10 @@ public class AddEventFragment extends Fragment {
         RequestBody eventNamePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventName);
         RequestBody eventDatePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventDate);
         RequestBody eventTimePart = RequestBody.create(MediaType.parse("multipart/form-data"), eventTime);
-       RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
+        RequestBody eventAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), eventAbout);
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<Event>> call = apiService.addEvent(user.getId(),body, eventNamePart, eventDatePart, eventTimePart,eventAboutPart);
+        Call<ApiResponse<Event>> call = apiService.addEvent(user.getId(), body, eventNamePart, eventDatePart, eventTimePart, eventAboutPart);
         call.enqueue(new Callback<ApiResponse<Event>>() {
             @Override
             public void onResponse(Call<ApiResponse<Event>> call, Response<ApiResponse<Event>> response) {

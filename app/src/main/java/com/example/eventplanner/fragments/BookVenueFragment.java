@@ -29,10 +29,12 @@ import com.example.eventplanner.models.Event;
 import com.example.eventplanner.models.Venue;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -73,8 +75,8 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
 
         // Set listeners using ViewBinding
         binding.etDate.setOnClickListener(v -> showDatePicker());
-        binding.etStartTime.setOnClickListener(v -> showTimePicker(binding.etStartTime));
-        binding.etEndTime.setOnClickListener(v -> showTimePicker(binding.etEndTime));
+        binding.etStartTime.setOnClickListener(v -> showTimePicker(binding.etStartTime, true));
+        binding.etEndTime.setOnClickListener(v -> showTimePicker(binding.etEndTime, false));
 
         // Setup Spinner with event names
         List<String> events = new ArrayList<>();
@@ -134,39 +136,130 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
     }
 
     private void showDatePicker() {
+        // Get the current date
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        // Create a DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (view, selectedYear, selectedMonth, selectedDay) -> {
+            // Set the selected date in the EditText field
             binding.etDate.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear);
         }, year, month, day);
 
+        // Set the minimum selectable date to today
         datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+
+        // Show the DatePickerDialog
         datePickerDialog.show();
     }
 
-    private void showTimePicker(EditText editText) {
+    // Member variables to store selected times
+    private int startHour = -1;
+    private int startMinute = -1;
+
+    private void showTimePicker(EditText editText, boolean isStartTime) {
         final Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = calendar.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (view, selectedHour, selectedMinute) -> {
-            editText.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
-        }, hour, minute, true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (view, hourOfDay, minute1) -> {
+            String formattedMinute = minute1 < 10 ? "0" + minute1 : String.valueOf(minute1);
+            String formattedTime = hourOfDay + ":" + formattedMinute;
+            editText.setText(formattedTime);
 
-        timePickerDialog.updateTime(hour, minute);
+            // Store the selected start time for comparison
+            if (isStartTime) {
+                startHour = hourOfDay;
+                startMinute = minute1;
+            } else {
+                // Validate the end time against the start time
+                if (startHour != -1 && startMinute != -1) {
+                    // Convert both times to minutes for easy comparison
+                    int selectedEndTimeInMinutes = hourOfDay * 60 + minute1;
+                    int selectedStartTimeInMinutes = startHour * 60 + startMinute;
+
+                    // Check if the selected end time is before the start time
+                    if (selectedEndTimeInMinutes <= selectedStartTimeInMinutes) {
+                        // Reset the end time field and notify the user
+                        editText.setText(""); // Clear end time
+                        Toast.makeText(getContext(), "End time must be after start time", Toast.LENGTH_SHORT).show();
+                        return; // Don't proceed with setting invalid time
+                    }
+                }
+            }
+
+        }, currentHour, currentMinute, true);
+
+        // Only set the time restrictions if the event date is today
+        String selectedDate = binding.etDate.getText().toString().trim();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String todayDate = sdf.format(calendar.getTime());
+
+        if (selectedDate.equals(todayDate)) {
+            timePickerDialog.updateTime(currentHour, currentMinute);
+        }
+
         timePickerDialog.show();
     }
 
+//    private void showTimePicker(EditText editText) {
+//        final Calendar calendar = Calendar.getInstance();
+//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int minute = calendar.get(Calendar.MINUTE);
+//
+//        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (view, selectedHour, selectedMinute) -> {
+//            editText.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
+//        }, hour, minute, true);
+//
+//        timePickerDialog.updateTime(hour, minute);
+//        timePickerDialog.show();
+//    }
+
+
     private void sendBookingDataToBackend() {
-// Create the request body as a Map
+        // Create the request body as a Map
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("date", binding.etDate.getText().toString());
-        requestBody.put("start_time", binding.etStartTime.getText().toString());
-        requestBody.put("end_time", binding.etEndTime.getText().toString());
-        requestBody.put("phone", binding.etPhoneNumber.getText().toString());
+
+        // Get input from EditText fields
+        String date = binding.etDate.getText().toString().trim();
+        String startTime = binding.etStartTime.getText().toString().trim();
+        String endTime = binding.etEndTime.getText().toString().trim();
+        String phone = binding.etPhoneNumber.getText().toString().trim();
+
+        // Validate fields before adding to the request body
+        if (date.isEmpty()) {
+            Toast.makeText(getContext(), "Date is required", Toast.LENGTH_SHORT).show();
+            return; // Exit if date is empty
+        }
+
+        if (startTime.isEmpty()) {
+            Toast.makeText(getContext(), "Start time is required", Toast.LENGTH_SHORT).show();
+            return; // Exit if start time is empty
+        }
+
+        if (endTime.isEmpty()) {
+            Toast.makeText(getContext(), "End time is required", Toast.LENGTH_SHORT).show();
+            return; // Exit if end time is empty
+        }
+
+        if (phone.isEmpty()) {
+            Toast.makeText(getContext(), "Phone number is required", Toast.LENGTH_SHORT).show();
+            return; // Exit if phone number is empty
+        }
+
+        // Optionally, you can add additional validation for the phone number format
+        if (!phone.matches("\\d{10}")) {
+            Toast.makeText(getContext(), "Please enter a valid phone number", Toast.LENGTH_SHORT).show();
+            return; // Exit if phone number format is invalid
+        }
+
+        // Add validated inputs to the request body
+        requestBody.put("date", date);
+        requestBody.put("start_time", startTime);
+        requestBody.put("end_time", endTime);
+        requestBody.put("phone", phone);
         requestBody.put("event_id", selectedEventId);
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);

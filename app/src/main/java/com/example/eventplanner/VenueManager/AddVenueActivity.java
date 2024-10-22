@@ -176,13 +176,54 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
     }
 
     private void saveVenue() throws IOException {
+        // Check if the image is selected
+        if (imageUri == null) {
+            Toast.makeText(AddVenueActivity.this, "Please select an image", Toast.LENGTH_SHORT).show();
+            binding.saveVenueButton.setText("Add Venue");
+            return;
+        }
+
         // Convert URI to File and proceed with the API call
         File imageFile = getFileFromUri(imageUri);
+
+        // Check if the file is valid after conversion from the URI
+        if (imageFile == null || !imageFile.exists()) {
+            Toast.makeText(AddVenueActivity.this, "Please select a valid image", Toast.LENGTH_SHORT).show();
+            binding.saveVenueButton.setText("Add Venue");
+            return;
+        }
+
 
         // Get input from EditText fields
         String venueName = binding.etVenueName.getText().toString().trim();
         String venuePhone = binding.etVenuePhone.getText().toString().trim();
         String venueAbout = binding.etVenueAbout.getText().toString().trim();
+
+        // Validation checks for the fields
+        if (venueName.isEmpty()) {
+            Toast.makeText(AddVenueActivity.this, "Venue name is required", Toast.LENGTH_SHORT).show();
+            binding.saveVenueButton.setText("Add Venue");
+            return;
+        }
+
+        if (venuePhone.isEmpty()) {
+            Toast.makeText(AddVenueActivity.this, "Venue phone number is required", Toast.LENGTH_SHORT).show();
+            binding.saveVenueButton.setText("Add Venue");
+            return;
+        }
+
+        if (venueAbout.isEmpty() || venueAbout.length() < 20) {
+            Toast.makeText(AddVenueActivity.this, "About section must be at least 20 characters long", Toast.LENGTH_SHORT).show();
+            binding.saveVenueButton.setText("Add Venue");
+            return;
+        }
+
+        // Ensure that the selectedLatLng (latitude and longitude) has been set
+        if (selectedLatLng == null) {
+            Toast.makeText(AddVenueActivity.this, "Please select a location on the map", Toast.LENGTH_SHORT).show();
+            binding.saveVenueButton.setText("Add Venue");
+            return;
+        }
 
         // Ensure that the selectedLatLng (latitude and longitude) has been set
         if (selectedLatLng == null) {

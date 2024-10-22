@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventplanner.R;
 import com.example.eventplanner.VenueManager.OnMenuItemUpdatedListener;
 import com.example.eventplanner.VenueManager.adapter.MenuItemAdapter;
 import com.example.eventplanner.api.ApiClient;
@@ -87,7 +86,6 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
         binding.saveItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(AddMenuActivity.this, "save menu item", Toast.LENGTH_SHORT).show();
                 binding.saveItemButton.setText("Adding...");
 
                 // Convert URI to File and proceed with the API call
@@ -95,12 +93,34 @@ public class AddMenuActivity extends AppCompatActivity implements OnMenuItemUpda
                 try {
                     imageFile = getFileFromUri(imageUri);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Toast.makeText(AddMenuActivity.this, "Error converting image", Toast.LENGTH_SHORT).show();
+                    binding.saveItemButton.setText("Add Item");
+                    return; // Exit if image conversion fails
+                }
+
+                // Check if the file is valid after conversion from the URI
+                if (imageFile == null || !imageFile.exists()) {
+                    Toast.makeText(AddMenuActivity.this, "Please select a valid image", Toast.LENGTH_SHORT).show();
+                    binding.saveItemButton.setText("Add Item");
+                    return; // Exit if the image file is invalid
                 }
 
                 // Get input from EditText fields
                 String menuItemName = binding.etItemName.getText().toString().trim();
                 String menuItemPrice = binding.etMenuPrice.getText().toString().trim();
+
+                // Validation checks for the input fields
+                if (menuItemName.isEmpty()) {
+                    Toast.makeText(AddMenuActivity.this, "Menu item name is required", Toast.LENGTH_SHORT).show();
+                    binding.saveItemButton.setText("Add Item");
+                    return; // Exit if menu item name is empty
+                }
+
+                if (menuItemPrice.isEmpty()) {
+                    Toast.makeText(AddMenuActivity.this, "Menu item price is required", Toast.LENGTH_SHORT).show();
+                    binding.saveItemButton.setText("Add Item");
+                    return; // Exit if menu item price is empty
+                }
 
                 RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
                 MultipartBody.Part body = MultipartBody.Part.createFormData("picture", imageFile.getName(), requestFile);

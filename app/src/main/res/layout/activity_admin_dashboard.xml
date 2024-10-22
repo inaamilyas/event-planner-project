@@ -4,9 +4,11 @@
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Admin.AdminDashboardActivity">
 
     <LinearLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -45,30 +47,66 @@
             android:orientation="vertical"
             android:padding="15dp">
 
+            <!-- Horizontal Menu -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
+                android:gravity="center">
 
+                <!-- Menu Option: Venue Request -->
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/venue_request_tab"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="10dp"
                     android:text="Venue Request"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!-- Menu Option: All Venues -->
+                <TextView
+                    android:id="@+id/all_venues_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="All Venues"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/venues_recycler_home"
+
+            <!-- Container to switch between different RecyclerViews -->
+            <FrameLayout
+                android:id="@+id/content_frame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <!-- First RecyclerView (Venue Request) -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/venues_recycler_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+
+                <!-- Second RecyclerView (All Venues) -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/other_venues_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <TextView
-                android:id="@+id/no_events"
+                android:id="@+id/no_venue_request"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
