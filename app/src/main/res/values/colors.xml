@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary_color">#5669FF</color>
+
+    <color name="blue_shade">#C1C4E5FF</color>  <!-- Replace with desired blue -->
+    <color name="gray_shade">#EEEEEE</color>  <!-- Light gray for pending -->
+    <color name="red_shade">#8BFDCFCB</color>   <!-- Replace with desired red -->
+
 </resources>

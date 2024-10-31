@@ -58,7 +58,7 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
         TextView emailTextView = headerView.findViewById(R.id.email);
         ImageView profileImageView = headerView.findViewById(R.id.profile_image);
 
-        User venueManager = VenueManager.getFromPreferences(this);
+        VenueManager venueManager = VenueManager.getFromPreferences(this);
 
         if (venueManager != null) {
             userNameTextView.setText(venueManager.getName());
@@ -78,6 +78,8 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
             if (itemId == R.id.nav_home) {
                 // Navigate to the home activity
                 startActivity(new Intent(this, DashboardVenueManagerActivity.class)); // Example
+            }  else if (itemId == R.id.nav_order) {
+                startActivity(new Intent(this, OrderActivity.class));
             } else if (itemId == R.id.nav_add_venue) {
                 startActivity(new Intent(this, AddVenueActivity.class));
             } else if (itemId == R.id.nav_profile) {

@@ -2,12 +2,14 @@ package com.example.eventplanner.api;
 
 // ApiService.java
 
+import com.example.eventplanner.models.BookedVenue;
 import com.example.eventplanner.models.Event;
 import com.example.eventplanner.models.MenuItem;
 import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.VenueManager;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -50,7 +52,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/events")
-    Call<ApiResponse<Event>> addEvent(@Header("user_id") int userId,@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("about") RequestBody about);
+    Call<ApiResponse<Event>> addEvent(@Header("user_id") int userId, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("about") RequestBody about);
 
     @Multipart
     @PUT("api/v1/events/{event_id}")
@@ -141,14 +143,13 @@ public interface ApiService {
 
 
     @Multipart
-    @PUT("api/v1/user")
-    Call<ApiResponse<String>> updateUserProfile(
+    @POST("api/v1/user/update-profile")
+    Call<ApiResponse<User>> updateUserProfile(
             @Header("user_id") int userId,
             @Part MultipartBody.Part picture,
             @Part("name") RequestBody name,
-            @Part("email") RequestBody price,
-            @Part("password") RequestBody password,
-            @Part("conf_password") RequestBody confPassword
+            @Part("email") RequestBody email,
+            @Part("password") RequestBody password
     );
 
 
@@ -160,6 +161,25 @@ public interface ApiService {
     @POST("api/v1/admin/venue/change-status")
     Call<ApiResponse> changeVenueStatus(@Body Map<String, Object> requestBody);
 
+
+    //    get user bookings
+    @Headers({"Content-Type: application/json"})
+    @GET("api/v1/venues/booking/get-all-bookings")
+    Call<ApiResponse<ArrayList<BookedVenue>>> getCurrentUserBookings(@Header("user_id") int userId);
+
+    //    get venues order
+    @Headers({"Content-Type: application/json"})
+    @GET("api/v1/venues/booking/get-all-manager-bookings")
+    Call<ApiResponse<ArrayList<BookedVenue>>> getManagerBookings(@Header("manager_id") int managerId);
+
+    //    get user bookings
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/venues/booking/manager/status")
+    Call<ApiResponse<String>> changeBookingOrderStatus(@Body Map<String, Object> requestBody);
+
+    @Headers({"Content-Type: application/json"})
+    @POST("api/v1/venues/booking/user/delete")
+    Call<ApiResponse<String>> deleteUserBooking(@Body Map<String, Object> requestBody);
 
 
 }

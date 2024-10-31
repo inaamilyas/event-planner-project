@@ -87,11 +87,11 @@ public class VenueManager implements Serializable {
     }
 
     // Retrieve user object from SharedPreferences
-    public static User getFromPreferences(Context context) {
+    public static VenueManager getFromPreferences(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String userJson = sharedPreferences.getString(USER_KEY, null);
-        return gson.fromJson(userJson, User.class);
+        return gson.fromJson(userJson, VenueManager.class);
     }
 
     // Clear user object from SharedPreferences
