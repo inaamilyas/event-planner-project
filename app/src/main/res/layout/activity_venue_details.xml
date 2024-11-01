@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".EventDetailsActivity"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical"
+    tools:context=".EventDetailsActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -72,9 +72,10 @@
     </FrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
         android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -193,6 +194,7 @@
                             android:layout_height="wrap_content"
                             android:text="Owner"
                             android:textSize="15dp" />
+
                         <TextView
                             android:id="@+id/venue_owner_phone"
                             android:layout_width="match_parent"
@@ -201,10 +203,15 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <FrameLayout
+<!--                <FrameLayout-->
+<!--                    android:id="@+id/map_container"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="400dp" />-->
+
+                <com.example.eventplanner.fragments.MapScrollContainer
                     android:id="@+id/map_container"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp" />
+                    android:layout_height="250dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -231,21 +238,89 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="10dp"
-                        android:textColor="@color/white"
                         android:layout_marginVertical="10dp"
                         android:background="@color/primary_color"
+                        android:paddingVertical="10dp"
                         android:text="Menu Items Offered"
                         android:textAlignment="center"
+                        android:textColor="@color/white"
                         android:textSize="20sp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/menu_recycler_view"
-                        android:layout_marginBottom="40dp"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:layout_marginBottom="40dp"
                         android:layout_weight="1" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:text="Reviews"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/reviews_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="40dp"
+                        android:layout_weight="1" />
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:text="Have any suggestion/feedback"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <!-- Suggestion Input Field with Border -->
+                    <EditText
+                        android:id="@+id/editTextSuggestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/border_rounded"
+                        android:gravity="top|start"
+                        android:hint="Your suggestion"
+                        android:inputType="textMultiLine"
+                        android:maxLines="4"
+                        android:minLines="4"
+                        android:padding="10dp" />
+
+                    <!-- Submit Button -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/save_feedback_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Submit"
+                        android:layout_gravity="right"
+                        android:background="@drawable/buttonbg"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false" />
+                </LinearLayout>
+
 
             </LinearLayout>
 

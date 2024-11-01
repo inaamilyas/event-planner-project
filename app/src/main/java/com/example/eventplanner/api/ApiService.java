@@ -181,5 +181,9 @@ public interface ApiService {
     @POST("api/v1/venues/booking/user/delete")
     Call<ApiResponse<String>> deleteUserBooking(@Body Map<String, Object> requestBody);
 
+    @Headers({"Content-Type: application/json"})
+    @POST("/api/v1/feedback")
+    Call<ApiResponse<String>> saveFeedback(@Body Map<String, Object> requestBody);
+
 
 }

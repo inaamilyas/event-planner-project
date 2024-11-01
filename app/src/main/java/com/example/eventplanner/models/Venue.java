@@ -48,6 +48,9 @@ public class Venue implements Serializable {
     @SerializedName("venue_food_menu")
     private List<MenuItem> foodMenuItems;
 
+    @SerializedName("venue_feedbacks")
+    private List<Feedback> venueFeedbacks;
+
     public Venue(int id, String name, double latitude, double longitude, String phone, String address, String about, String image) {
         this.id = id;
         this.name = name;
@@ -181,5 +184,13 @@ public class Venue implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<Feedback> getVenueFeedbacks() {
+        return venueFeedbacks;
+    }
+
+    public void setVenueFeedbacks(List<Feedback> venueFeedbacks) {
+        this.venueFeedbacks = venueFeedbacks;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.eventplanner;
 
 import static com.example.eventplanner.fragments.HomeFragment.eventList;
+import static com.example.eventplanner.fragments.HomeFragment.user;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -13,15 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.eventplanner.adapters.FeedbackAdapter;
 import com.example.eventplanner.adapters.ManuVenueDetailsAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
-import com.example.eventplanner.api.Data;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityVenueDetailsBinding;
 import com.example.eventplanner.fragments.BookVenueFragment;
-import com.example.eventplanner.models.Event;
+import com.example.eventplanner.models.Feedback;
 import com.example.eventplanner.models.MenuItem;
 import com.example.eventplanner.models.Venue;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,9 +31,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,6 +90,11 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         binding.menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.menuRecyclerView.setAdapter(adapter);
 
+        ArrayList<Feedback> feedbacksList = (ArrayList<Feedback>) selectedVenue.getVenueFeedbacks();
+        FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbacksList);
+        binding.reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.reviewsRecyclerView.setAdapter(feedbackAdapter);
+
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -125,6 +133,64 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
                 binding.swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        binding.saveFeedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String feedback = binding.editTextSuggestion.getText().toString();
+                int userId = user.getId();
+                int venueId = selectedVenue.getId();
+
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("user_id", userId);
+                requestBody.put("feedback", feedback);
+                requestBody.put("venue_id", venueId);
+                Call<ApiResponse<String>> call = apiService.saveFeedback(requestBody);
+
+                call.enqueue(new Callback<ApiResponse<String>>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                        binding.saveFeedbackButton.setEnabled(false);
+                        binding.saveFeedbackButton.setText("Loading...");
+
+                        if (response.isSuccessful()) {
+                            binding.editTextSuggestion.setText("");
+                            feedbacksList.add(new Feedback(feedback, user.getProfilePic(), user.getName()));
+                            feedbackAdapter.notifyDataSetChanged();
+                            binding.saveFeedbackButton.setEnabled(false);
+                            binding.saveFeedbackButton.setText("Submitted");
+                        } else {
+                            try {
+                                // Parse the error body to get the API response
+                                Gson gson = new Gson();
+                                ApiResponse<?> apiErrorResponse = gson.fromJson(response.errorBody().string(), ApiResponse.class);
+                                if (apiErrorResponse != null) {
+                                    Toast.makeText(VenueDetailsActivity.this, apiErrorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                    binding.saveFeedbackButton.setEnabled(true);
+                                    binding.saveFeedbackButton.setText("Submit Again");
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(VenueDetailsActivity.this, "Something went wrong. Try again", Toast.LENGTH_SHORT).show();
+                                binding.saveFeedbackButton.setEnabled(true);
+                                binding.saveFeedbackButton.setText("Submit Again");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                        // Handle failure (e.g., no internet connection)
+                        Toast.makeText(VenueDetailsActivity.this, "Failed to connect. Please check your internet connection.", Toast.LENGTH_SHORT).show();
+                        binding.saveFeedbackButton.setEnabled(true);
+                        binding.saveFeedbackButton.setText("Submit Again");
+                    }
+                });
+
+
+            }
+        });
     }
 
     @Override
@@ -137,7 +203,7 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         mMap.addMarker(new MarkerOptions().position(location).title(selectedVenue.getName()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
 
     }
 }

@@ -47,7 +47,12 @@
 <!--                android:textColor="@color/black"-->
 <!--                android:textSize="25sp" />-->
 
-            <FrameLayout
+<!--            <FrameLayout-->
+<!--                android:id="@+id/select_map_container"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="300dp" />-->
+
+            <com.example.eventplanner.fragments.MapScrollContainer
                 android:id="@+id/select_map_container"
                 android:layout_width="match_parent"
                 android:layout_height="300dp" />
