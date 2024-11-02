@@ -1,13 +1,16 @@
 package com.example.eventplanner;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventplanner.Admin.AdminLoginActivity;
@@ -18,6 +21,7 @@ import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityLoginBinding;
 import com.example.eventplanner.models.User;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -44,68 +48,83 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 binding.btnLogin.setEnabled(false);
                 binding.btnLogin.setText("Loading...");
 
                 String email = binding.etLoginEmail.getText().toString();
                 String password = binding.etLoginPassword.getText().toString();
 
-                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                // Create request body with email and password
                 Map<String, Object> requestBody = new HashMap<>();
                 requestBody.put("email", email);
                 requestBody.put("password", password);
-                Call<ApiResponse<User>> call = apiService.login(requestBody);
 
-                call.enqueue(new Callback<ApiResponse<User>>() {
-                    @Override
-                    public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
-                        if (response.isSuccessful()) {
-                            ApiResponse<User> apiResponse = response.body();
-                            if (apiResponse != null && apiResponse.getCode() == 200) {
+                // Get the FCM token
+                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("TAG=======", "Fetching FCM registration token failed", task.getException());
+                        // Handle failure to get token
+//                        binding.tvShowError.setText("Failed to get FCM token.");
+                        resetLoginButton();
+                        return;
+                    }
 
-                                // Handle success
-                                User user = apiResponse.getData();
-                                user.saveToPreferences(LoginActivity.this);
+                    // Get new FCM registration token
+                    String token = task.getResult();
+//                    Log.d("TAG=======", "FCM Token: " + token);
+                    requestBody.put("fcm_token", token);
 
-                                Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
-                                // Navigate to MainActivity
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
-                            } else {
-                                // Handle error based on API response
-                                assert apiResponse != null;
-                                binding.tvShowError.setText(apiResponse.getMessage());
-                            }
-                        } else {
-                            try {
-                                // Parse the error body to get the API response
-                                Gson gson = new Gson();
-                                ApiResponse<?> apiErrorResponse = gson.fromJson(response.errorBody().string(), ApiResponse.class);
-                                if (apiErrorResponse != null) {
-                                    binding.tvShowError.setText(apiErrorResponse.getMessage());
+                    // Now make the login API call
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    Call<ApiResponse<User>> call = apiService.login(requestBody);
+
+                    call.enqueue(new Callback<ApiResponse<User>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+                            if (response.isSuccessful()) {
+                                ApiResponse<User> apiResponse = response.body();
+                                if (apiResponse != null && apiResponse.getCode() == 200) {
+                                    // Handle success
+                                    User user = apiResponse.getData();
+                                    user.saveToPreferences(LoginActivity.this);
+
+                                    Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                                    // Navigate to MainActivity
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    finish();
+                                } else {
+                                    // Handle error based on API response
+                                    assert apiResponse != null;
+                                    binding.tvShowError.setText(apiResponse.getMessage());
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                binding.tvShowError.setText("An unexpected error occurred.");
+                            } else {
+                                try {
+                                    // Parse the error body to get the API response
+                                    Gson gson = new Gson();
+                                    ApiResponse<?> apiErrorResponse = gson.fromJson(response.errorBody().string(), ApiResponse.class);
+                                    if (apiErrorResponse != null) {
+                                        binding.tvShowError.setText(apiErrorResponse.getMessage());
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    binding.tvShowError.setText("An unexpected error occurred.");
+                                }
                             }
+
+                            resetLoginButton();
                         }
 
-                        binding.btnLogin.setEnabled(true);
-                        binding.btnLogin.setText("Sign In");
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                        // Handle failure (e.g., no internet connection)
-                        binding.tvShowError.setText("Failed to connect. Please check your internet connection.");
-                        binding.btnLogin.setEnabled(true);
-                        binding.btnLogin.setText("Sign In");
-                    }
+                        @Override
+                        public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+                            // Handle failure (e.g., no internet connection)
+                            binding.tvShowError.setText("Failed to connect. Please check your internet connection.");
+                            resetLoginButton();
+                        }
+                    });
                 });
-
             }
         });
+
 
 //        binding.tvGoToForgetPassword.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -123,6 +142,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // Helper method to reset the login button state
+    private void resetLoginButton() {
+        binding.btnLogin.setEnabled(true);
+        binding.btnLogin.setText("Sign In");
     }
 
     @Override
@@ -147,4 +172,17 @@ public class LoginActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with displaying notifications
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message to the user)}
+            }
+        }
+    }
+
 }

@@ -250,7 +250,7 @@ public class BookVenueFragment extends BottomSheetDialogFragment {
         }
 
         // Optionally, you can add additional validation for the phone number format
-        if (!phone.matches("\\d{10}")) {
+        if (!phone.matches("\\d{10,}")) { // Change to require at least 10 digits
             Toast.makeText(getContext(), "Please enter a valid phone number", Toast.LENGTH_SHORT).show();
             return; // Exit if phone number format is invalid
         }

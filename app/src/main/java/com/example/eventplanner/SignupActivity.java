@@ -2,6 +2,7 @@ package com.example.eventplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventplanner.Admin.AdminLoginActivity;
@@ -19,6 +21,9 @@ import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivitySignupBinding;
 import com.example.eventplanner.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -90,59 +95,74 @@ public class SignupActivity extends AppCompatActivity {
                 requestBody.put("email", email);
                 requestBody.put("password", password);
                 requestBody.put("confirmPassword", confirmPassword);
-                Call<ApiResponse<User>> call = apiService.signup(requestBody);
 
-                binding.btnSignup.setEnabled(false);
-                binding.btnSignup.setText("Loading...");
-                call.enqueue(new Callback<ApiResponse<User>>() {
+                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
-                        if (response.isSuccessful()) {
-                            ApiResponse<User> apiResponse = response.body();
-                            if (apiResponse != null && apiResponse.getCode() == 200) {
-                                // Handle success
-                                User user = apiResponse.getData();
-                                user.saveToPreferences(SignupActivity.this);
-                                Toast.makeText(SignupActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
-                                // Navigate to MainActivity
-                                startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                finish();
-                            } else {
-                                // Handle error based on API response
-                                assert apiResponse != null;
-                                binding.tvSignupApiError.setText(apiResponse.getMessage());
-                            }
-                        } else {
-                            try {
-                                // Parse the error body to get the API response
-                                Gson gson = new Gson();
-                                ApiResponse<?> apiErrorResponse = gson.fromJson(response.errorBody().string(), ApiResponse.class);
-                                if (apiErrorResponse != null && apiErrorResponse.getCode() == 400) {
-                                    // Display the API error message
-                                    binding.tvSignupApiError.setText(apiErrorResponse.getMessage());
-                                } else {
-                                    // Handle other errors
-                                    binding.tvSignupApiError.setText("Something went wrong. Please try again.");
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                binding.tvSignupApiError.setText("An unexpected error occurred.");
-                            }
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG=====", "Fetching FCM registration token failed", task.getException());
+                            return;
                         }
 
-                        binding.btnSignup.setEnabled(true);
-                        binding.btnSignup.setText("Sign Up");
-                    }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        requestBody.put("fcm_token", token);
 
-                    @Override
-                    public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                        // Handle failure (e.g., no internet connection
-                        binding.tvSignupApiError.setText("Failed to connect. Please check your internet connection.");
-                        binding.btnSignup.setEnabled(true);
-                        binding.btnSignup.setText("Sign Up");
+                        Call<ApiResponse<User>> call = apiService.signup(requestBody);
+
+                        binding.btnSignup.setEnabled(false);
+                        binding.btnSignup.setText("Loading...");
+                        call.enqueue(new Callback<ApiResponse<User>>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+                                if (response.isSuccessful()) {
+                                    ApiResponse<User> apiResponse = response.body();
+                                    if (apiResponse != null && apiResponse.getCode() == 200) {
+                                        // Handle success
+                                        User user = apiResponse.getData();
+                                        user.saveToPreferences(SignupActivity.this);
+                                        Toast.makeText(SignupActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+                                        // Navigate to MainActivity
+                                        startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                        finish();
+                                    } else {
+                                        // Handle error based on API response
+                                        assert apiResponse != null;
+                                        binding.tvSignupApiError.setText(apiResponse.getMessage());
+                                    }
+                                } else {
+                                    try {
+                                        // Parse the error body to get the API response
+                                        Gson gson = new Gson();
+                                        ApiResponse<?> apiErrorResponse = gson.fromJson(response.errorBody().string(), ApiResponse.class);
+                                        if (apiErrorResponse != null && apiErrorResponse.getCode() == 400) {
+                                            // Display the API error message
+                                            binding.tvSignupApiError.setText(apiErrorResponse.getMessage());
+                                        } else {
+                                            // Handle other errors
+                                            binding.tvSignupApiError.setText("Something went wrong. Please try again.");
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        binding.tvSignupApiError.setText("An unexpected error occurred.");
+                                    }
+                                }
+
+                                binding.btnSignup.setEnabled(true);
+                                binding.btnSignup.setText("Sign Up");
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+                                // Handle failure (e.g., no internet connection
+                                binding.tvSignupApiError.setText("Failed to connect. Please check your internet connection.");
+                                binding.btnSignup.setEnabled(true);
+                                binding.btnSignup.setText("Sign Up");
+                            }
+                        });
+
                     }
                 });
-
 
             }
         });

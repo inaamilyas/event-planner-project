@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,7 +29,10 @@ import com.example.eventplanner.fragments.HomeFragment;
 import com.example.eventplanner.fragments.ProfileFragment;
 import com.example.eventplanner.fragments.VenuesFragment;
 import com.example.eventplanner.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActivityMainBinding binding;
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             selectedFragment = new VenuesFragment();
         } else if (id == R.id.nav_profile) {
             selectedFragment = new ProfileFragment();
-        }else if (id == R.id.booked_venues) {
+        } else if (id == R.id.booked_venues) {
             selectedFragment = new BookedVenueFragment();
         } else if (id == R.id.nav_logout) {
             // Handle logout here
