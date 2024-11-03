@@ -39,8 +39,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ImageView profileImageView;
-    private TextView usernameTextView;
+    @SuppressLint("StaticFieldLeak")
+    public static ImageView profileImageView;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView usernameTextView;
     private ImageView buttonCloseDrawer;
 
     @SuppressLint("ResourceType")

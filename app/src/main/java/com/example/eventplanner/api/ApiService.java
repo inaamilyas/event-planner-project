@@ -152,6 +152,16 @@ public interface ApiService {
             @Part("password") RequestBody password
     );
 
+    @Multipart
+    @POST("api/v1/venue-manager/update-profile")
+    Call<ApiResponse<VenueManager>> updateManagerProfile(
+            @Header("manager_id") int managerId,
+            @Part MultipartBody.Part picture,
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part("password") RequestBody password
+    );
+
 
     @Headers({"Content-Type: application/json"})
     @GET("api/v1/admin")

@@ -89,8 +89,10 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         ManuVenueDetailsAdapter adapter = new ManuVenueDetailsAdapter((ArrayList<MenuItem>) selectedVenue.getFoodMenuItems());
         binding.menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.menuRecyclerView.setAdapter(adapter);
-
-        ArrayList<Feedback> feedbacksList = (ArrayList<Feedback>) selectedVenue.getVenueFeedbacks();
+        ArrayList<Feedback> feedbacksList = new ArrayList<>();
+        if (selectedVenue != null && selectedVenue.getVenueFeedbacks() != null) {
+            feedbacksList = (ArrayList<Feedback>) selectedVenue.getVenueFeedbacks();
+        }
         FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbacksList);
         binding.reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.reviewsRecyclerView.setAdapter(feedbackAdapter);
@@ -134,6 +136,7 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
             }
         });
 
+        ArrayList<Feedback> finalFeedbacksList = feedbacksList;
         binding.saveFeedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +160,7 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
 
                         if (response.isSuccessful()) {
                             binding.editTextSuggestion.setText("");
-                            feedbacksList.add(new Feedback(feedback, user.getProfilePic(), user.getName()));
+                            finalFeedbacksList.add(new Feedback(feedback, user.getProfilePic(), user.getName()));
                             feedbackAdapter.notifyDataSetChanged();
                             binding.saveFeedbackButton.setEnabled(false);
                             binding.saveFeedbackButton.setText("Submitted");

@@ -8,16 +8,21 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
 import com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity;
+import com.example.eventplanner.adapters.FeedbackAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.config.AppConfig;
 import com.example.eventplanner.databinding.ActivityVenueManagerVenDetailsBinding;
+import com.example.eventplanner.models.Feedback;
 import com.example.eventplanner.models.Venue;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,6 +87,15 @@ public class VenueManagerVenDetailsActivity extends AppCompatActivity {
                 deleteVenue(selectedVenue.getId());
             }
         });
+
+        assert selectedVenue != null;
+        ArrayList<Feedback> feedbacksList = new ArrayList<>();
+        if (selectedVenue.getVenueFeedbacks() != null) {
+            feedbacksList = (ArrayList<Feedback>) selectedVenue.getVenueFeedbacks();
+        }
+        FeedbackAdapter feedbackAdapter = new FeedbackAdapter(feedbacksList);
+        binding.reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.reviewsRecyclerView.setAdapter(feedbackAdapter);
 
     }
 

@@ -14,8 +14,6 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
 
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -26,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventPlanner"
         tools:targetApi="31">
+        <activity
+            android:name=".VenueManager.ProfileActivity"
+            android:exported="false" />
 
         <service
             android:name=".services.MyFirebaseMessagingService"
@@ -108,9 +109,6 @@
             android:name=".EventDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgetPasswordActivity"
-            android:exported="false" />
-        <activity
             android:name=".SignupActivity"
             android:exported="false" />
         <activity
@@ -136,13 +134,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

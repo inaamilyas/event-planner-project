@@ -23,7 +23,6 @@ import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponseArray;
 import com.example.eventplanner.api.ApiService;
 import com.example.eventplanner.databinding.ActivityDashboardVenueManagerBinding;
-import com.example.eventplanner.models.User;
 import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.VenueManager;
 import com.google.android.material.navigation.NavigationView;
@@ -41,6 +40,13 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
     private ArrayList<Venue> venuesList = new ArrayList<>();
     private MangerVenueAdapter venuesAdapter;
     private ActionBarDrawerToggle toggle;
+    static VenueManager venueManager;
+    @SuppressLint("StaticFieldLeak")
+    static TextView userNameTextView;
+    @SuppressLint("StaticFieldLeak")
+    static TextView emailTextView;
+    @SuppressLint("StaticFieldLeak")
+    static ImageView profileImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +60,11 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
         View headerView = navigationView.getHeaderView(0);
-        TextView userNameTextView = headerView.findViewById(R.id.user_name);
-        TextView emailTextView = headerView.findViewById(R.id.email);
-        ImageView profileImageView = headerView.findViewById(R.id.profile_image);
+        userNameTextView = headerView.findViewById(R.id.user_name);
+        emailTextView = headerView.findViewById(R.id.email);
+        profileImageView = headerView.findViewById(R.id.profile_image);
 
-        VenueManager venueManager = VenueManager.getFromPreferences(this);
-
+        venueManager = VenueManager.getFromPreferences(this);
         if (venueManager != null) {
             userNameTextView.setText(venueManager.getName());
             emailTextView.setText(venueManager.getEmail());
@@ -78,12 +83,12 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
             if (itemId == R.id.nav_home) {
                 // Navigate to the home activity
                 startActivity(new Intent(this, DashboardVenueManagerActivity.class)); // Example
-            }  else if (itemId == R.id.nav_order) {
+            } else if (itemId == R.id.nav_order) {
                 startActivity(new Intent(this, OrderActivity.class));
             } else if (itemId == R.id.nav_add_venue) {
                 startActivity(new Intent(this, AddVenueActivity.class));
             } else if (itemId == R.id.nav_profile) {
-
+                startActivity(new Intent(this, ProfileActivity.class));
             } else if (itemId == R.id.manager_logout) {
                 startActivity(new Intent(this, VenueLoginActivity.class));
                 VenueManager.clearPreferences(this);
@@ -124,11 +129,9 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
         });
     }
 
-
     private void fetchVenues(ApiService apiService) {
         // Get the Venue Manager ID from preferences
         int managerId = VenueManager.getFromPreferences(DashboardVenueManagerActivity.this).getId();
-        Log.d("inaamilysa", "fetchVenues: Manager ID = " + managerId);
 
         // Call the API to fetch venues for the manager
         Call<ApiResponseArray<Venue>> call = apiService.getVenues(managerId);
@@ -136,45 +139,35 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<ApiResponseArray<Venue>> call, Response<ApiResponseArray<Venue>> response) {
-                Log.d("inaamilysa", "onResponse: API call successful. Response code = " + response.code());
 
                 if (response.isSuccessful()) {
-                    Log.d("inaamilysa", "onResponse: Response is successful");
 
                     if (response.body() != null) {
-                        Log.d("inaamilysa", "onResponse: Response body is not null");
 
                         // Get the list of Venue from the ApiResponseArray
                         List<Venue> venueList = response.body().getData();
-                        Log.d("inaamilysa", "onResponse: Venue list fetched: " + venueList);
 
                         if (venueList != null && !venueList.isEmpty()) {
-                            Log.d("inaamilysa", "onResponse: Venue list size = " + venueList.size());
 
                             // Update the list and notify adapter
                             venuesList.clear(); // Clear the current list
                             venuesList.addAll(venueList); // Add all fetched venues to the list
-                            Log.d("inaamilysa", "onResponse: Venues list updated in adapter, size = " + venuesList.size());
                             venuesAdapter.notifyDataSetChanged(); // Notify adapter about data change
 
                         } else {
-                            Log.d("inaamilysa", "onResponse: Venue list is empty or null");
                             binding.noEvents.setVisibility(View.VISIBLE);
                             Toast.makeText(DashboardVenueManagerActivity.this, "No venues found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Log.d("inaamilysa", "onResponse: Response body is null");
                         Toast.makeText(DashboardVenueManagerActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.d("inaamilysa", "onResponse: Response is unsuccessful. Error code = " + response.code());
                     Toast.makeText(DashboardVenueManagerActivity.this, "Failed to retrieve data", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponseArray<Venue>> call, Throwable t) {
-                Log.d("inaamilysa", "onFailure: API call failed. Error message = " + t.getMessage());
                 Toast.makeText(DashboardVenueManagerActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
             }
         });
@@ -190,5 +183,14 @@ public class DashboardVenueManagerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        venueManager = VenueManager.getFromPreferences(this);
+        if (venueManager != null) {
+            userNameTextView.setText(venueManager.getName());
+            emailTextView.setText(venueManager.getEmail());
+            Glide.with(this).load(venueManager.getProfilePic()).placeholder(R.drawable.event_image_1).into(profileImageView);
+        }
+    }
 }
