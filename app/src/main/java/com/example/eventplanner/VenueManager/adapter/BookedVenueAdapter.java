@@ -92,6 +92,9 @@ public class BookedVenueAdapter extends RecyclerView.Adapter<BookedVenueAdapter.
                                 if (apiResponse != null && apiResponse.getCode() == 200) {
                                     // Handle success
                                     Toast.makeText(itemView.getContext(), "Order accepted successfully", Toast.LENGTH_SHORT).show();
+                                    acceptButton.setText("Approved");
+                                    venueBookedContainer.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.blue_shade)));
+                                    cancelButton.setVisibility(View.GONE);
                                 } else {
                                     // Handle error based on API response
                                     assert apiResponse != null;
@@ -135,6 +138,7 @@ public class BookedVenueAdapter extends RecyclerView.Adapter<BookedVenueAdapter.
 
                     call.enqueue(new Callback<ApiResponse<String>>() {
 
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                             if (response.isSuccessful()) {
@@ -142,6 +146,9 @@ public class BookedVenueAdapter extends RecyclerView.Adapter<BookedVenueAdapter.
                                 if (apiResponse != null && apiResponse.getCode() == 200) {
                                     // Handle success
                                     Toast.makeText(itemView.getContext(), "Order cancled successfully", Toast.LENGTH_SHORT).show();
+                                    cancelButton.setText("Canceled");
+                                    venueBookedContainer.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.red_shade)));
+                                    acceptButton.setVisibility(View.GONE);
                                 } else {
                                     // Handle error based on API response
                                     assert apiResponse != null;
@@ -182,12 +189,14 @@ public class BookedVenueAdapter extends RecyclerView.Adapter<BookedVenueAdapter.
 
             if (bookedVenue.getStatus() == 1) {
                 // Approved (Blue Shade)
+                acceptButton.setText("Approved");
                 venueBookedContainer.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.blue_shade)));
             } else if (bookedVenue.getStatus() == 0) {
                 // Pending (Gray Shade)
                 venueBookedContainer.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.gray_shade)));
             } else if (bookedVenue.getStatus() == 2) {
                 // Canceled (Red Shade)
+                cancelButton.setText("canceled");
                 venueBookedContainer.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(itemView.getContext(), R.color.red_shade)));
             }
         }

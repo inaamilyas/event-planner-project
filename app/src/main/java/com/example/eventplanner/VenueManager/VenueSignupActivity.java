@@ -69,8 +69,8 @@ public class VenueSignupActivity extends AppCompatActivity {
                 }
 
                 // Validate Password
-                if (password.isEmpty() || !password.matches(passwordPattern)) {
-                    binding.tvSignupApiError.setText("Password must be at least 8 characters long, include a number, an uppercase letter, a lowercase letter, and a special character");
+                if (password.isEmpty() || password.length() < 8) {
+                    binding.tvSignupApiError.setText("Password must be at least 8 characters long.");
                     return;
                 }
 
@@ -81,8 +81,8 @@ public class VenueSignupActivity extends AppCompatActivity {
                 }
 
                 // Validate Phone Number
-                if (phoneNumber.isEmpty() || !phoneNumber.matches("\\d{10}")) { // Assuming a 10-digit phone number
-                    binding.tvSignupApiError.setText("Please enter a valid 10-digit phone number");
+                if (phoneNumber.isEmpty() || phoneNumber.length()<9) {
+                    binding.tvSignupApiError.setText("Please enter a valid phone number");
                     return;
                 }
 
@@ -93,7 +93,6 @@ public class VenueSignupActivity extends AppCompatActivity {
                 requestBody.put("email", email);
                 requestBody.put("password", password);
 
-                binding.btnSignup.setEnabled(false);
                 binding.btnSignup.setText("Loading...");
 
                 FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
@@ -144,8 +143,6 @@ public class VenueSignupActivity extends AppCompatActivity {
                                         binding.tvSignupApiError.setText("An unexpected error occurred.");
                                     }
                                 }
-
-                                binding.btnSignup.setEnabled(true);
                                 binding.btnSignup.setText("Sign Up");
                             }
 

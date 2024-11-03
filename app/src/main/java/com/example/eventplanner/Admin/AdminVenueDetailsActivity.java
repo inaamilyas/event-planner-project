@@ -124,6 +124,7 @@ public class AdminVenueDetailsActivity extends AppCompatActivity implements OnMa
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(AdminVenueDetailsActivity.this, title + " successfully", Toast.LENGTH_SHORT).show();
+                        binding.btnVenueApprove.setText("Approved");
                         dialog.dismiss();
                     } else {
                         Toast.makeText(AdminVenueDetailsActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -186,7 +187,7 @@ public class AdminVenueDetailsActivity extends AppCompatActivity implements OnMa
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         mMap.addMarker(new MarkerOptions().position(location).title(selectedVenue.getName()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
 
     }
 }

@@ -86,15 +86,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void showVenueRequest() {
-        binding.venuesRecyclerHome.setVisibility(View.VISIBLE);
-        binding.otherVenuesRecycler.setVisibility(View.GONE);
+        binding.allRequestsContainer.setVisibility(View.VISIBLE);
+        binding.allVenuesContainer.setVisibility(View.GONE);
         binding.venueRequestTab.setBackgroundColor(Color.parseColor("#eaeaea"));
         binding.allVenuesTab.setBackgroundColor(Color.parseColor("#ffffff"));
     }
 
     private void showAllVenues() {
-        binding.venuesRecyclerHome.setVisibility(View.GONE);
-        binding.otherVenuesRecycler.setVisibility(View.VISIBLE);
+        binding.allRequestsContainer.setVisibility(View.GONE);
+        binding.allVenuesContainer.setVisibility(View.VISIBLE);
         binding.venueRequestTab.setBackgroundColor(Color.parseColor("#ffffff"));
         binding.allVenuesTab.setBackgroundColor(Color.parseColor("#eaeaea"));
     }

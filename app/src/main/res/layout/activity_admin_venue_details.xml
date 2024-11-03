@@ -179,10 +179,10 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <FrameLayout
+                <com.example.eventplanner.fragments.MapScrollContainer
                     android:id="@+id/admin_map_container"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp" />
+                    android:layout_height="250dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
