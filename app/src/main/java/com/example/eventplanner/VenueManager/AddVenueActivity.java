@@ -94,7 +94,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
             public void onClick(View v) {
 
                 binding.saveVenueButton.setText("Loading...");
-                binding.saveVenueButton.setEnabled(false);
+//                binding.saveVenueButton.setEnabled(false);
 
                 // Ensure permissions are granted before proceeding
 //                if (ContextCompat.checkSelfPermission(AddVenueActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

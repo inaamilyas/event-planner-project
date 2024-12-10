@@ -51,7 +51,6 @@ public class VenueLoginActivity extends AppCompatActivity {
                 Map<String, Object> requestBody = new HashMap<>();
                 requestBody.put("email", email);
                 requestBody.put("password", password);
-
                 FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
