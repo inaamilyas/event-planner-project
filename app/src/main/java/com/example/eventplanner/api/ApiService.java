@@ -10,6 +10,7 @@ import com.example.eventplanner.models.Venue;
 import com.example.eventplanner.models.VenueManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -48,7 +49,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/venues")
-    Call<ApiResponse<Venue>> addVenue(@Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude, @Part("manager_id") RequestBody managerIdPart);
+    Call<ApiResponse<Venue>> addVenue(@Part List<MultipartBody.Part> gallery, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("phone") RequestBody phone, @Part("about") RequestBody about, @Part("latitude") RequestBody latitude, @Part("longitude") RequestBody longitude, @Part("manager_id") RequestBody managerIdPart);
 
     @Multipart
     @POST("api/v1/events")
@@ -56,13 +57,7 @@ public interface ApiService {
 
     @Multipart
     @PUT("api/v1/events/{event_id}")
-    Call<ApiResponse<String>> updateEvent(
-            @Path("event_id") String event_id,
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("date") RequestBody date,
-            @Part("time") RequestBody time,
-            @Part("about") RequestBody about);
+    Call<ApiResponse<String>> updateEvent(@Path("event_id") String event_id, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("date") RequestBody date, @Part("time") RequestBody time, @Part("about") RequestBody about);
 
     @FormUrlEncoded
     @PUT("api/v1/events/{event_id}")
@@ -73,9 +68,7 @@ public interface ApiService {
     Call<ApiResponse> deleteEvent(@Path("event_id") String event_id);
 
     @GET("api/v1/venues")
-    Call<ApiResponseArray<Venue>> getVenues(
-            @Header("manager_id") int id
-    );
+    Call<ApiResponseArray<Venue>> getVenues(@Header("manager_id") int id);
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/user/info")
@@ -87,14 +80,13 @@ public interface ApiService {
 
     @Multipart
     @PUT("api/v1/venues/{venue_id}")
-    Call<ApiResponse<Venue>> updateVenue(
-            @Path("venue_id") String venueId,                   // Path parameter for the venue ID
-            @Part MultipartBody.Part picture,                   // Part for the picture (image)
-            @Part("name") RequestBody name,                     // Part for the venue name
-            @Part("phone") RequestBody phone,                   // Part for the phone number
-            @Part("about") RequestBody about,                   // Part for the description
-            @Part("latitude") RequestBody latitude,             // Part for latitude
-            @Part("longitude") RequestBody longitude            // Part for longitude
+    Call<ApiResponse<Venue>> updateVenue(@Path("venue_id") String venueId,                   // Path parameter for the venue ID
+                                         @Part MultipartBody.Part picture,                   // Part for the picture (image)
+                                         @Part("name") RequestBody name,                     // Part for the venue name
+                                         @Part("phone") RequestBody phone,                   // Part for the phone number
+                                         @Part("about") RequestBody about,                   // Part for the description
+                                         @Part("latitude") RequestBody latitude,             // Part for latitude
+                                         @Part("longitude") RequestBody longitude            // Part for longitude
     );
 
     @Headers({"Content-Type: application/json"})
@@ -117,21 +109,11 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/food-menu/{venue_id}")
-    Call<ApiResponse<MenuItem[]>> addMenuItems(
-            @Path("venue_id") String venueId,
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("price") RequestBody price
-    );
+    Call<ApiResponse<MenuItem[]>> addMenuItems(@Path("venue_id") String venueId, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("price") RequestBody price);
 
     @Multipart
     @PUT("api/v1/food-menu/{id}")
-    Call<ApiResponse<MenuItem>> updateMenuItems(
-            @Path("id") String itemId,
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("price") RequestBody price
-    );
+    Call<ApiResponse<MenuItem>> updateMenuItems(@Path("id") String itemId, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("price") RequestBody price);
 
     @Headers({"Content-Type: application/json"})
     @POST("api/v1/food-menu/order/save")
@@ -144,23 +126,11 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v1/user/update-profile")
-    Call<ApiResponse<User>> updateUserProfile(
-            @Header("user_id") int userId,
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("email") RequestBody email,
-            @Part("password") RequestBody password
-    );
+    Call<ApiResponse<User>> updateUserProfile(@Header("user_id") int userId, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("email") RequestBody email, @Part("password") RequestBody password);
 
     @Multipart
     @POST("api/v1/venue-manager/update-profile")
-    Call<ApiResponse<VenueManager>> updateManagerProfile(
-            @Header("manager_id") int managerId,
-            @Part MultipartBody.Part picture,
-            @Part("name") RequestBody name,
-            @Part("email") RequestBody email,
-            @Part("password") RequestBody password
-    );
+    Call<ApiResponse<VenueManager>> updateManagerProfile(@Header("manager_id") int managerId, @Part MultipartBody.Part picture, @Part("name") RequestBody name, @Part("email") RequestBody email, @Part("password") RequestBody password);
 
 
     @Headers({"Content-Type: application/json"})

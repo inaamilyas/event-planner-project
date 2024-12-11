@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.eventplanner.VenueManager.adapter.GalleryAdapter;
 import com.example.eventplanner.adapters.FeedbackAdapter;
 import com.example.eventplanner.adapters.ManuVenueDetailsAdapter;
 import com.example.eventplanner.api.ApiClient;
@@ -69,6 +70,11 @@ public class VenueDetailsActivity extends FragmentActivity implements OnMapReady
         binding.venueOwnerPhone.setText(selectedVenue.getOwner().getPhone());
         String imageUrl = AppConfig.SERVER_URL + selectedVenue.getPicture();
         Glide.with(this).load(imageUrl).placeholder(R.drawable.event_image_1).into(binding.venueImage);
+
+        // Set up the RecyclerView with horizontal LinearLayoutManager
+        binding.galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        GalleryAdapter galleryAdapter = new GalleryAdapter(selectedVenue.getGallery());
+        binding.galleryRecyclerView.setAdapter(galleryAdapter);
 
         binding.gotoBookVenueBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -45,6 +45,9 @@ public class Venue implements Serializable {
     @SerializedName("status")
     private int status;
 
+    @SerializedName("gallery")
+    private List<String> gallery;
+
     @SerializedName("venue_food_menu")
     private List<MenuItem> foodMenuItems;
 
@@ -192,5 +195,13 @@ public class Venue implements Serializable {
 
     public void setVenueFeedbacks(List<Feedback> venueFeedbacks) {
         this.venueFeedbacks = venueFeedbacks;
+    }
+
+    public List<String> getGallery() {
+        return gallery;
+    }
+
+    public void setGallery(List<String> gallery) {
+        this.gallery = gallery;
     }
 }

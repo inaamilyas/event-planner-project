@@ -1,12 +1,17 @@
 package com.example.eventplanner.VenueManager;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,7 +21,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.eventplanner.R;
 import com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity;
-import com.example.eventplanner.VenueManager.MenuItem.MenuItemsActivity;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
 import com.example.eventplanner.api.ApiService;
@@ -38,6 +42,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -51,6 +57,11 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
     private ActivityAddVenueBinding binding;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
+
+    private static final int PICK_IMAGE = 1;
+    private static final int MAX_IMAGES = 3;
+    private int imageCount = 0;
+    private ArrayList<Uri> imageUris = new ArrayList<>();
 
     private Marker selectedMarker;
     private LatLng selectedLatLng;
@@ -67,7 +78,7 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
 
         // Check for storage permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-          ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
         }
 
         // Set a custom title for the toolbar
@@ -88,6 +99,15 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
             }
         });
 
+        // Set click listener for "+" button
+        binding.b.setOnClickListener(v -> pickImage());
+
+
+        // Get screen width
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        binding.b.setWidth(screenWidth - 20);
 
         binding.saveVenueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,12 +118,12 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
 
                 // Ensure permissions are granted before proceeding
 //                if (ContextCompat.checkSelfPermission(AddVenueActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    // Your code to handle the button click
-                    try {
-                        saveVenue();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                // Your code to handle the button click
+                try {
+                    saveVenue();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 //                } else {
 //                    Toast.makeText(AddVenueActivity.this, "Storage permission is required to select an image", Toast.LENGTH_SHORT).show();
 ////                    ActivityCompat.requestPermissions(, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
@@ -175,7 +195,120 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         }
     }
 
+
+//    private void saveVenue() throws IOException {
+//        // Check if the image is selected
+//        if (imageUri == null) {
+//            Toast.makeText(AddVenueActivity.this, "Please select an image", Toast.LENGTH_SHORT).show();
+//            binding.saveVenueButton.setText("Add Venue");
+//            return;
+//        }
+//
+//        // Convert URI to File and proceed with the API call
+//        File imageFile = getFileFromUri(imageUri);
+//
+//        // Check if the file is valid after conversion from the URI
+//        if (imageFile == null || !imageFile.exists()) {
+//            Toast.makeText(AddVenueActivity.this, "Please select a valid image", Toast.LENGTH_SHORT).show();
+//            binding.saveVenueButton.setText("Add Venue");
+//            return;
+//        }
+//
+//
+//        // Get input from EditText fields
+//        String venueName = binding.etVenueName.getText().toString().trim();
+//        String venuePhone = binding.etVenuePhone.getText().toString().trim();
+//        String venueAbout = binding.etVenueAbout.getText().toString().trim();
+//
+//        // Validation checks for the fields
+//        if (venueName.isEmpty()) {
+//            Toast.makeText(AddVenueActivity.this, "Venue name is required", Toast.LENGTH_SHORT).show();
+//            binding.saveVenueButton.setText("Add Venue");
+//            return;
+//        }
+//
+//        if (venuePhone.isEmpty()) {
+//            Toast.makeText(AddVenueActivity.this, "Venue phone number is required", Toast.LENGTH_SHORT).show();
+//            binding.saveVenueButton.setText("Add Venue");
+//            return;
+//        }
+//
+//        if (venueAbout.isEmpty() || venueAbout.length() < 20) {
+//            Toast.makeText(AddVenueActivity.this, "About section must be at least 20 characters long", Toast.LENGTH_SHORT).show();
+//            binding.saveVenueButton.setText("Add Venue");
+//            return;
+//        }
+//
+//        // Ensure that the selectedLatLng (latitude and longitude) has been set
+//        if (selectedLatLng == null) {
+//            Toast.makeText(AddVenueActivity.this, "Please select a location on the map", Toast.LENGTH_SHORT).show();
+//            binding.saveVenueButton.setText("Add Venue");
+//            return;
+//        }
+//
+//        // Ensure that the selectedLatLng (latitude and longitude) has been set
+//        if (selectedLatLng == null) {
+//            Toast.makeText(AddVenueActivity.this, "Please select a location on the map", Toast.LENGTH_SHORT).show();
+////                    resetButtonState();
+//            return;
+//        }
+//
+//        // Collect latitude and longitude
+//        double latitude = selectedLatLng.latitude;
+//        double longitude = selectedLatLng.longitude;
+//
+//        // Create RequestBody for the image file
+//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+//
+//        // Create MultipartBody.Part using file request-body, file name, and part name
+//        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", imageFile.getName(), requestFile);
+//
+//        // Create other request bodies
+//        RequestBody venueNamePart = RequestBody.create(MediaType.parse("multipart/form-data"), venueName);
+//        RequestBody venuePhonePart = RequestBody.create(MediaType.parse("multipart/form-data"), venuePhone);
+//        RequestBody venueAboutPart = RequestBody.create(MediaType.parse("multipart/form-data"), venueAbout);
+//        RequestBody latitudePart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(latitude));
+//        RequestBody longitudePart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(longitude));
+//
+//        int managerId = VenueManager.getFromPreferences(this).getId();
+//        RequestBody managerIdPart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(managerId));
+//
+//        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+//        Call<ApiResponse<Venue>> call = apiService.addVenue(body, venueNamePart, venuePhonePart, venueAboutPart, latitudePart, longitudePart,managerIdPart);
+//        call.enqueue(new Callback<ApiResponse<Venue>>() {
+//            @Override
+//            public void onResponse(Call<ApiResponse<Venue>> call, Response<ApiResponse<Venue>> response) {
+//                // Handle success
+//                if (response.isSuccessful()) {
+//                    // Do something with the response
+//                    Toast.makeText(AddVenueActivity.this, "Venue created successfully", Toast.LENGTH_SHORT).show();
+//                    assert response.body() != null;
+//                    Venue venue = (Venue) response.body().getData();
+//                    Intent intent = new Intent(AddVenueActivity.this, AddMenuActivity.class);
+//                    intent.putExtra("selectedVenue", venue);
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    // Handle error
+//                    Toast.makeText(AddVenueActivity.this, "Failed to create venue", Toast.LENGTH_SHORT).show();
+//                    binding.saveVenueButton.setText("Add Venue");
+//                    binding.saveVenueButton.isEnabled();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ApiResponse<Venue>> call, Throwable t) {
+//                // Handle failur
+//                Toast.makeText(AddVenueActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+//                binding.saveVenueButton.setText("Add Venue");
+//                binding.saveVenueButton.isEnabled();
+//            }
+//        });
+//
+//    }
+
     private void saveVenue() throws IOException {
+
         // Check if the image is selected
         if (imageUri == null) {
             Toast.makeText(AddVenueActivity.this, "Please select an image", Toast.LENGTH_SHORT).show();
@@ -186,13 +319,13 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         // Convert URI to File and proceed with the API call
         File imageFile = getFileFromUri(imageUri);
 
-        // Check if the file is valid after conversion from the URI
-        if (imageFile == null || !imageFile.exists()) {
-            Toast.makeText(AddVenueActivity.this, "Please select a valid image", Toast.LENGTH_SHORT).show();
+
+        // Check if imageUris are selected
+        if (imageUris == null || imageUris.isEmpty()) {
+            Toast.makeText(AddVenueActivity.this, "Please select at least one image", Toast.LENGTH_SHORT).show();
             binding.saveVenueButton.setText("Add Venue");
             return;
         }
-
 
         // Get input from EditText fields
         String venueName = binding.etVenueName.getText().toString().trim();
@@ -225,22 +358,26 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
             return;
         }
 
-        // Ensure that the selectedLatLng (latitude and longitude) has been set
-        if (selectedLatLng == null) {
-            Toast.makeText(AddVenueActivity.this, "Please select a location on the map", Toast.LENGTH_SHORT).show();
-//                    resetButtonState();
-            return;
-        }
-
         // Collect latitude and longitude
         double latitude = selectedLatLng.latitude;
         double longitude = selectedLatLng.longitude;
 
         // Create RequestBody for the image file
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
-
         // Create MultipartBody.Part using file request-body, file name, and part name
         MultipartBody.Part body = MultipartBody.Part.createFormData("picture", imageFile.getName(), requestFile);
+
+        // Convert URI list to File list and create MultipartBody parts
+        List<MultipartBody.Part> imageParts = new ArrayList<>();
+        for (Uri uri : imageUris) {
+            File galleryImage = getFileFromUri(uri);
+
+            if (galleryImage != null && galleryImage.exists()) {
+                RequestBody galleryImageRequest = RequestBody.create(MediaType.parse("multipart/form-data"), galleryImage);
+                MultipartBody.Part gallery = MultipartBody.Part.createFormData("gallery", imageFile.getName(), galleryImageRequest);
+                imageParts.add(gallery);
+            }
+        }
 
         // Create other request bodies
         RequestBody venueNamePart = RequestBody.create(MediaType.parse("multipart/form-data"), venueName);
@@ -253,38 +390,32 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         RequestBody managerIdPart = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(managerId));
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ApiResponse<Venue>> call = apiService.addVenue(body, venueNamePart, venuePhonePart, venueAboutPart, latitudePart, longitudePart,managerIdPart);
+        Call<ApiResponse<Venue>> call = apiService.addVenue(imageParts, body, venueNamePart, venuePhonePart, venueAboutPart, latitudePart, longitudePart, managerIdPart);
+
         call.enqueue(new Callback<ApiResponse<Venue>>() {
             @Override
             public void onResponse(Call<ApiResponse<Venue>> call, Response<ApiResponse<Venue>> response) {
-                // Handle success
                 if (response.isSuccessful()) {
-                    // Do something with the response
                     Toast.makeText(AddVenueActivity.this, "Venue created successfully", Toast.LENGTH_SHORT).show();
-                    assert response.body() != null;
-                    Venue venue = (Venue) response.body().getData();
+                    Venue venue = response.body().getData();
                     Intent intent = new Intent(AddVenueActivity.this, AddMenuActivity.class);
                     intent.putExtra("selectedVenue", venue);
                     startActivity(intent);
                     finish();
                 } else {
-                    // Handle error
                     Toast.makeText(AddVenueActivity.this, "Failed to create venue", Toast.LENGTH_SHORT).show();
                     binding.saveVenueButton.setText("Add Venue");
-                    binding.saveVenueButton.isEnabled();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Venue>> call, Throwable t) {
-                // Handle failur
                 Toast.makeText(AddVenueActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
                 binding.saveVenueButton.setText("Add Venue");
-                binding.saveVenueButton.isEnabled();
             }
         });
-
     }
+
 
     private void openImagePicker() {
         Intent intent = new Intent();
@@ -300,7 +431,28 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             binding.ivSelectedImage.setImageURI(imageUri);
+        } else if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count && imageUris.size() < MAX_IMAGES; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    imageUris.add(imageUri);
+                    addImageToGallery(imageUri);
+                }
+            } else if (data.getData() != null) {
+                if (imageUris.size() < MAX_IMAGES) {
+                    Uri imageUri = data.getData();
+                    imageUris.add(imageUri);
+                    addImageToGallery(imageUri);
+                }
+            }
         }
+//        else  if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+//            Uri selectedImageUri = data.getData();
+//            if (selectedImageUri != null) {
+//                addImageToGallery(selectedImageUri);
+//            }
+//        }
     }
 
     private File getFileFromUri(Uri uri) throws IOException {
@@ -319,5 +471,36 @@ public class AddVenueActivity extends FragmentActivity implements OnMapReadyCall
         return tempFile;
     }
 
+    private void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
+    }
 
+    private void addImageToGallery(Uri imageUri) {
+        try {
+            // Decode the selected image to a Bitmap
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+
+            // Create a new ImageView
+            ImageView imageView = new ImageView(this);
+            imageView.setImageBitmap(bitmap);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.setMargins(0, 10, 0, 10);
+            imageView.setLayoutParams(params);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            // Add ImageView to the layout
+            binding.galleryImageSelection.addView(imageView, binding.galleryImageSelection.getChildCount() - 1);
+            imageCount++;
+
+            // Hide "+" button if maximum images are added
+            if (imageCount >= MAX_IMAGES) {
+                binding.b.setVisibility(View.GONE);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

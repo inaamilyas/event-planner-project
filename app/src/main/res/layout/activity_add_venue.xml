@@ -114,6 +114,39 @@
                     android:layout_marginVertical="10dp"/>
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Gallery Images(Max 3)"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:layout_marginBottom="10dp"
+                    />
+               <HorizontalScrollView
+                   android:layout_width="match_parent"
+                   android:layoutDirection="ltr"
+                   android:layout_height="200dp">
+
+                   <LinearLayout
+                       android:id="@+id/gallery_image_selection"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:orientation="horizontal"
+                       android:gravity="center">
+
+                       <androidx.appcompat.widget.AppCompatButton
+                           android:id="@+id/b"
+                           android:background="#BEF4F2F2"
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:text="+"
+                           android:textColor="#E0DADA"
+                           android:textSize="100sp"
+                           android:layout_marginVertical="10dp"/>
+                   </LinearLayout>
+               </HorizontalScrollView>
+
+
+                <TextView
                     android:id="@+id/tv_show_error"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

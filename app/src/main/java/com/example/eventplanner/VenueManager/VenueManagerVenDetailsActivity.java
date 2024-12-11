@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.example.eventplanner.R;
 import com.example.eventplanner.VenueManager.MenuItem.AddMenuActivity;
+import com.example.eventplanner.VenueManager.adapter.GalleryAdapter;
 import com.example.eventplanner.adapters.FeedbackAdapter;
 import com.example.eventplanner.api.ApiClient;
 import com.example.eventplanner.api.ApiResponse;
@@ -59,6 +60,11 @@ public class VenueManagerVenDetailsActivity extends AppCompatActivity {
             } else {
                 binding.pendingStatus.setVisibility(View.VISIBLE);
             }
+
+            // Set up the RecyclerView with horizontal LinearLayoutManager
+            binding.galleryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            GalleryAdapter galleryAdapter = new GalleryAdapter(selectedVenue.getGallery());
+            binding.galleryRecyclerView.setAdapter(galleryAdapter);
         }
 
         binding.viewMenu.setOnClickListener(new View.OnClickListener() {
